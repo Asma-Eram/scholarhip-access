@@ -1,0 +1,40 @@
+# Logs & runtime
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+dist-ssr/
+*.local
+
+# Environment secrets
+.env
+.env*.local
+
+# SQLite local DBs
+trisha.db
+trisha.db-wal
+trisha.db-shm
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+.vercel
+DEPLOYMENT.md
+*deployment*.md
+
+# Presentation and pitch scripts
+*.pptx
+TECHNICAL_APPROACH*
+TRISHA_TECH*
+TRISHA_SIH*
+WALKTHROUGH_SCRIPT*
+generate_*.py
+
