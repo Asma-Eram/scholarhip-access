@@ -100,12 +100,12 @@ export default function AutofillModal({
               </div>
 
               <div className="field-group">
-                <label>ST Caste Certificate Ref.</label>
+                <label>Category / Domicile Certificate Ref.</label>
                 <div className="verified-input-wrapper">
-                  <input type="text" value={`${casteDoc?.certNumber || 'JH/ST/2023/889104'} (DigiLocker)`} readOnly />
+                  <input type="text" value={`${casteDoc?.certNumber || 'IND/VERIFIED/2024/889104'} (DigiLocker Synced)`} readOnly />
                   <CheckCircle2 size={16} className="valid-chk" />
                 </div>
-                <span className="sub-helper">Issuing Authority: {casteDoc?.issuer}</span>
+                <span className="sub-helper">Issuing Authority: {casteDoc?.issuer || 'State Revenue / e-District'}</span>
               </div>
 
               <div className="field-group">

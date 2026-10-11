@@ -30,6 +30,7 @@ import {
 import './App.css'
 
 export default function App() {
+  const [userRole, setUserRole] = useState('student')
   const [household, setHousehold] = useState(HOUSEHOLD_DATA)
   const [activeStudent, setActiveStudent] = useState(HOUSEHOLD_DATA.members[0])
   const [lang, setLang] = useState('en')
@@ -98,9 +99,9 @@ export default function App() {
 
   const handleAutofillSubmit = (appData) => {
     const newApp = {
-      id: `APP-MOTA-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: `APP-SB-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
       schemeId: appData.schemeId,
-      portal: 'NSP / AISHE Synced',
+      portal: 'ScholarBridge / DigiLocker Synced',
       appliedDate: new Date().toISOString().split('T')[0],
       academicSession: '2026-27',
       sanctionAmount: appData.tuitionFeeClaim || '₹1,25,000 / year',
@@ -111,11 +112,11 @@ export default function App() {
       lastActionDate: new Date().toISOString().split('T')[0],
       institution: appData.collegeName,
       stages: [
-        { id: 1, title: 'DigiLocker Identity & ST Verification', date: new Date().toISOString().split('T')[0], done: true, remarks: 'Verified via MoTA Central Registry' },
+        { id: 1, title: 'DigiLocker Identity & Marksheets Sync', date: new Date().toISOString().split('T')[0], done: true, remarks: 'Verified via DigiLocker Cryptographic Hash' },
         { id: 2, title: `Institution Bonafide Verification (${appData.collegeName})`, date: null, done: false, active: true },
-        { id: 3, title: 'State Tribal Welfare Directorate Clearance', date: null, done: false },
-        { id: 4, title: 'MoTA National Central Committee Sanction', date: null, done: false },
-        { id: 5, title: 'PFMS Direct Benefit Transfer Credit', date: null, done: false }
+        { id: 3, title: 'State Directorate Clearance Audit', date: null, done: false },
+        { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
+        { id: 5, title: 'PFMS Direct Benefit Transfer (DBT)', date: null, done: false }
       ],
       dbtDetails: null,
       deficiencies: []
@@ -123,7 +124,7 @@ export default function App() {
     const updatedMembers = household.members.map(m => m.id === activeStudent.id ? { ...m, applications: [newApp, ...m.applications] } : m)
     setHousehold(prev => ({ ...prev, members: updatedMembers }))
     setActiveStudent(prev => ({ ...prev, applications: [newApp, ...prev.applications] }))
-    addToast(`One-Click Application ${newApp.id} generated & sent to ${appData.collegeName}!`, 'success')
+    addToast(`One-Click Application ${newApp.id} submitted via DigiLocker and forwarded to ${appData.collegeName}!`, 'success')
     setActiveTab('tracker')
   }
 
@@ -158,14 +159,15 @@ export default function App() {
 
   const getTabLabel = (tab) => {
     switch (tab) {
-      case 'dashboard': return t.dashboard
-      case 'schemes': return t.schemes
-      case 'tracker': return t.applications
-      case 'documents': return t.documents
-      case 'family': return t.family
-      case 'eligibility': return t.eligibility || 'Eligibility Engine'
-      case 'assistant': return t.assistant
-      default: return t.dashboard
+      case 'dashboard': return 'Student Overview'
+      case 'schemes': return 'All Scholarships Directory'
+      case 'tracker': return 'Live Application Tracker'
+      case 'college': return 'College Admin Desk'
+      case 'documents': return 'DigiLocker Document Vault'
+      case 'family': return 'Household & Sibling Pool'
+      case 'eligibility': return 'Smart Grant Matcher'
+      case 'assistant': return 'AI Policy Advisor'
+      default: return 'ScholarBridge Portal'
     }
   }
 
@@ -180,6 +182,8 @@ export default function App() {
         activeStudent={localizedActiveStudent}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
+        userRole={userRole}
+        setUserRole={setUserRole}
       />
 
       {/* Right Content Area */}
@@ -200,6 +204,8 @@ export default function App() {
           onOpenNotifications={() => setShowNotificationsDrawer(true)}
           activeTabLabel={getTabLabel(activeTab)}
           onNavigate={setActiveTab}
+          userRole={userRole}
+          setUserRole={setUserRole}
         />
 
         {/* Offline Banner */}

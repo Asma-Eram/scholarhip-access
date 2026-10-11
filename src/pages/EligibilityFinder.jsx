@@ -126,8 +126,8 @@ export default function EligibilityFinder({
       <section className="gov-card eligibility-hero-card">
         <div className="hero-top-row">
           <div className="badge-group">
-            <span className="badge badge-primary">{t.ruleEngineBadge || 'MoTA Smart Rule Engine'}</span>
-            <span className="badge badge-warning">{lang === 'hi' ? 'समस्या विवरण 26238' : 'Problem Statement 26238'}</span>
+            <span className="badge badge-primary"><Sparkles size={12} /> ScholarBridge Matching Engine</span>
+            <span className="badge badge-success"><ShieldCheck size={12} /> GFR Rule 11 Active</span>
           </div>
           <button className="reset-btn" onClick={() => applyPreset('premier')}>
             <RotateCcw size={14} /> {t.resetFilters || 'Reset Filters'}
@@ -136,11 +136,11 @@ export default function EligibilityFinder({
 
         <h1 className="hero-heading">
           <Sparkles size={22} className="sparkle-icon" />
-          {t.engineHeroTitle || 'Smart Eligibility & One-Scholarship Conflict Engine'}
+          {t.engineHeroTitle || 'Smart Eligibility & Financial Aid Matcher'}
         </h1>
         
         <p className="hero-subtext">
-          {t.engineHeroDesc || 'Evaluate eligibility across all 5 MoTA scholarship schemes, compute maximum financial allowances, and ensure compliance with the One-Active-Scholarship Rule.'}
+          Evaluate eligibility across national central sector, state, and premier corporate scholarship schemes, compute maximum financial allowances, and ensure automated GFR Rule 11 audit compliance.
         </p>
 
         {/* 1-Click Demo Scenarios */}

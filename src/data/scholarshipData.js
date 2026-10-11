@@ -175,6 +175,173 @@ export const SCHEMES = [
     faqs: [
       { q: 'Can I apply before receiving the foreign visa?', a: 'Yes. MoTA issues a formal Sanction Letter which you submit to the foreign embassy for visa facilitation.' }
     ]
+  },
+  {
+    id: 'csss',
+    code: 'MOE-CSSS-06',
+    name: 'Central Sector Scheme of Scholarships for College & University Students',
+    nameHi: 'कॉलेज और विश्वविद्यालय के छात्रों के लिए केंद्रीय क्षेत्र छात्रवृत्ति',
+    shortName: 'Central Sector UG/PG',
+    portal: 'NSP',
+    portalFullName: 'National Scholarship Portal (scholarships.gov.in)',
+    targetGroup: 'Meritorious Under-Graduate & Post-Graduate Students (Top 20th Percentile)',
+    category: 'Central Sector (MoE)',
+    fundingRatio: '100% Central Sector (Ministry of Education)',
+    disbursementFreq: 'Annual Direct Benefit Transfer (PFMS)',
+    amountRange: '₹12,000/yr (UG) – ₹20,000/yr (PG)',
+    hostellerAllowance: '₹1,000 – ₹2,000 / month standard maintenance',
+    dayScholarAllowance: 'Applicable standard grant',
+    bookGrant: 'Covered under annual grant',
+    deadline: '2026-11-15',
+    description: 'Provides financial assistance to meritorious students from economically weaker sections to meet day-to-day expenses while pursuing higher studies in colleges and universities.',
+    eligibilityCriteria: [
+      'Scored above 80th percentile in relevant stream in Class XII board examination',
+      'Enrolled in regular full-time undergraduate or postgraduate course in recognized college/university',
+      'Gross parental/family annual income must not exceed ₹4.50 Lakhs per annum',
+      'Not receiving any other Central or State government scholarship simultaneously'
+    ],
+    mandatoryDocuments: [
+      { id: 'class12_marksheet', name: 'Class 12th Board Marksheet with QR Code', source: 'DigiLocker / CBSE / State Board' },
+      { id: 'income_cert', name: 'Income Certificate (< ₹4.50 Lakhs)', source: 'DigiLocker / Revenue Authority' },
+      { id: 'bonafide_cert', name: 'College Admission Bonafide with AISHE Code', source: 'University / Institute' },
+      { id: 'aadhaar_doc', name: 'Aadhaar e-KYC (NPCI Seeded Bank Account)', source: 'UIDAI' }
+    ],
+    faqs: [
+      { q: 'Is this scholarship renewable every year?', a: 'Yes, renewed annually up to 5 years subject to securing minimum 50% marks in semester examinations.' }
+    ]
+  },
+  {
+    id: 'aicte-pragati',
+    code: 'AICTE-PRAGATI-07',
+    name: 'AICTE Pragati Scholarship for Girl Students (Technical Degree & Diploma)',
+    nameHi: 'बालिकाओं के लिए एआईसीटीई प्रगति छात्रवृत्ति',
+    shortName: 'Pragati for Girls',
+    portal: 'NSP',
+    portalFullName: 'National Scholarship Portal / AICTE Portal',
+    targetGroup: 'Female Students Admitted to First Year Technical Programs (B.Tech / Diploma)',
+    category: 'Women in STEM',
+    fundingRatio: '100% AICTE Central Grant',
+    disbursementFreq: 'Annual DBT Credit',
+    amountRange: '₹50,000 / year (Every year of study)',
+    hostellerAllowance: 'Lump-sum ₹50,000/yr towards tuition fee, computer purchase, books & stationery',
+    dayScholarAllowance: '₹50,000 / year',
+    bookGrant: 'Included in lump sum grant',
+    deadline: '2026-12-15',
+    description: 'Empowers meritorious young women pursuing technical engineering degrees and diplomas in AICTE-approved institutions, promoting female leadership in technology and STEM.',
+    eligibilityCriteria: [
+      'Only female candidates admitted to 1st year Degree or Diploma course in AICTE-approved institution',
+      'Admission secured through centralized admission process of State or Central Government',
+      'Family annual income from all sources must not exceed ₹8.00 Lakhs per annum',
+      'Maximum two girls per family can avail this scholarship'
+    ],
+    mandatoryDocuments: [
+      { id: 'aicte_admission', name: 'AICTE Approved Institute Allotment Letter', source: 'State CET / JoSAA' },
+      { id: 'marksheet_12', name: 'Class 12 / Diploma Entrance Scorecard', source: 'DigiLocker' },
+      { id: 'income_cert', name: 'Family Income Certificate (< ₹8.00 Lakhs)', source: 'DigiLocker' },
+      { id: 'family_affidavit', name: 'Parents Affidavit certifying single/two girl child', source: 'Executive Magistrate' }
+    ],
+    faqs: [
+      { q: 'Can I use the grant to buy a laptop?', a: 'Yes, the ₹50,000 annual allowance can be used for college tuition, books, equipment, and laptop purchase.' }
+    ]
+  },
+  {
+    id: 'pmrf',
+    code: 'MOE-PMRF-08',
+    name: 'Prime Minister’s Research Fellowship (PMRF)',
+    nameHi: 'प्रधानमंत्री अनुसंधान फेलोशिप (PMRF)',
+    shortName: 'PMRF Fellowship',
+    portal: 'PMRF Portal',
+    portalFullName: 'Prime Minister’s Research Fellowship National Portal (pmrf.in)',
+    targetGroup: 'Ph.D Scholars in Science & Technology at Premier Institutions',
+    category: 'Research & Innovation',
+    fundingRatio: '100% Central Sector (Ministry of Education)',
+    disbursementFreq: 'Monthly DBT via National Nodal Institute',
+    amountRange: '₹70,000 – ₹80,000/mo + ₹2 Lakh/yr Research Contingency',
+    hostellerAllowance: 'HRA as per Central Government norms + ₹2,00,000/year research contingency',
+    dayScholarAllowance: '₹70,000/mo (Years 1-2) | ₹75,000/mo (Year 3) | ₹80,000/mo (Years 4-5)',
+    bookGrant: '₹2,00,000 annual research contingency grant for international conferences and equipment',
+    deadline: '2026-11-30',
+    description: 'The highest civilian research fellowship in India, attracting top talent into Ph.D programs at premier institutes (IITs, IISc, IISERs) with world-class stipends and research support.',
+    eligibilityCriteria: [
+      'Completed or in final year of B.Tech/M.Sc/M.Tech with minimum CGPA 8.0 or GATE score >= 650',
+      'Admitted to regular Ph.D program in PMRF granting institutions (IITs, IISc, NITs, Central Universities)',
+      'Rigorous research proposal evaluated by National Domain Expert Committee',
+      'No income ceiling limit applies'
+    ],
+    mandatoryDocuments: [
+      { id: 'phd_offer', name: 'Doctoral Offer Letter from PMRF Granting Institute', source: 'Institute Academic Section' },
+      { id: 'gate_score', name: 'Valid GATE Scorecard / National Exam Rank', source: 'NTA / GATE Authority' },
+      { id: 'research_proposal', name: 'PMRF Research Project Formulation Proposal', source: 'Research Advisory' }
+    ],
+    faqs: [
+      { q: 'Is there an age limit for PMRF?', a: 'Candidates must satisfy standard Ph.D admission age norms set by participating premier institutions.' }
+    ]
+  },
+  {
+    id: 'reliance-foundation',
+    code: 'CSR-REL-09',
+    name: 'Reliance Foundation Undergraduate & Postgraduate Scholarships',
+    nameHi: 'रिलायंस फाउंडेशन उच्च शिक्षा छात्रवृत्ति',
+    shortName: 'Reliance Foundation Grant',
+    portal: 'Reliance Portal',
+    portalFullName: 'Reliance Foundation Education Portal (scholarships.reliancefoundation.org)',
+    targetGroup: 'Undergraduate and Postgraduate Students in All Academic Streams',
+    category: 'Corporate / CSR Grants',
+    fundingRatio: '100% Reliance Foundation Philanthropic Grant',
+    disbursementFreq: 'Semester-wise Direct Bank Credit',
+    amountRange: 'Up to ₹2,00,000 (UG) – ₹6,00,000 (PG) over duration of degree',
+    hostellerAllowance: 'Full educational grant covering tuition, boarding, and development books',
+    dayScholarAllowance: 'Direct academic fund transfer',
+    bookGrant: 'Covered under comprehensive grant allocation',
+    deadline: '2026-10-25',
+    description: 'Supports visionary and community-minded Indian youth through merit-cum-means grants, leadership mentoring, and an exclusive alumni network across all university streams.',
+    eligibilityCriteria: [
+      'First-year student enrolled in full-time recognized undergraduate or postgraduate degree program in India',
+      'Scored minimum 60% in Class 12 board examination',
+      'Household annual income preferred below ₹15.00 Lakhs (priority to income < ₹2.5 Lakhs)',
+      'Selection based on online aptitude test, academic achievements, and personal essay'
+    ],
+    mandatoryDocuments: [
+      { id: 'class12_marks', name: 'Class 12th Verified Board Marksheet', source: 'DigiLocker' },
+      { id: 'college_id', name: 'College Identity Card & Admission Confirmation Slip', source: 'Institute Registrar' },
+      { id: 'income_doc', name: 'Income Certificate / Form 16 / ITR of Parents', source: 'DigiLocker / Income Tax' }
+    ],
+    faqs: [
+      { q: 'Does this scholarship require repayment?', a: 'No, this is a 100% non-repayable philanthropic scholarship grant.' }
+    ]
+  },
+  {
+    id: 'tata-trusts',
+    code: 'CSR-TATA-10',
+    name: 'Tata Trusts Merit-cum-Means Higher Education Grant',
+    nameHi: 'टाटा ट्रस्ट्स उच्च शिक्षा छात्रवृत्ति',
+    shortName: 'Tata Trusts Merit Grant',
+    portal: 'Tata Trusts Portal',
+    portalFullName: 'Tata Trusts Education Grants Portal (tatatrusts.org)',
+    targetGroup: 'Undergraduate & Masters Students in Engineering, Medicine & Pure Sciences',
+    category: 'Corporate / CSR Grants',
+    fundingRatio: '100% Philanthropic Merit Sponsorship',
+    disbursementFreq: 'Annual Direct College Tuition Credit',
+    amountRange: '₹60,000 – ₹1,50,000 / year (Direct Tuition Fee Offset)',
+    hostellerAllowance: 'Direct tuition waiver at partner universities',
+    dayScholarAllowance: 'Applicable institutional fees',
+    bookGrant: 'Subsidized study grants',
+    deadline: '2026-11-10',
+    description: 'One of India’s oldest philanthropic scholarship endowments, providing institutional tuition fee relief to meritorious undergraduate and postgraduate students from modest backgrounds.',
+    eligibilityCriteria: [
+      'Enrolled in recognized Indian college in B.E, B.Tech, MBBS, B.Sc, or Master’s programs',
+      'Consistent academic record with at least 70% in preceding academic year or qualifying exam',
+      'Total family income from all sources must not exceed ₹4.50 Lakhs per annum',
+      'Transparent fee structure provided by the educational institution'
+    ],
+    mandatoryDocuments: [
+      { id: 'sem_marks', name: 'Previous Year Consolidated Grade Card / Marksheet', source: 'DigiLocker / College' },
+      { id: 'college_fee_estimate', name: 'Current Academic Year Institutional Fee Receipt', source: 'Accounts Section' },
+      { id: 'income_cert', name: 'Family Income Certificate', source: 'DigiLocker' }
+    ],
+    faqs: [
+      { q: 'Is the fee paid to student or college?', a: 'The sanctioned tuition scholarship is credited directly to the college account for student ledger credit.' }
+    ]
   }
 ]
 

@@ -47,7 +47,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
           ...a,
           collegeStatus: 'approved',
           status: 'verified_by_college',
-          remarks: `Bonafide enrollment & course fees certified by ${currentCollege.nodalOfficer.name} on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State Tribal Welfare Directorate.`
+          remarks: `Bonafide enrollment & course fees certified by ${currentCollege.nodalOfficer.name} on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State / Central Directorate.`
         }
       }
       return a
@@ -82,7 +82,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
               <Building2 size={24} />
             </div>
             <div>
-              <div className="portal-tag">MoTA AISHE Institute Verification Node</div>
+              <div className="portal-tag">ScholarBridge AISHE Institutional Nodal Desk</div>
               <h1 className="college-name">{currentCollege.name}</h1>
               <div className="college-meta">
                 <span>AISHE Code: <strong>{currentCollege.aisheCode}</strong></span> • 

@@ -12,7 +12,10 @@ import {
   LogOut,
   Settings,
   HelpCircle,
-  Building2
+  Building2,
+  FileCheck2,
+  Compass,
+  FileSpreadsheet
 } from 'lucide-react'
 import { I18N } from '../data/scholarshipData'
 import './Sidebar.css'
@@ -24,63 +27,80 @@ export default function Sidebar({
   deficiencyCount, 
   activeStudent,
   collapsed: externalCollapsed,
-  setCollapsed: externalSetCollapsed
+  setCollapsed: externalSetCollapsed,
+  userRole,
+  setUserRole
 }) {
   const [internalCollapsed, setInternalCollapsed] = useState(false)
   const collapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed
   const setCollapsed = externalSetCollapsed || setInternalCollapsed
   const t = I18N[lang] || I18N.en
 
-  const mainNavItems = [
-    { id: 'dashboard', label: t.dashboard, icon: LayoutDashboard },
-    { id: 'schemes', label: t.schemes, icon: GraduationCap },
-    { id: 'tracker', label: t.applications, icon: Clock, badge: deficiencyCount > 0 ? deficiencyCount : null },
-    { id: 'documents', label: t.documents, icon: ShieldCheck },
-    { id: 'family', label: t.family, icon: Users },
+  const studentNavItems = [
+    { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
+    { id: 'schemes', label: 'All Scholarships', icon: Compass },
+    { id: 'tracker', label: 'Live Application Tracker', icon: Clock, badge: deficiencyCount > 0 ? `${deficiencyCount} Alert` : null },
+    { id: 'documents', label: 'DigiLocker Vault', icon: ShieldCheck },
+    { id: 'eligibility', label: 'Smart Grant Matcher', icon: Sparkles, isAI: true },
+    { id: 'family', label: 'Household & Siblings', icon: Users },
   ]
 
-  const toolNavItems = [
-    { id: 'eligibility', label: t.eligibility || 'Eligibility Engine', icon: Sparkles, isAI: true },
-    { id: 'college', label: t.collegePortal || 'College Portal (AISHE)', icon: Building2 },
-    { id: 'assistant', label: t.assistant, icon: Bot, isAI: true },
+  const adminNavItems = [
+    { id: 'college', label: 'Institutional Desk', icon: Building2 },
+    { id: 'schemes', label: 'All Scheme Directives', icon: Compass },
+    { id: 'tracker', label: 'Central Tracking Audit', icon: Clock },
+    { id: 'documents', label: 'Document Registry', icon: ShieldCheck },
   ]
+
+  const navItems = userRole === 'admin' ? adminNavItems : studentNavItems
 
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''}`}>
-      {/* Sidebar Brand */}
+      {/* Brand Header */}
       <div className="sidebar-brand">
-        <div className="brand-emblem">
-          <svg className="emblem-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="46" stroke="#d97706" strokeWidth="2.5" strokeDasharray="3 3"/>
-            <circle cx="50" cy="50" r="38" fill="#16406c" />
-            <path d="M50 20 L58 36 L76 36 L62 48 L67 66 L50 54 L33 66 L38 48 L24 36 L42 36 Z" fill="#ff9933" opacity="0.9"/>
-            <circle cx="50" cy="50" r="10" fill="#ffffff" />
-            <circle cx="50" cy="50" r="6" stroke="#000080" strokeWidth="1.5" />
-          </svg>
+        <div className="brand-logo-icon">
+          <GraduationCap size={22} className="logo-cap-icon" />
+          <span className="logo-sparkle-dot" />
         </div>
         {!collapsed && (
           <div className="brand-text">
-            <div className="brand-name">TRISHA</div>
-            <div className="brand-tagline">MoTA Scholarship Portal</div>
+            <div className="brand-name">ScholarBridge</div>
+            <div className="brand-tagline">National Scholarship Gateway</div>
           </div>
         )}
       </div>
 
-      {/* Active Student Mini Profile */}
+      {/* Profile Card / Context Banner */}
       {!collapsed && (
-        <div className="sidebar-student-card">
-          <div className="sidebar-avatar">{activeStudent.avatarInitials}</div>
-          <div className="sidebar-student-info">
-            <div className="sidebar-student-name">{activeStudent.name}</div>
-            <div className="sidebar-student-level">{activeStudent.educationLevel}</div>
-          </div>
+        <div className="sidebar-user-card">
+          {userRole === 'admin' ? (
+            <div className="admin-context-box">
+              <div className="admin-avatar-badge">
+                <Building2 size={16} />
+              </div>
+              <div className="admin-info-text">
+                <div className="admin-name">College Nodal Desk</div>
+                <div className="admin-sub">AISHE Code: U-0205 (NIT Jamshedpur)</div>
+              </div>
+            </div>
+          ) : (
+            <div className="student-context-box">
+              <div className="student-avatar">{activeStudent.avatarInitials || 'ST'}</div>
+              <div className="student-info-text">
+                <div className="student-name">{activeStudent.name}</div>
+                <div className="student-sub">{activeStudent.educationLevel}</div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Main Navigation */}
+      {/* Navigation Links */}
       <nav className="sidebar-nav">
-        <div className="nav-section-label">{!collapsed && (t.mainMenu || 'Main Menu')}</div>
-        {mainNavItems.map(item => {
+        <div className="nav-section-label">
+          {!collapsed && (userRole === 'admin' ? 'VERIFICATION MODULES' : 'MAIN MENU')}
+        </div>
+        {navItems.map(item => {
           const Icon = item.icon
           const isActive = activeTab === item.id
           return (
@@ -90,48 +110,55 @@ export default function Sidebar({
               onClick={() => setActiveTab(item.id)}
               title={collapsed ? item.label : undefined}
             >
-              <Icon size={20} className="sidebar-nav-icon" />
+              <Icon size={19} className="sidebar-nav-icon" />
               {!collapsed && <span className="sidebar-nav-label">{item.label}</span>}
-              {item.badge && <span className="sidebar-badge">{item.badge}</span>}
+              {item.badge && !collapsed && (
+                <span className="sidebar-badge-warning">{item.badge}</span>
+              )}
+              {item.isAI && !collapsed && (
+                <span className="sidebar-ai-pill">AI</span>
+              )}
             </button>
           )
         })}
 
-        <div className="nav-divider" />
-        <div className="nav-section-label">{!collapsed && (t.aiTools || 'AI Tools')}</div>
-
-        {toolNavItems.map(item => {
-          const Icon = item.icon
-          const isActive = activeTab === item.id
-          return (
+        {/* AI Advisor Tool for Students */}
+        {userRole === 'student' && (
+          <>
+            <div className="nav-divider" />
+            <div className="nav-section-label">{!collapsed && 'SMART ASSISTANCE'}</div>
             <button
-              key={item.id}
-              className={`sidebar-nav-btn ai-nav-btn ${isActive ? 'active-sidebar-btn' : ''}`}
-              onClick={() => setActiveTab(item.id)}
-              title={collapsed ? item.label : undefined}
+              className={`sidebar-nav-btn ${activeTab === 'assistant' ? 'active-sidebar-btn' : ''}`}
+              onClick={() => setActiveTab('assistant')}
+              title={collapsed ? 'AI Scholarship Sahayak' : undefined}
             >
-              <Icon size={20} className="sidebar-nav-icon" />
-              {!collapsed && <span className="sidebar-nav-label">{item.label}</span>}
-              {item.isAI && !collapsed && <Sparkles size={13} className="ai-sparkle-sidebar" />}
+              <Bot size={19} className="sidebar-nav-icon text-primary" />
+              {!collapsed && <span className="sidebar-nav-label">AI Policy Advisor</span>}
+              {!collapsed && <span className="sidebar-ai-pill">24/7</span>}
             </button>
-          )
-        })}
+          </>
+        )}
       </nav>
 
-      {/* Sidebar Footer Actions */}
+      {/* Bottom Footer / Collapse Toggle */}
       <div className="sidebar-footer">
-        <button className="sidebar-nav-btn footer-btn" title={collapsed ? (t.helpSupport || 'Help & Support') : undefined}>
-          <HelpCircle size={18} className="sidebar-nav-icon" />
-          {!collapsed && <span className="sidebar-nav-label">{t.helpSupport || 'Help & Support'}</span>}
-        </button>
+        {!collapsed && (
+          <div className="digilocker-trust-card">
+            <div className="trust-icon-row">
+              <ShieldCheck size={16} className="text-success" />
+              <span>DigiLocker & PFMS Integrated</span>
+            </div>
+            <p className="trust-desc">Zero-Touch Verification • 100% GFR Rule 11 Audit Trail</p>
+          </div>
+        )}
 
         <button 
-          className="sidebar-collapse-btn"
+          className="collapse-toggle-btn"
           onClick={() => setCollapsed(!collapsed)}
-          title={collapsed ? (t.expand || 'Expand Sidebar') : (t.collapse || 'Collapse Sidebar')}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-          {!collapsed && <span>{t.collapse || 'Collapse'}</span>}
+          {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
+          {!collapsed && <span className="collapse-text">Collapse Menu</span>}
         </button>
       </div>
     </aside>
