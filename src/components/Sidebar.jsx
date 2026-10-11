@@ -24,7 +24,8 @@ export default function Sidebar({
   deficiencyCount, 
   activeStudent,
   collapsed: externalCollapsed,
-  setCollapsed: externalSetCollapsed
+  setCollapsed: externalSetCollapsed,
+  onOpenHelpSupport
 }) {
   const [internalCollapsed, setInternalCollapsed] = useState(false)
   const collapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed
@@ -120,7 +121,11 @@ export default function Sidebar({
 
       {/* Sidebar Footer Actions */}
       <div className="sidebar-footer">
-        <button className="sidebar-nav-btn footer-btn" title={collapsed ? (t.helpSupport || 'Help & Support') : undefined}>
+        <button 
+          className="sidebar-nav-btn footer-btn" 
+          onClick={onOpenHelpSupport}
+          title={collapsed ? (t.helpSupport || 'Help & Support') : undefined}
+        >
           <HelpCircle size={18} className="sidebar-nav-icon" />
           {!collapsed && <span className="sidebar-nav-label">{t.helpSupport || 'Help & Support'}</span>}
         </button>

@@ -177,63 +177,69 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
-  // Web Speech Recognition Setup
-  useEffect(() => {
+  // Web Speech Recognition Handler
+  const startSpeechRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (SpeechRecognition) {
+    if (!SpeechRecognition) {
+      onToast?.('Speech recognition not supported in this browser. Please use Chrome or Edge.', 'warning')
+      return
+    }
+
+    try {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort()
+      }
+
       const recognition = new SpeechRecognition()
       recognition.continuous = false
       recognition.interimResults = false
+      recognition.lang = lang === 'hi' ? 'hi-IN' : 'en-IN'
 
       recognition.onstart = () => {
         setListening(true)
-        onToast?.('🎙️ Listening... speak now', 'info')
+        onToast?.('🎙️ Microphone active: listening for your question...', 'info')
       }
 
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript
         setListening(false)
         setInputVal(transcript)
-        onToast?.('Voice captured: ' + transcript, 'success')
-        // Auto-send the transcribed voice query
+        onToast?.(`Voice captured: "${transcript}"`, 'success')
+        // Automatically submit the voice transcript
         handleSend(transcript)
       }
 
       recognition.onerror = (event) => {
         setListening(false)
         if (event.error === 'not-allowed') {
-          onToast?.('Microphone access denied. Please allow mic in your browser.', 'warning')
+          onToast?.('Microphone permission blocked. Please enable microphone permissions in your browser address bar.', 'warning')
+        } else if (event.error === 'no-speech') {
+          onToast?.('No speech detected. Please speak into your microphone and try again.', 'info')
         } else {
-          onToast?.(`Voice: ${event.error}`, 'warning')
+          onToast?.(`Voice recognition notice: ${event.error}`, 'warning')
         }
       }
 
-      recognition.onend = () => setListening(false)
+      recognition.onend = () => {
+        setListening(false)
+      }
+
       recognitionRef.current = recognition
+      recognition.start()
+    } catch (err) {
+      setListening(false)
+      console.warn('SpeechRecognition error:', err)
+      onToast?.('Could not activate voice input. Please check microphone settings.', 'warning')
     }
-    return () => recognitionRef.current?.abort()
-  }, [lang])
+  }
 
   const toggleMic = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (!SpeechRecognition) {
-      onToast?.('Speech recognition not supported. Use Chrome or Edge.', 'warning')
-      return
-    }
-
     if (listening) {
       recognitionRef.current?.stop()
       setListening(false)
+      onToast?.('Microphone stopped', 'info')
     } else {
-      try {
-        if (recognitionRef.current) {
-          recognitionRef.current.lang = lang === 'hi' ? 'hi-IN' : 'en-IN'
-          recognitionRef.current.start()
-        }
-      } catch {
-        recognitionRef.current?.abort()
-        setTimeout(() => recognitionRef.current?.start(), 200)
-      }
+      startSpeechRecognition()
     }
   }
 

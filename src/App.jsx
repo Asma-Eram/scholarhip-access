@@ -12,6 +12,7 @@ import FamilyOverview from './pages/FamilyOverview'
 import GrievanceAssistant from './pages/GrievanceAssistant'
 import EligibilityFinder from './pages/EligibilityFinder'
 import CollegeAdminPortal from './pages/CollegeAdminPortal'
+import HelpSupportModal from './components/HelpSupportModal'
 import { HOUSEHOLD_DATA, SCHEMES, CONFLICT_RULES, I18N } from './data/scholarshipData'
 import { 
   getLocalizedStudent, 
@@ -40,6 +41,7 @@ export default function App() {
   const [conflictData, setConflictData] = useState(null)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showNotificationsDrawer, setShowNotificationsDrawer] = useState(false)
+  const [showHelpSupportModal, setShowHelpSupportModal] = useState(false)
 
   const notifications = getLocalizedNotifications(lang)
   const localizedActiveStudent = getLocalizedStudent(activeStudent, lang)
@@ -180,6 +182,7 @@ export default function App() {
         activeStudent={localizedActiveStudent}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
+        onOpenHelpSupport={() => setShowHelpSupportModal(true)}
       />
 
       {/* Right Content Area */}
@@ -280,6 +283,18 @@ export default function App() {
           lang={lang}
           onClose={() => { setConflictData(null); setConflictTargetScheme(null); }}
           onRelinquishAndProceed={handleRelinquishAndProceed}
+        />
+      )}
+
+      {/* Help & Support Modal */}
+      {showHelpSupportModal && (
+        <HelpSupportModal
+          lang={lang}
+          onClose={() => setShowHelpSupportModal(false)}
+          onNavigate={(tab) => {
+            setShowHelpSupportModal(false)
+            setActiveTab(tab)
+          }}
         />
       )}
 
