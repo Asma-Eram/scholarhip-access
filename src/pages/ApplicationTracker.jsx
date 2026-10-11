@@ -10,10 +10,18 @@ import {
   ArrowRight,
   ShieldCheck,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Info,
+  Calendar,
+  UserCheck,
+  Phone,
+  Mail,
+  HelpCircle,
+  Sparkles
 } from 'lucide-react'
 import { SCHEMES, I18N } from '../data/scholarshipData'
 import { getLocalizedSchemes } from '../data/localizationEngine'
+import { AISHE_DIRECTORY } from '../data/aisheData'
 import './ApplicationTracker.css'
 
 export default function ApplicationTracker({ 
@@ -32,6 +40,12 @@ export default function ApplicationTracker({
 
   const studentDisplayName = activeStudent.name
 
+  // Resolve institute & nodal contact info
+  const matchedCollege = AISHE_DIRECTORY.find(c => 
+    selectedApp?.institution?.includes(c.name) || 
+    activeStudent?.institution?.includes(c.name)
+  ) || AISHE_DIRECTORY[0]
+
   if (!selectedApp) {
     return (
       <div className="gov-card empty-tracker-card">
@@ -41,6 +55,14 @@ export default function ApplicationTracker({
       </div>
     )
   }
+
+  // Determine "What's Next" active guidance
+  const activeStage = selectedApp.stages?.find(s => s.active) || 
+    selectedApp.stages?.find(s => !s.done) || 
+    selectedApp.stages?.[selectedApp.stages.length - 1]
+
+  const isDisbursed = selectedApp.status === 'disbursed'
+  const hasDeficiency = selectedApp.deficiencies?.length > 0 || selectedApp.status === 'action_required'
 
   return (
     <div className="tracker-view fade-in">
@@ -67,6 +89,84 @@ export default function ApplicationTracker({
             ))}
           </div>
         )}
+      </div>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* TRANSPARENT "WHAT'S NEXT" LIVE ACTION BANNER (PHASE 2) */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <div className={`gov-card whats-next-banner ${hasDeficiency ? 'banner-deficiency' : isDisbursed ? 'banner-disbursed' : 'banner-in-progress'}`}>
+        <div className="whats-next-header-row">
+          <div className="banner-icon-col">
+            {hasDeficiency ? (
+              <AlertTriangle size={24} className="text-warning-icon" />
+            ) : isDisbursed ? (
+              <CheckCircle2 size={24} className="text-success-icon" />
+            ) : (
+              <Clock size={24} className="text-primary-icon" />
+            )}
+          </div>
+
+          <div className="banner-content-col">
+            <div className="banner-label-row">
+              <span className="whats-next-tag">
+                {isDisbursed ? '✓ Application Cycle Complete' : hasDeficiency ? 'Action Required From Student' : 'Transparency Status & Next Step'}
+              </span>
+              <span className="eta-badge">
+                <Calendar size={13} />
+                <span>
+                  {isDisbursed 
+                    ? `Disbursed on ${selectedApp.lastActionDate}` 
+                    : hasDeficiency 
+                    ? 'Immediate Attention Required' 
+                    : 'Expected Resolution: Within 4-6 Working Days'}
+                </span>
+              </span>
+            </div>
+
+            <h2 className="whats-next-heading">
+              {isDisbursed
+                ? `Scholarship Grant of ${selectedApp.sanctionAmount || 'Sanctioned Amount'} successfully credited via DBT.`
+                : hasDeficiency
+                ? `Deficiency Flagged: Action required to avoid delay in institutional verification.`
+                : `Currently Processing: ${activeStage?.title || 'State Nodal Officer Review'}`}
+            </h2>
+
+            <p className="whats-next-desc">
+              {isDisbursed ? (
+                <>
+                  Funds have been directly released by MoTA / PFMS into your Aadhaar-seeded bank account. Keep your UTR receipt for institutional fee submission records.
+                </>
+              ) : hasDeficiency ? (
+                <>
+                  Your College Nodal Officer or State Welfare Directorate has requested an updated document or clarification. Please re-verify via DigiLocker live sync below.
+                </>
+              ) : (
+                <>
+                  Your verified documents have been forwarded to <strong>{matchedCollege.name}</strong>. The Institutional Nodal Officer (<strong>{matchedCollege.nodalOfficer.name}</strong>) is verifying your bonafide roll enrollment and course fees. <strong>No action is required from you at this time.</strong>
+                </>
+              )}
+            </p>
+
+            {/* Nodal Officer Contact Bar */}
+            {!isDisbursed && (
+              <div className="nodal-contact-bar">
+                <div className="nodal-officer-info">
+                  <UserCheck size={14} className="text-muted" />
+                  <span>Assigned Nodal Desk: <strong>{matchedCollege.nodalOfficer.name}</strong> ({matchedCollege.nodalOfficer.designation})</span>
+                </div>
+                <div className="nodal-contact-links">
+                  <a href={`mailto:${matchedCollege.nodalOfficer.email}`} className="contact-link">
+                    <Mail size={13} /> {matchedCollege.nodalOfficer.email}
+                  </a>
+                  <span className="contact-sep">•</span>
+                  <span className="contact-phone">
+                    <Phone size={13} /> {matchedCollege.nodalOfficer.phone}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="tracker-layout-grid">
@@ -121,7 +221,7 @@ export default function ApplicationTracker({
                       {isActive && (
                         <div className="active-stage-indicator">
                           <span className="pulse-ping" />
-                          <span>{t.currentlyUnderProcess || 'Currently Under Process by State Nodal Verification Officers'}</span>
+                          <span>{t.currentlyUnderProcess || 'Currently Under Verification at Institute Nodal Officer Desk'}</span>
                         </div>
                       )}
                     </div>
@@ -137,8 +237,8 @@ export default function ApplicationTracker({
               <div className="def-card-top">
                 <AlertTriangle size={20} className="def-warning-icon" />
                 <div>
-                  <h3 className="def-card-title">{t.incomeCertRequired || t.stateNodalQuery}</h3>
-                  <p className="def-card-desc">{t.deficiencyDetail}</p>
+                  <h3 className="def-card-title">{t.incomeCertRequired || t.stateNodalQuery || 'Action Required: Document Verification'}</h3>
+                  <p className="def-card-desc">{t.deficiencyDetail || 'The Institutional Nodal Officer requires verification of your current academic year documentation.'}</p>
                 </div>
               </div>
 
@@ -160,66 +260,64 @@ export default function ApplicationTracker({
           {/* DBT Disbursement Slip Card */}
           {selectedApp.dbtDetails ? (
             <div className="gov-card dbt-slip-card">
-              <div className="slip-top-badge">
-                <ShieldCheck size={16} />
-                <span>{t.pfmsFull || 'Public Financial Management System'}</span>
-              </div>
-
-              <div className="slip-amount-box">
-                <div className="slip-amount-label">{t.directBenefitTransfer || 'Direct Benefit Transfer'}</div>
-                <div className="slip-amount-value">{selectedApp.dbtDetails.amountCredited}</div>
-                <div className="slip-credit-date">{t.creditedOn || 'Credited on'} {selectedApp.dbtDetails.creditDate}</div>
-              </div>
-
-              <div className="slip-details-list">
-                <div className="slip-row">
-                  <span className="slip-label">{t.beneficiary || 'Beneficiary'}</span>
-                  <span className="slip-val">{studentDisplayName}</span>
-                </div>
-                <div className="slip-row">
-                  <span className="slip-label">Aadhaar (NPCI)</span>
-                  <span className="slip-val">{activeStudent.aadhaarMasked}</span>
-                </div>
-                <div className="slip-row">
-                  <span className="slip-label">{t.creditedBank || 'Credited Bank'}</span>
-                  <span className="slip-val">{selectedApp.dbtDetails.bankName}</span>
-                </div>
-                <div className="slip-row">
-                  <span className="slip-label">Account No.</span>
-                  <span className="slip-val">{selectedApp.dbtDetails.accountMasked}</span>
-                </div>
-                <div className="slip-row">
-                  <span className="slip-label">{t.utrRef || 'RBI / UTR Ref'}</span>
-                  <span className="slip-val code-text">{selectedApp.dbtDetails.utrNumber}</span>
-                </div>
-                <div className="slip-row">
-                  <span className="slip-label">MoTA Sanction</span>
-                  <span className="slip-val code-text">{selectedApp.dbtDetails.pfmsSanctionId}</span>
+              <div className="dbt-slip-header">
+                <Banknote size={20} className="dbt-icon" />
+                <div>
+                  <h3 className="dbt-title">{t.dbtRemittanceSlip || 'Direct Benefit Transfer (DBT) Receipt'}</h3>
+                  <p className="dbt-sub">{t.pfmsVerified || 'PFMS Central Transaction Confirmed'}</p>
                 </div>
               </div>
 
-              <button className="btn btn-secondary btn-full slip-download-btn" onClick={onDownloadSlip}>
+              <div className="dbt-data-stack">
+                <div className="dbt-row">
+                  <span className="dbt-label">{t.utrNumber || 'UTR / Transaction No:'}</span>
+                  <span className="dbt-val mono">{selectedApp.dbtDetails.utrNumber}</span>
+                </div>
+                <div className="dbt-row">
+                  <span className="dbt-label">{t.beneficiaryBank || 'Beneficiary Bank:'}</span>
+                  <span className="dbt-val">{selectedApp.dbtDetails.bankName}</span>
+                </div>
+                <div className="dbt-row">
+                  <span className="dbt-label">{t.accountCredited || 'Account Number:'}</span>
+                  <span className="dbt-val mono">{selectedApp.dbtDetails.accountMasked}</span>
+                </div>
+                <div className="dbt-row">
+                  <span className="dbt-label">{t.amountReleased || 'Amount Credited:'}</span>
+                  <span className="dbt-val amount-highlight">{selectedApp.dbtDetails.amountCredited}</span>
+                </div>
+                <div className="dbt-row">
+                  <span className="dbt-label">{t.creditDate || 'Credit Date:'}</span>
+                  <span className="dbt-val">{selectedApp.dbtDetails.creditDate}</span>
+                </div>
+                <div className="dbt-row">
+                  <span className="dbt-label">{t.pfmsSanctionId || 'Sanction Order No:'}</span>
+                  <span className="dbt-val mono">{selectedApp.dbtDetails.pfmsSanctionId}</span>
+                </div>
+              </div>
+
+              <button 
+                className="btn btn-secondary btn-full dbt-download-btn"
+                onClick={() => onDownloadSlip(selectedApp)}
+              >
                 <Download size={15} />
-                <span>{t.downloadSanctionSlip || 'Download Official DBT Receipt (PDF)'}</span>
+                <span>{t.downloadAcknowledgement || 'Download PDF Sanction Receipt'}</span>
               </button>
             </div>
           ) : (
-            <div className="gov-card dbt-pending-card">
-              <Banknote size={28} className="dbt-pending-icon" />
-              <h3>{t.directBenefitTransfer || 'Direct Benefit Transfer (DBT)'} Pending</h3>
+            <div className="gov-card pending-dbt-card">
+              <Building2 size={24} className="text-muted" />
+              <h3>{t.disbursementPending || 'Disbursement Stage Awaiting Approval'}</h3>
               <p>
-                Sanction amount of <strong>{selectedApp.sanctionAmount}</strong> will be 
-                credited directly into Aadhaar-seeded Bank Account via PFMS once State Tribal Welfare clearance completes.
+                {t.disbursementPendingDesc || 'Funds will be transferred directly to the Aadhaar-seeded bank account upon Stage 4 Central Committee Clearance.'}
               </p>
             </div>
           )}
 
-          {/* Quick Help Box */}
-          <div className="gov-card nodal-help-card">
-            <h3 className="help-card-title">{t.helpSupport || 'Need Help with this Stage?'}</h3>
-            <p className="help-card-text">
-              {t.allRecordsSecured || 'If your application has been at the same stage for more than 15 days, use the Tribal AI Sahayak to automatically register an expedited grievance ticket.'}
-            </p>
+          {/* Quick Helpline Support Box */}
+          <div className="gov-card helpline-card">
+            <h4><HelpCircle size={15} /> {t.needAssistance || 'Need Help with Verification?'}</h4>
+            <p>{t.helplineDesc || 'Connect with the Tribal Welfare Toll-Free Grievance Cell or your institutional representative.'}</p>
+            <div className="helpline-num">1800-11-7788 (Toll Free)</div>
           </div>
         </div>
       </div>

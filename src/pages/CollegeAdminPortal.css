@@ -1,0 +1,327 @@
+.college-portal-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.college-header-card {
+  padding: 1.75rem;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.college-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.college-identity {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.aishe-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.portal-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #d97706;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.college-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.college-meta {
+  font-size: 0.825rem;
+  color: #64748b;
+}
+
+.institute-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 280px;
+}
+
+.institute-switcher label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.aishe-select {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: #ffffff;
+  font-weight: 500;
+}
+
+.college-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.kpi-box {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.kpi-pending .kpi-num { color: #d97706; }
+.kpi-approved .kpi-num { color: #16a34a; }
+.kpi-deficiency .kpi-num { color: #dc2626; }
+
+.college-table-card {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.45rem 0.75rem;
+  background: #ffffff;
+  min-width: 280px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn.active {
+  background: #16406c;
+  color: #ffffff;
+  border-color: #16406c;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.college-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.college-table th {
+  text-align: left;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.college-table td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.app-id-bold {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.app-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.student-name-cell {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.caste-cert-text, .apaar-text, .fee-claim-text, .inc-status {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.roll-badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  background: #f1f5f9;
+  border-radius: 4px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.scheme-cell-name {
+  font-weight: 600;
+  color: #0369a1;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 2.5rem;
+  color: #94a3b8;
+}
+
+.action-review-btn {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+/* Review Modal */
+.college-review-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+}
+
+.review-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.review-modal-header h2 {
+  font-size: 1.15rem;
+  margin: 0.35rem 0 0.15rem;
+  color: #0f172a;
+}
+
+.review-modal-body {
+  padding-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.checklist-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.checklist-box h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  margin: 0 0 0.25rem;
+}
+
+.chk-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.825rem;
+  color: #1e293b;
+}
+
+.deficiency-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.deficiency-section label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.deficiency-select {
+  padding: 0.55rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.825rem;
+}
+
+.review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1rem;
+}

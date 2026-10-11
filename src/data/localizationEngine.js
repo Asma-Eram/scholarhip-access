@@ -858,3 +858,39 @@ export function getLocalizedNotifications(lang = 'en') {
     body: n.body[l] || n.body.en
   }));
 }
+
+export const LOCALIZED_PORTAL_LABELS = {
+  collegePortal: {
+    en: 'College Portal',
+    hi: 'कॉलेज पोर्टल',
+    santhali: 'ᱠᱚᱞᱮᱡᱽ ᱯᱳᱨᱴᱟᱞ',
+    gondi: 'कॉलेज पोर्टल',
+    ho: 'ᱠᱚᱞᱮᱡᱽ ᱯᱳᱨᱴᱟᱞ',
+    bodo: 'कलेज पोर्टल',
+    kui: 'କଲେଜ ପୋର୍ଟାଲ'
+  },
+  autofillTitle: {
+    en: 'DigiLocker Zero-Touch Autofill',
+    hi: 'डिजिलॉकर जीरो-टच ऑटोफिल',
+    santhali: 'ᱰᱤᱡᱤᱞᱚᱠᱟᱨ ᱚᱴᱚᱯᱷᱤᱞ',
+    gondi: 'डिजिलॉकर ऑटोफिल',
+    ho: 'ᱰᱤᱡᱤᱞᱚᱠᱟᱨ ᱚᱴᱚᱯᱷᱤᱞ',
+    bodo: 'डिजिलकार अटोफिल',
+    kui: 'ଡିଜିଲକର ଅଟୋଫିଲ'
+  },
+  whatsNext: {
+    en: 'What to do next?',
+    hi: 'आगे क्या करें?',
+    santhali: 'ᱫᱟᱨᱟᱭ ᱛᱮ ᱪᱮᱫ ᱠᱟᱹᱢᱤ?',
+    gondi: 'आगे का करनो?',
+    ho: 'ᱛᱟᱭᱚᱢ ᱛᱮ ᱪᱮᱫ?',
+    bodo: 'उनाव मा मावनांगौ?',
+    kui: 'ପରେ କ’ଣ କରିବେ?'
+  }
+};
+
+export function getLocalizedPortalLabel(key, lang = 'en') {
+  const l = lang in LOCALIZED_STUDENTS.student_priya ? lang : 'en';
+  return LOCALIZED_PORTAL_LABELS[key]?.[l] || LOCALIZED_PORTAL_LABELS[key]?.en || '';
+}
+

@@ -41,6 +41,7 @@ export default function Sidebar({
 
   const toolNavItems = [
     { id: 'eligibility', label: t.eligibility || 'Eligibility Engine', icon: Sparkles, isAI: true },
+    { id: 'college', label: t.collegePortal || 'College Portal (AISHE)', icon: Building2 },
     { id: 'assistant', label: t.assistant, icon: Bot, isAI: true },
   ]
 

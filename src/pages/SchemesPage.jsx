@@ -12,23 +12,29 @@ import {
   AlertCircle,
   HelpCircle,
   Building2,
-  Sparkles
+  Sparkles,
+  Zap
 } from 'lucide-react'
 import { SCHEMES, CONFLICT_RULES, I18N } from '../data/scholarshipData'
+import { getLocalizedSchemes } from '../data/localizationEngine'
+import AutofillModal from '../components/AutofillModal'
 import './SchemesPage.css'
 
 export default function SchemesPage({ 
   activeStudent, 
   lang, 
   onTriggerConflict, 
-  onDirectApply 
+  onDirectApply,
+  onSubmitAutofillApp
 }) {
   const [filterPortal, setFilterPortal] = useState('ALL')
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedSchemeId, setExpandedSchemeId] = useState(null)
+  const [autofillTargetScheme, setAutofillTargetScheme] = useState(null)
   const t = I18N[lang] || I18N.en
+  const localizedSchemes = getLocalizedSchemes(SCHEMES, lang)
 
-  const filteredSchemes = SCHEMES.filter(scheme => {
+  const filteredSchemes = localizedSchemes.filter(scheme => {
     const matchesPortal = filterPortal === 'ALL' || scheme.portal.includes(filterPortal)
     const matchesQuery = 
       scheme.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -43,7 +49,17 @@ export default function SchemesPage({
     if (conflictResult.hasConflict) {
       onTriggerConflict(scheme.id)
     } else {
-      onDirectApply(scheme)
+      // Launch Zero-Touch Autofill Modal
+      setAutofillTargetScheme(scheme)
+    }
+  }
+
+  const handleAutofillSubmit = (appData) => {
+    setAutofillTargetScheme(null)
+    if (onSubmitAutofillApp) {
+      onSubmitAutofillApp(appData)
+    } else if (onDirectApply) {
+      onDirectApply({ id: appData.schemeId, name: appData.schemeName })
     }
   }
 
@@ -123,7 +139,7 @@ export default function SchemesPage({
                       </span>
                     )}
                   </div>
-                  <h2 className="scheme-name">{(lang === 'hi' && scheme.nameHi) ? scheme.nameHi : scheme.name}</h2>
+                  <h2 className="scheme-name">{scheme.name}</h2>
                   <p className="scheme-desc">{scheme.description}</p>
                 </div>
 
@@ -200,14 +216,35 @@ export default function SchemesPage({
                   className="btn btn-primary"
                   onClick={() => handleApplyClick(scheme)}
                 >
-                  <span>{hasActiveApp ? (t.viewActiveApp || 'View Active Application') : (t.checkEligibility || 'Check Eligibility & Apply')}</span>
-                  <ArrowRight size={16} />
+                  {hasActiveApp ? (
+                    <>
+                      <span>{t.viewActiveApp || 'View Active Application'}</span>
+                      <ArrowRight size={16} />
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={14} />
+                      <span>DigiLocker One-Click Autofill Apply</span>
+                      <ArrowRight size={16} />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
           )
         })}
       </div>
+
+      {/* DigiLocker Zero-Touch Autofill Modal */}
+      {autofillTargetScheme && (
+        <AutofillModal
+          scheme={autofillTargetScheme}
+          student={activeStudent}
+          lang={lang}
+          onClose={() => setAutofillTargetScheme(null)}
+          onSubmitApplication={handleAutofillSubmit}
+        />
+      )}
     </div>
   )
 }

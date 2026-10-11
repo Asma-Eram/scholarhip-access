@@ -11,6 +11,7 @@ import DocumentVault from './pages/DocumentVault'
 import FamilyOverview from './pages/FamilyOverview'
 import GrievanceAssistant from './pages/GrievanceAssistant'
 import EligibilityFinder from './pages/EligibilityFinder'
+import CollegeAdminPortal from './pages/CollegeAdminPortal'
 import { HOUSEHOLD_DATA, SCHEMES, CONFLICT_RULES, I18N } from './data/scholarshipData'
 import { 
   getLocalizedStudent, 
@@ -92,6 +93,37 @@ export default function App() {
     setConflictData(null)
     setConflictTargetScheme(null)
     addToast(`${newApp.id} submitted with Automated NOC!`, 'success')
+    setActiveTab('tracker')
+  }
+
+  const handleAutofillSubmit = (appData) => {
+    const newApp = {
+      id: `APP-MOTA-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      schemeId: appData.schemeId,
+      portal: 'NSP / AISHE Synced',
+      appliedDate: new Date().toISOString().split('T')[0],
+      academicSession: '2026-27',
+      sanctionAmount: appData.tuitionFeeClaim || '₹1,25,000 / year',
+      currentStageIndex: 2,
+      status: 'under_review',
+      statusText: `Forwarded to ${appData.collegeName} for Bonafide Certification`,
+      statusType: 'primary',
+      lastActionDate: new Date().toISOString().split('T')[0],
+      institution: appData.collegeName,
+      stages: [
+        { id: 1, title: 'DigiLocker Identity & ST Verification', date: new Date().toISOString().split('T')[0], done: true, remarks: 'Verified via MoTA Central Registry' },
+        { id: 2, title: `Institution Bonafide Verification (${appData.collegeName})`, date: null, done: false, active: true },
+        { id: 3, title: 'State Tribal Welfare Directorate Clearance', date: null, done: false },
+        { id: 4, title: 'MoTA National Central Committee Sanction', date: null, done: false },
+        { id: 5, title: 'PFMS Direct Benefit Transfer Credit', date: null, done: false }
+      ],
+      dbtDetails: null,
+      deficiencies: []
+    }
+    const updatedMembers = household.members.map(m => m.id === activeStudent.id ? { ...m, applications: [newApp, ...m.applications] } : m)
+    setHousehold(prev => ({ ...prev, members: updatedMembers }))
+    setActiveStudent(prev => ({ ...prev, applications: [newApp, ...prev.applications] }))
+    addToast(`One-Click Application ${newApp.id} generated & sent to ${appData.collegeName}!`, 'success')
     setActiveTab('tracker')
   }
 
@@ -191,6 +223,7 @@ export default function App() {
               lang={lang}
               onTriggerConflict={handleTriggerConflict}
               onDirectApply={(scheme) => handleTriggerConflict(scheme.id)}
+              onSubmitAutofillApp={handleAutofillSubmit}
             />
           )}
           {activeTab === 'tracker' && (
@@ -199,6 +232,12 @@ export default function App() {
               lang={lang}
               onResolveDeficiency={handleResolveDeficiency}
               onDownloadSlip={handleDownloadSlip}
+            />
+          )}
+          {activeTab === 'college' && (
+            <CollegeAdminPortal
+              lang={lang}
+              onToast={addToast}
             />
           )}
           {activeTab === 'documents' && (
