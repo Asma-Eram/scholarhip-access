@@ -93,11 +93,13 @@ export default function CollegeAdminPortal({ lang, onToast }) {
           </div>
 
           <div className="institute-switcher">
-            <label>Switch Institute Context:</label>
+            <label htmlFor="aishe-select-dropdown">Switch Institute Context:</label>
             <select 
+              id="aishe-select-dropdown"
               value={selectedAishe} 
               onChange={(e) => { setSelectedAishe(e.target.value); setSelectedApp(null); }}
               className="aishe-select"
+              aria-label="Switch Institute Context"
             >
               {AISHE_DIRECTORY.map(c => (
                 <option key={c.aisheCode} value={c.aisheCode}>
@@ -133,12 +135,13 @@ export default function CollegeAdminPortal({ lang, onToast }) {
       <div className="gov-card college-table-card">
         <div className="table-toolbar">
           <div className="search-box">
-            <Search size={18} className="search-icon" />
+            <Search size={18} className="search-icon" aria-hidden="true" />
             <input 
               type="text" 
               placeholder="Search by student name, roll no, or App ID..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search applications by student name, roll number, or application ID"
             />
           </div>
 

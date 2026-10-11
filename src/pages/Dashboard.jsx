@@ -45,6 +45,14 @@ export default function Dashboard({
   // Find if there is any pending action/deficiency
   const actionRequiredApp = applications.find(a => a.status === 'action_required' || a.deficiencies?.length > 0)
 
+  // Smartly matched scholarships for the student's academic profile
+  const matchedSchemes = SCHEMES.filter(s => {
+    if (activeStudent?.educationLevel?.includes('College') || activeStudent?.academicProgram) {
+      return ['aicte-pragati', 'csss', 'reliance-ug', 'top-class', 'pmrf'].includes(s.id)
+    }
+    return ['pre-matric', 'post-matric', 'csss'].includes(s.id)
+  }).slice(0, 3)
+
   return (
     <div className="dashboard-view fade-in">
       {/* Top Welcome & Smart Action Banner */}
@@ -111,9 +119,9 @@ export default function Dashboard({
 
       {/* Deficiency / Action Alert If Present */}
       {actionRequiredApp && (
-        <div className="gov-card action-alert-card fade-in">
+        <div className="gov-card action-alert-card fade-in" role="alert" aria-live="polite">
           <div className="alert-icon-col">
-            <AlertTriangle size={24} className="text-warning" />
+            <AlertTriangle size={24} className="text-warning" aria-hidden="true" />
           </div>
           <div className="alert-content-col">
             <div className="alert-title-row">
@@ -127,17 +135,25 @@ export default function Dashboard({
           <button 
             className="btn btn-warning resolve-btn"
             onClick={() => onResolveDeficiency(actionRequiredApp.id)}
+            aria-label={`Resolve verification query for application ${actionRequiredApp.id} via DigiLocker`}
           >
-            <ShieldCheck size={15} />
+            <ShieldCheck size={15} aria-hidden="true" />
             <span>1-Click Resolve via DigiLocker</span>
           </button>
         </div>
       )}
 
       {/* Key Metric KPI Cards */}
-      <section className="kpi-cards-grid">
-        <div className="gov-card kpi-card" onClick={() => onNavigate('tracker')}>
-          <div className="kpi-icon-wrap bg-blue-subtle">
+      <section className="kpi-cards-grid" aria-label="Key Scholarship Performance Indicators">
+        <div 
+          className="gov-card kpi-card" 
+          onClick={() => onNavigate('tracker')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('tracker') }}
+          aria-label={`Active Applications: ${applications.length} Submissions`}
+        >
+          <div className="kpi-icon-wrap bg-blue-subtle" aria-hidden="true">
             <Clock size={20} className="text-royal" />
           </div>
           <div className="kpi-info">
@@ -145,11 +161,18 @@ export default function Dashboard({
             <span className="kpi-value">{applications.length} Submissions</span>
             <span className="kpi-subtext">Live audit trail & ETA</span>
           </div>
-          <ChevronRight size={16} className="kpi-arrow" />
+          <ChevronRight size={16} className="kpi-arrow" aria-hidden="true" />
         </div>
 
-        <div className="gov-card kpi-card" onClick={() => onNavigate('schemes')}>
-          <div className="kpi-icon-wrap bg-green-subtle">
+        <div 
+          className="gov-card kpi-card" 
+          onClick={() => onNavigate('schemes')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('schemes') }}
+          aria-label={`Available Scholarships: ${SCHEMES.length} Active Grants`}
+        >
+          <div className="kpi-icon-wrap bg-green-subtle" aria-hidden="true">
             <Award size={20} className="text-success" />
           </div>
           <div className="kpi-info">
@@ -157,11 +180,18 @@ export default function Dashboard({
             <span className="kpi-value">{SCHEMES.length} Active Grants</span>
             <span className="kpi-subtext">Central, STEM & Corporate</span>
           </div>
-          <ChevronRight size={16} className="kpi-arrow" />
+          <ChevronRight size={16} className="kpi-arrow" aria-hidden="true" />
         </div>
 
-        <div className="gov-card kpi-card" onClick={() => onNavigate('documents')}>
-          <div className="kpi-icon-wrap bg-indigo-subtle">
+        <div 
+          className="gov-card kpi-card" 
+          onClick={() => onNavigate('documents')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('documents') }}
+          aria-label="DigiLocker Synced Docs: 5 Documents Verified"
+        >
+          <div className="kpi-icon-wrap bg-indigo-subtle" aria-hidden="true">
             <ShieldCheck size={20} className="text-indigo" />
           </div>
           <div className="kpi-info">
@@ -169,11 +199,18 @@ export default function Dashboard({
             <span className="kpi-value">5 Documents Verified</span>
             <span className="kpi-subtext">Aadhaar, Caste, Income, Marks</span>
           </div>
-          <ChevronRight size={16} className="kpi-arrow" />
+          <ChevronRight size={16} className="kpi-arrow" aria-hidden="true" />
         </div>
 
-        <div className="gov-card kpi-card" onClick={() => onNavigate('eligibility')}>
-          <div className="kpi-icon-wrap bg-amber-subtle">
+        <div 
+          className="gov-card kpi-card" 
+          onClick={() => onNavigate('eligibility')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('eligibility') }}
+          aria-label="Eligibility Shield: GFR Rule 11 Active"
+        >
+          <div className="kpi-icon-wrap bg-amber-subtle" aria-hidden="true">
             <Sparkles size={20} className="text-warning" />
           </div>
           <div className="kpi-info">
@@ -181,7 +218,7 @@ export default function Dashboard({
             <span className="kpi-value">GFR Rule 11 Active</span>
             <span className="kpi-subtext">Zero double-dipping conflict</span>
           </div>
-          <ChevronRight size={16} className="kpi-arrow" />
+          <ChevronRight size={16} className="kpi-arrow" aria-hidden="true" />
         </div>
       </section>
 
@@ -278,11 +315,15 @@ export default function Dashboard({
             </div>
 
             <div className="mini-schemes-list">
-              {SCHEMES.slice(0, 3).map(scheme => (
+              {matchedSchemes.map(scheme => (
                 <div 
                   key={scheme.id} 
                   className="mini-scheme-item"
                   onClick={() => onNavigate('schemes')}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('schemes') }}
+                  aria-label={`View details for ${scheme.name}`}
                 >
                   <div className="mini-scheme-top">
                     <span className="mini-scheme-portal">{scheme.portal}</span>
@@ -290,7 +331,7 @@ export default function Dashboard({
                   </div>
                   <h4 className="mini-scheme-title">{scheme.name}</h4>
                   <div className="mini-scheme-amount">
-                    <Banknote size={13} className="text-royal" />
+                    <Banknote size={13} className="text-royal" aria-hidden="true" />
                     <span>{scheme.amountRange}</span>
                   </div>
                 </div>
@@ -299,6 +340,44 @@ export default function Dashboard({
           </div>
         </div>
       </div>
+
+      {/* Zero-Touch Transparency Pipeline Showcase */}
+      <section className="gov-card transparency-banner-card" aria-label="Zero-Touch Transparency Architecture">
+        <div className="transparency-header">
+          <div className="transparency-title-group">
+            <span className="badge badge-digilocker">
+              <ShieldCheck size={13} aria-hidden="true" />
+              <span>DigiLocker Zero-Touch Pipeline</span>
+            </span>
+            <h3 className="transparency-heading">Cryptographic Verification & GFR Rule 11 Audit Trail</h3>
+          </div>
+          <span className="transparency-sla-badge">Automated SLA: &lt; 72 Hours</span>
+        </div>
+
+        <div className="transparency-steps-grid">
+          <div className="transparency-step-item">
+            <div className="step-num-bubble" aria-hidden="true">01</div>
+            <div className="step-content">
+              <h4 className="step-title">DigiLocker Direct Pull</h4>
+              <p className="step-desc">Aadhaar e-KYC, income certificate, and Class X/XII marksheets authenticated via cryptographic XML hash.</p>
+            </div>
+          </div>
+          <div className="transparency-step-item">
+            <div className="step-num-bubble" aria-hidden="true">02</div>
+            <div className="step-content">
+              <h4 className="step-title">AISHE Nodal Verification</h4>
+              <p className="step-desc">Bonafide enrollment & tuition fee claims verified in 1-click by College Institutional Nodal Officers.</p>
+            </div>
+          </div>
+          <div className="transparency-step-item">
+            <div className="step-num-bubble" aria-hidden="true">03</div>
+            <div className="step-content">
+              <h4 className="step-title">PFMS DBT Remittance</h4>
+              <p className="step-desc">Direct Benefit Transfer routed straight to Aadhaar-seeded NPCI bank account with immutable UTR receipts.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

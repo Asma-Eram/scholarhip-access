@@ -111,27 +111,31 @@ export default function SchemesPage({
         {/* Search & Category Filter Toolbar */}
         <div className="schemes-search-bar-wrap">
           <div className="search-input-box">
-            <Search size={18} className="search-icon" />
+            <Search size={18} className="search-icon" aria-hidden="true" />
             <input 
               type="text" 
               placeholder="Search by scholarship title, engineering, medicine, degree level, or eligibility..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="scheme-search-field"
+              aria-label="Search scholarships by title, degree level, or eligibility"
             />
             {searchQuery && (
-              <button className="clear-search-btn" onClick={() => setSearchQuery('')}>×</button>
+              <button className="clear-search-btn" onClick={() => setSearchQuery('')} aria-label="Clear search input">×</button>
             )}
           </div>
         </div>
 
         {/* Category Pills */}
-        <div className="category-chips-row">
+        <div className="category-chips-row" role="tablist" aria-label="Scholarship categories">
           {categories.map(cat => (
             <button
               key={cat.id}
               className={`category-chip-btn ${filterCategory === cat.id ? 'active-chip' : ''}`}
               onClick={() => setFilterCategory(cat.id)}
+              aria-pressed={filterCategory === cat.id}
+              role="tab"
+              aria-selected={filterCategory === cat.id}
             >
               {cat.label}
             </button>

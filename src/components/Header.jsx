@@ -69,6 +69,7 @@ export default function Header({
             <button
               className={`role-pill-btn ${userRole === 'student' ? 'active-role-pill' : ''}`}
               onClick={() => handleRoleToggle('student')}
+              aria-label="Switch to Student Portal"
               title="Switch to Student Scholarship Discovery & Tracking"
             >
               <GraduationCap size={15} />
@@ -77,6 +78,7 @@ export default function Header({
             <button
               className={`role-pill-btn ${userRole === 'admin' ? 'active-role-pill' : ''}`}
               onClick={() => handleRoleToggle('admin')}
+              aria-label="Switch to College Admin Desk"
               title="Switch to College Nodal Officer / Admin Verification Desk"
             >
               <Building2 size={15} />
@@ -89,7 +91,7 @@ export default function Header({
         {/* Right: Actions, DigiLocker Badge, Language & Notifications */}
         <div className="header-controls">
           {/* DigiLocker Status Indicator */}
-          <div className="digilocker-header-badge" title="DigiLocker Cryptographic Service Active">
+          <div className="digilocker-header-badge" title="DigiLocker Cryptographic Service Active" role="status" aria-label="DigiLocker service active">
             <ShieldCheck size={15} className="digilocker-icon" />
             <span className="digilocker-text">DigiLocker Active</span>
             <span className="live-ping-dot" />
@@ -100,6 +102,7 @@ export default function Header({
             <button 
               className="header-pill search-quick-btn"
               onClick={() => onNavigate?.('schemes')}
+              aria-label="Browse all scholarships and grants"
               title="Browse all national, state, and merit scholarships"
             >
               <Search size={14} />
@@ -113,18 +116,20 @@ export default function Header({
               <button 
                 className="header-pill member-switch-pill"
                 onClick={() => { setShowMemberMenu(!showMemberMenu); setShowLangMenu(false); }}
+                aria-label={`Current student profile: ${activeStudent.name}. Click to switch student.`}
                 title="Switch active student profile"
+                aria-expanded={showMemberMenu}
               >
-                <div className="mini-avatar">{activeStudent.avatarInitials}</div>
+                <div className="mini-avatar" aria-hidden="true">{activeStudent.avatarInitials}</div>
                 <div className="mini-student-info">
                   <span className="mini-student-name">{activeStudent.name.split(' ')[0]}</span>
                   <span className="mini-student-status">Active</span>
                 </div>
-                <ChevronDown size={12} className={showMemberMenu ? 'arrow-flipped' : ''} />
+                <ChevronDown size={12} className={showMemberMenu ? 'arrow-flipped' : ''} aria-hidden="true" />
               </button>
 
               {showMemberMenu && (
-                <div className="dropdown-panel member-panel fade-in">
+                <div className="dropdown-panel member-panel fade-in" role="menu">
                   <div className="panel-header">
                     <span className="panel-title">Registered Students</span>
                     <span className="badge badge-primary">{household.members.length}</span>
@@ -138,13 +143,15 @@ export default function Header({
                           setActiveStudent(member);
                           setShowMemberMenu(false);
                         }}
+                        role="menuitem"
+                        aria-label={`Select student ${member.name}`}
                       >
-                        <div className="member-avatar">{member.avatarInitials}</div>
+                        <div className="member-avatar" aria-hidden="true">{member.avatarInitials}</div>
                         <div className="member-item-info">
                           <div className="member-name-row">
                             <span className="member-item-name">{member.name}</span>
                             {member.id === activeStudent.id && (
-                              <CheckCircle2 size={13} className="text-success" />
+                              <CheckCircle2 size={13} className="text-success" aria-hidden="true" />
                             )}
                           </div>
                           <span className="member-item-meta">{member.institution || member.educationLevel}</span>
@@ -161,6 +168,7 @@ export default function Header({
           <button 
             className="header-pill notif-pill"
             onClick={onOpenNotifications}
+            aria-label={`View notifications, ${unreadCount} unread`}
             title={`${unreadCount} notifications`}
           >
             <Bell size={15} />
@@ -174,13 +182,15 @@ export default function Header({
             <button 
               className="header-pill lang-pill"
               onClick={() => { setShowLangMenu(!showLangMenu); setShowMemberMenu(false); }}
+              aria-label="Change portal language"
               title="Change Language"
+              aria-expanded={showLangMenu}
             >
               <Languages size={15} />
               <span className="pill-label">
                 {lang === 'en' ? 'EN' : lang === 'hi' ? 'हिं' : lang.toUpperCase()}
               </span>
-              <ChevronDown size={12} className={showLangMenu ? 'arrow-flipped' : ''} />
+              <ChevronDown size={12} className={showLangMenu ? 'arrow-flipped' : ''} aria-hidden="true" />
             </button>
 
             {showLangMenu && (

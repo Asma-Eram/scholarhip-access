@@ -55,11 +55,11 @@ export default function Sidebar({
   const navItems = userRole === 'admin' ? adminNavItems : studentNavItems
 
   return (
-    <aside className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''}`}>
+    <aside className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''}`} aria-label="Portal Navigation Sidebar">
       {/* Brand Header */}
       <div className="sidebar-brand">
-        <div className="brand-logo-icon">
-          <GraduationCap size={22} className="logo-cap-icon" />
+        <div className="brand-logo-icon" aria-hidden="true">
+          <GraduationCap size={22} className="logo-cap-icon" aria-hidden="true" />
           <span className="logo-sparkle-dot" />
         </div>
         {!collapsed && (
@@ -96,7 +96,7 @@ export default function Sidebar({
       )}
 
       {/* Navigation Links */}
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav" aria-label="Main Navigation">
         <div className="nav-section-label">
           {!collapsed && (userRole === 'admin' ? 'VERIFICATION MODULES' : 'MAIN MENU')}
         </div>
@@ -108,9 +108,11 @@ export default function Sidebar({
               key={item.id}
               className={`sidebar-nav-btn ${isActive ? 'active-sidebar-btn' : ''}`}
               onClick={() => setActiveTab(item.id)}
+              aria-label={item.label}
+              aria-current={isActive ? 'page' : undefined}
               title={collapsed ? item.label : undefined}
             >
-              <Icon size={19} className="sidebar-nav-icon" />
+              <Icon size={19} className="sidebar-nav-icon" aria-hidden="true" />
               {!collapsed && <span className="sidebar-nav-label">{item.label}</span>}
               {item.badge && !collapsed && (
                 <span className="sidebar-badge-warning">{item.badge}</span>
@@ -130,9 +132,11 @@ export default function Sidebar({
             <button
               className={`sidebar-nav-btn ${activeTab === 'assistant' ? 'active-sidebar-btn' : ''}`}
               onClick={() => setActiveTab('assistant')}
+              aria-label="AI Policy Advisor"
+              aria-current={activeTab === 'assistant' ? 'page' : undefined}
               title={collapsed ? 'AI Scholarship Sahayak' : undefined}
             >
-              <Bot size={19} className="sidebar-nav-icon text-primary" />
+              <Bot size={19} className="sidebar-nav-icon text-primary" aria-hidden="true" />
               {!collapsed && <span className="sidebar-nav-label">AI Policy Advisor</span>}
               {!collapsed && <span className="sidebar-ai-pill">24/7</span>}
             </button>
@@ -145,7 +149,7 @@ export default function Sidebar({
         {!collapsed && (
           <div className="digilocker-trust-card">
             <div className="trust-icon-row">
-              <ShieldCheck size={16} className="text-success" />
+              <ShieldCheck size={16} className="text-success" aria-hidden="true" />
               <span>DigiLocker & PFMS Integrated</span>
             </div>
             <p className="trust-desc">Zero-Touch Verification • 100% GFR Rule 11 Audit Trail</p>
@@ -155,9 +159,10 @@ export default function Sidebar({
         <button 
           className="collapse-toggle-btn"
           onClick={() => setCollapsed(!collapsed)}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
+          {collapsed ? <ChevronRight size={17} aria-hidden="true" /> : <ChevronLeft size={17} aria-hidden="true" />}
           {!collapsed && <span className="collapse-text">Collapse Menu</span>}
         </button>
       </div>

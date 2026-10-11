@@ -246,8 +246,9 @@ export default function ApplicationTracker({
                 <button 
                   className="btn btn-warning"
                   onClick={() => onResolveDeficiency(selectedApp.id)}
+                  aria-label="Re-verify via DigiLocker Live Sync"
                 >
-                  <ShieldCheck size={16} />
+                  <ShieldCheck size={16} aria-hidden="true" />
                   <span>{t.reverifyDigilocker || 'Re-verify via DigiLocker Live Sync'}</span>
                 </button>
               </div>
@@ -298,8 +299,9 @@ export default function ApplicationTracker({
               <button 
                 className="btn btn-secondary btn-full dbt-download-btn"
                 onClick={() => onDownloadSlip(selectedApp)}
+                aria-label="Download PDF Sanction Receipt"
               >
-                <Download size={15} />
+                <Download size={15} aria-hidden="true" />
                 <span>{t.downloadAcknowledgement || 'Download PDF Sanction Receipt'}</span>
               </button>
             </div>

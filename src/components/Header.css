@@ -3,12 +3,14 @@
    ═════════════════════════════════════════════════════════════════════ */
 
 .top-header {
-  background: var(--bg-surface);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
   z-index: 95;
-  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 4px 0 rgba(15, 23, 42, 0.05);
 }
 
 .header-inner {

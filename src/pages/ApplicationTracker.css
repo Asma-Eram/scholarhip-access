@@ -229,7 +229,7 @@
 }
 
 .def-warning-icon {
-  color: var(--warning-600);
+  color: var(--warning-700);
   flex-shrink: 0;
 }
 

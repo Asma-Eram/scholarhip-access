@@ -57,19 +57,19 @@ export default function AutofillModal({
   }
 
   return (
-    <div className="modal-overlay fade-in" onClick={onClose}>
+    <div className="modal-overlay fade-in" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="autofill-scheme-title">
       <div className="autofill-modal-card" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
         <div className="autofill-modal-header">
           <div className="header-badge-title">
-            <span className="badge badge-success"><Sparkles size={12} /> DigiLocker Zero-Touch Autofill</span>
-            <h2>{scheme.name}</h2>
+            <span className="badge badge-success"><Sparkles size={12} aria-hidden="true" /> DigiLocker Zero-Touch Autofill</span>
+            <h2 id="autofill-scheme-title">{scheme.name}</h2>
             <p className="scheme-subtitle">
               Application for <strong>{student.name}</strong> • Code: <strong>{scheme.code}</strong>
             </p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Close modal">
-            <X size={20} />
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 

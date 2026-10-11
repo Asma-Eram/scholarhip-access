@@ -410,32 +410,32 @@ export const HOUSEHOLD_DATA = {
           deficiencies: []
         },
         {
-          id: 'APP-SFMP-2026-TC1042',
-          schemeId: 'top-class',
-          portal: 'SFMP / NSP',
+          id: 'APP-CSSS-2026-UG1042',
+          schemeId: 'csss',
+          portal: 'NSP (MoE CSSS)',
           appliedDate: '2026-08-15',
           academicSession: '2026-27',
-          sanctionAmount: 'Full Tuition + ₹36,000 Living Grant',
+          sanctionAmount: '₹20,000 / year (UG)',
           currentStageIndex: 2, // In progress
           status: 'action_required',
-          statusText: 'Action Required: Income Affidavit Clarification',
+          statusText: 'Action Required: Institutional Bonafide & Fee Receipt Query',
           statusType: 'warning',
           lastActionDate: '2026-09-20',
           stages: [
-            { id: 1, title: 'DigiLocker Identity & ST Verification', date: '2026-08-15', done: true, remarks: 'Verified against State ST master registry' },
-            { id: 2, title: 'NIT Jamshedpur Top Class Verification', date: '2026-08-25', done: true, remarks: 'Premier Institute Nodal Officer confirmed JEE All India Rank' },
-            { id: 3, title: 'State Tribal Nodal Inspection', date: '2026-09-20', done: false, active: true, remarks: 'Clarification required: Annual income certificate format update requested' },
-            { id: 4, title: 'MoTA National Committee Sanction', date: null, done: false },
+            { id: 1, title: 'DigiLocker Identity & Marksheets Sync', date: '2026-08-15', done: true, remarks: 'Class XII 94.2% percentile verified via CBSE/DigiLocker' },
+            { id: 2, title: 'NIT Jamshedpur Nodal Verification', date: '2026-08-25', done: true, remarks: 'Dean Academic certified regular full-time undergraduate status' },
+            { id: 3, title: 'State Directorate Clearance Audit', date: '2026-09-20', done: false, active: true, remarks: 'Clarification required: Current semester fee receipt update requested' },
+            { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
             { id: 5, title: 'PFMS Direct Benefit Transfer', date: null, done: false }
           ],
           dbtDetails: null,
           deficiencies: [
             {
               id: 'def_01',
-              title: 'Updated Income Certificate Required',
-              detail: 'Competent Authority Income certificate for FY 2025-26 needs re-verification due to illegible Tehsildar seal.',
+              title: 'Current Semester Fee Receipt Verification',
+              detail: 'Institutional Nodal Officer requested verified semester fee receipt and DigiLocker income certificate refresh.',
               severity: 'high',
-              actionLabel: 'Re-sync DigiLocker Income Certificate'
+              actionLabel: '1-Click Resolve via DigiLocker'
             }
           ]
         }
