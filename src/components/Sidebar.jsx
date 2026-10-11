@@ -59,7 +59,7 @@ export default function Sidebar({
       {/* Brand Header */}
       <div className="sidebar-brand">
         <div className="brand-logo-icon" aria-hidden="true">
-          <GraduationCap size={22} className="logo-cap-icon" aria-hidden="true" />
+          <img src="/logo.png" alt="ScholarBridge Logo" className="brand-logo-img" />
           <span className="logo-sparkle-dot" />
         </div>
         {!collapsed && (
@@ -85,7 +85,7 @@ export default function Sidebar({
             </div>
           ) : (
             <div className="student-context-box">
-              <div className="student-avatar">{activeStudent.avatarInitials || 'ST'}</div>
+              <div className="student-avatar">{activeStudent.avatarInitials || 'AS'}</div>
               <div className="student-info-text">
                 <div className="student-name">{activeStudent.name}</div>
                 <div className="student-sub">{activeStudent.educationLevel}</div>

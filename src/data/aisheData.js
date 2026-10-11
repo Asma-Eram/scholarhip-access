@@ -48,7 +48,7 @@ export const AISHE_DIRECTORY = [
     hostelFee: '₹12,000',
     programs: [
       { id: 'msc_botany', name: 'M.Sc in Applied Mathematics & Computing', durationYears: 2, feePerYear: 18500 },
-      { id: 'ma_tribal', name: 'M.A in English Literature & Linguistics', durationYears: 2, feePerYear: 12000 },
+      { id: 'ma_english', name: 'M.A in English Literature & Linguistics', durationYears: 2, feePerYear: 12000 },
       { id: 'phd_arts', name: 'Ph.D - Doctoral Research', durationYears: 5, feePerYear: 25000 }
     ]
   },

@@ -114,7 +114,7 @@ export default function AutofillModal({
                   <input type="text" value={`${incomeDoc?.certNumber || 'JH/INC/2025/110482'} (₹1,85,000/yr)`} readOnly />
                   <CheckCircle2 size={16} className="valid-chk" />
                 </div>
-                <span className="sub-helper">Within &le; ₹2.50L MoTA Guideline Cap</span>
+                <span className="sub-helper">Within &le; ₹2.50L Central Guideline Cap</span>
               </div>
             </div>
           </div>

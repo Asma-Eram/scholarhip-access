@@ -134,11 +134,11 @@ export default function ApplicationTracker({
             <p className="whats-next-desc">
               {isDisbursed ? (
                 <>
-                  Funds have been directly released by MoTA / PFMS into your Aadhaar-seeded bank account. Keep your UTR receipt for institutional fee submission records.
+                  Funds have been directly released by Central Scholarship Directorate / PFMS into your Aadhaar-seeded bank account. Keep your UTR receipt for institutional fee submission records.
                 </>
               ) : hasDeficiency ? (
                 <>
-                  Your College Nodal Officer or State Welfare Directorate has requested an updated document or clarification. Please re-verify via DigiLocker live sync below.
+                  Your College Nodal Officer or State Higher Education Directorate has requested an updated document or clarification. Please re-verify via DigiLocker live sync below.
                 </>
               ) : (
                 <>

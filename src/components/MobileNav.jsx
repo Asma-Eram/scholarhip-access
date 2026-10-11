@@ -23,7 +23,7 @@ export default function MobileNav({ activeTab, setActiveTab, lang, setLang, defi
 
   // Short, clean labels for mobile to completely prevent text wrapping or overlapping
   const LABELS = {
-    en: { home: 'Home', schemes: 'Schemes', eligibility: 'Eligibility', tracker: 'Tracker', sahayak: 'Sahayak', more: 'More', vault: 'Document Vault', family: 'Household', services: 'Additional MoTA Services' },
+    en: { home: 'Home', schemes: 'Schemes', eligibility: 'Eligibility', tracker: 'Tracker', sahayak: 'Sahayak', more: 'More', vault: 'Document Vault', family: 'Household', services: 'Additional Portal Services' },
     hi: { home: 'होम', schemes: 'योजनाएं', eligibility: 'पात्रता', tracker: 'ट्रैकर', sahayak: 'सहायक', more: 'अन्य', vault: 'दस्तावेज़ वॉल्ट', family: 'परिवार', services: 'अतिरिक्त सेवाएं' },
     santhali: { home: 'ᱢᱩᱬᱩᱛ', schemes: 'ᱟᱸᱪᱚᱱ', eligibility: 'ᱞᱟᱭᱚᱠ', tracker: 'ᱦᱟᱞᱚᱛ', sahayak: 'ᱜᱚᱲᱚ', more: 'ᱮᱴᱟᱜ', vault: 'ᱰᱤᱡᱤᱞᱚᱠᱟᱨ', family: 'ᱜᱷᱟᱨᱚᱸᱡᱽ', services: 'ᱮᱴᱟᱜ ᱥᱮᱵᱟ' },
     gondi: { home: 'मुखड़ा', schemes: 'योजना', eligibility: 'जांच', tracker: 'हाल', sahayak: 'संगी', more: 'अउर', vault: 'कागद पत्र', family: 'कुटुम', services: 'अउर सेवा' },

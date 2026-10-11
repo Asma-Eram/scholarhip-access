@@ -30,40 +30,40 @@ const KNOWLEDGE_BASE = {
     ]
   },
   hi: {
-    welcome: (name) => `जोहार / नमस्ते ${name}! मैं जनजातीय कार्य मंत्रालय (MoTA) का 'जनजातीय एआई सहायक (JAGO)' हूँ। मैं सभी 5 छात्रवृत्ति योजनाओं, डीबीटी भुगतान स्थिति, डिजिलॉकर सत्यापन, और शिक्षा एवं सामान्य ज्ञान से जुड़े किसी भी प्रश्न में आपकी पूरी सहायता कर सकता हूँ।`,
-    citation: 'जनजातीय कार्य मंत्रालय दिशा-निर्देश 2026-27',
+    welcome: (name) => `नमस्ते ${name}! मैं ScholarBridge का आधिकारिक एआई सहायक हूँ। मैं सभी राष्ट्रीय छात्रवृत्ति योजनाओं, डीबीटी भुगतान स्थिति, डिजिलॉकर सत्यापन, और शिक्षा से जुड़े किसी भी प्रश्न में आपकी पूरी सहायता कर सकता हूँ।`,
+    citation: 'राष्ट्रीय छात्रवृत्ति पोर्टल दिशा-निर्देश 2026-27',
     inputPlaceholder: 'हिंदी, संथाली, गोंडी या अंग्रेजी में प्रश्न पूछें...',
     speakingToast: 'हिंदी में ध्वनि संदेश सुनाया जा रहा है...',
     questions: [
       { q: 'मेरी छात्रवृत्ति और डीबीटी भुगतान की स्थिति क्या है?', a: 'आपकी पोस्ट-मैट्रिक छात्रवृत्ति (₹18,500) पूरी तरह सत्यापित हो चुकी है और डीबीटी राशि 12 सितंबर 2026 को आपके भारतीय स्टेट बैंक (SBI) खाते में सफलतापूर्वक जमा हो चुकी है (UTR: RBI2026091298412)।' },
-      { q: 'क्या पोस्ट-मैट्रिक के साथ NFST फेलोशिप भी मिल सकती है?', a: 'जनजातीय कार्य मंत्रालय के "एक सक्रिय छात्रवृत्ति" नियम (GFR 2017) के तहत आप एक साथ दो छात्रवृत्तियां नहीं ले सकते। हालांकि, TRISHA में स्वचालित अनापत्ति प्रमाण पत्र (NOC) की सुविधा है।' },
+      { q: 'क्या पोस्ट-मैट्रिक के साथ उच्च अनुसंधान फेलोशिप भी मिल सकती है?', a: 'राष्ट्रीय छात्रवृत्ति नियमों (GFR 2017) के तहत आप एक साथ दो सरकारी छात्रवृत्तियां नहीं ले सकते। हालांकि, ScholarBridge में स्वचालित अनापत्ति प्रमाण पत्र (NOC) की सुविधा है।' },
       { q: 'मेरे टॉप क्लास आवेदन पर कार्रवाई क्यों दिखाई दे रही है?', a: 'राज्य नोडल अधिकारी द्वारा वर्ष 2025-26 के आय प्रमाण पत्र के पुनः सत्यापन का अनुरोध किया गया है। आप "ट्रैकर" टैब में जाकर डिजिलॉकर लाइव सिंक द्वारा इसे तुरंत ठीक कर सकते हैं।' },
-      { q: 'डिजिलॉकर से कौन से दस्तावेज़ सत्यापित हैं?', a: 'आपका आधार कार्ड, एसटी जाति प्रमाण पत्र (ई-डिस्ट्रिक्ट) एवं कक्षा 12 की अंकतालिका डिजिलॉकर और APAAR के माध्यम से डिजिटल रूप से सत्यापित हैं।' }
+      { q: 'डिजिलॉकर से कौन से दस्तावेज़ सत्यापित हैं?', a: 'आपका आधार कार्ड, मूल निवास प्रमाण पत्र (ई-डिस्ट्रिक्ट) एवं कक्षा 12 की अंकतालिका डिजिलॉकर और APAAR के माध्यम से डिजिटल रूप से सत्यापित हैं।' }
     ]
   },
   santhali: {
-    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ᱡᱚᱱᱡᱟᱹᱛᱤᱭᱟᱹᱨᱤ ᱢᱚᱱᱛᱨᱟᱲᱚᱭ (MoTA) ᱨᱤᱱᱤᱡ 'ᱟᱹᱫᱤᱵᱟᱹᱥᱤ ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ (JAGO)' ᱠᱟᱱᱟᱹᱧ᱾`,
-    citation: 'MoTA ᱟᱹᱫᱤᱵᱟᱹᱥᱤ ᱱᱤᱭᱟᱹᱢ ᱒᱐᱒᱖-᱒᱗',
+    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ScholarBridge ᱨᱤᱱᱤᱡ 'ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ' ᱠᱟᱱᱟᱹᱧ᱾`,
+    citation: 'ScholarBridge ᱱᱤᱭᱟᱹᱢ ᱒᱐᱒᱖-᱒᱗',
     inputPlaceholder: 'ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ...',
     speakingToast: 'ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ ᱟᱲᱟᱝ ᱥᱟᱰᱮ ᱪᱟᱹᱞᱩ ᱟᱠᱟᱱᱟ...',
     questions: [
       { q: 'ᱤᱧᱟᱜ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱟᱨ ᱴᱟᱠᱟ ᱧᱟᱢ ᱨᱮᱱᱟᱜ ᱦᱟᱞᱚᱛ ᱪᱮᱫ ᱠᱟᱱᱟ?', a: 'ᱟᱢᱟᱜ ᱯᱳᱥᱴ-ᱢᱮᱴᱨᱤᱠ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ (₹18,500) ᱯᱩᱨᱟᱹ ᱡᱟᱸᱪ ᱦᱩᱭ ᱟᱠᱟᱱᱟ ᱟᱨ SBI ᱵᱮᱸᱠ ᱮᱠᱟᱣᱩᱱᱴ ᱨᱮ ᱴᱟᱠᱟ ᱥᱮᱴᱮᱨ ᱟᱠᱟᱱᱟ᱾' },
-      { q: 'ᱯᱳᱥᱴ-ᱢᱮᱴᱨᱤᱠ ᱛᱟᱦᱮᱸᱱ ᱛᱩᱞᱩᱡ NFST ᱯᱷᱮᱞᱳᱥᱤᱯ ᱧᱟᱢᱚᱜ-ᱟ ᱥᱮ ᱵᱟᱝ?', a: 'MoTA ᱨᱮᱱᱟᱜ ᱢᱤᱫ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱱᱤᱭᱟᱹᱢ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱨᱭᱟ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱢᱤᱫ ᱫᱷᱟᱣ ᱨᱮ ᱵᱟᱝ ᱧᱟᱢᱚᱜ-ᱟ᱾ ᱢᱮᱱᱠᱷᱟᱱ TRISHA ᱨᱮ ᱟᱡ ᱛᱮᱜᱮ NOC ᱵᱮᱱᱟᱣ ᱠᱟᱛᱮ NFST ᱨᱮ ᱵᱚᱫᱚᱞ ᱜᱟᱱᱚᱜ-ᱟ᱾' }
+      { q: 'ᱯᱳᱥᱴ-ᱢᱮᱴᱨᱤᱠ ᱛᱟᱦᱮᱸᱱ ᱛᱩᱞᱩᱡ ᱰᱚᱠᱴᱚᱨᱟᱞ ᱯᱷᱮᱞᱳᱥᱤᱯ ᱧᱟᱢᱚᱜ-ᱟ ᱥᱮ ᱵᱟᱝ?', a: 'ScholarBridge ᱨᱮᱱᱟᱜ ᱢᱤᱫ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱱᱤᱭᱟᱹᱢ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱨᱭᱟ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱢᱤᱫ ᱫᱷᱟᱣ ᱨᱮ ᱵᱟᱝ ᱧᱟᱢᱚᱜ-ᱟ᱾ ᱢᱮᱱᱠᱷᱟᱱ ScholarBridge ᱨᱮ ᱟᱡ ᱛᱮᱜᱮ NOC ᱵᱮᱱᱟᱣ ᱠᱟᱛᱮ ᱵᱚᱫᱚᱞ ᱜᱟᱱᱚᱜ-ᱟ᱾' }
     ]
   },
   gondi: {
-    welcome: (name) => `सेवा जोहार / राम-राम ${name}! नन्ना जनजातीय मंत्रालय (MoTA) ना 'सहायी संगी (JAGO)' आन।`,
-    citation: 'MoTA गोंडी सेवा नियम 2026-27',
+    welcome: (name) => `सेवा जोहार / राम-राम ${name}! नन्ना ScholarBridge ना 'सहायी संगी' आन।`,
+    citation: 'ScholarBridge सेवा नियम 2026-27',
     inputPlaceholder: 'गोंडी ते सवाल कीम...',
     speakingToast: 'गोंडी ते आवाज चालू मंता...',
     questions: [
       { q: 'मावा छात्रवृत्ति अउर DBT पैसा ना हाल बोर मंता?', a: 'नीवा पोस्ट-मैट्रिक छात्रवृत्ति (₹18,500) जांच पूरो आता अउर SBI बैंक खाता ते पैसा जमा आता।' },
-      { q: 'पोस्ट-मैट्रिक कज्या NFST फेलोशिप मिलि की?', a: 'MoTA ना नियम मुतालिक एक बेर ते रोंड (2) छात्रवृत्ति मिले वयो। पण TRISHA ते ऑटोमैटिक NOC कीसी NFST ते जासे सुविधा मंता।' }
+      { q: 'पोस्ट-मैट्रिक कज्या उच्च अनुसंधान फेलोशिप मिलि की?', a: 'ScholarBridge ना नियम मुतालिक एक बेर ते रोंड (2) छात्रवृत्ति मिले वयो। पण ScholarBridge ते ऑटोमैटिक NOC कीसी जासे सुविधा मंता।' }
     ]
   },
   ho: {
-    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ᱢᱚᱱᱛᱨᱤ ᱢᱟᱰᱮᱨ (MoTA) ᱨᱤᱱᱤᱡ 'ᱦᱳ ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ (JAGO)' ᱠᱟᱱᱟᱹᱧ᱾`,
-    citation: 'MoTA ᱦᱳ ᱫᱤᱥᱟᱹ-ᱩᱫᱩᱜ ᱒᱐᱒᱖-᱒᱗',
+    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ScholarBridge ᱨᱤᱱᱤᱡ 'ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ' ᱠᱟᱱᱟᱹᱧ᱾`,
+    citation: 'ScholarBridge ᱫᱤᱥᱟᱹ-ᱩᱫᱩᱜ ᱒᱐᱒᱖-᱒᱗',
     inputPlaceholder: 'ᱦᱳ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ...',
     speakingToast: 'ᱦᱳ ᱛᱮ ᱟᱲᱟᱝ ᱥᱟᱰᱮ ᱪᱟᱹᱞᱩ ᱟᱠᱟᱱᱟ...',
     questions: [
@@ -71,8 +71,8 @@ const KNOWLEDGE_BASE = {
     ]
   },
   bodo: {
-    welcome: (name) => `खुलुमबाय ${name}! आं जनजातीय मन्त्रालय (MoTA) नि 'बर\' एआइ मददगिरि (JAGO)'।`,
-    citation: 'MoTA बर\' बिथोन 2026-27',
+    welcome: (name) => `खुलुमबाय ${name}! आं ScholarBridge नि 'एआइ मददगिरि'।`,
+    citation: 'ScholarBridge बिथोन 2026-27',
     inputPlaceholder: 'बर\' रावजों सों...',
     speakingToast: 'बर\' रावजों खोनासं...',
     questions: [
@@ -80,8 +80,8 @@ const KNOWLEDGE_BASE = {
     ]
   },
   kui: {
-    welcome: (name) => `ଜୁହାର ${name}! ମୁଁ ଜନଜାତି କଲ୍ୟାଣ ମନ୍ତ୍ରଣାଳୟ (MoTA) ର 'କୁଇ ଏଆଇ ସହାୟକ (JAGO)'।`,
-    citation: 'MoTA କୁଇ ନିୟମାବଳୀ ୨୦୨୬-୨୭',
+    welcome: (name) => `ଜୁହାର ${name}! ମୁଁ ScholarBridge ର 'ଏଆଇ ସହାୟକ'।`,
+    citation: 'ScholarBridge ନିୟମାବଳୀ ୨୦୨୬-୨᱗',
     inputPlaceholder: 'କୁଇ ଭାଷାରେ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ...',
     speakingToast: 'କୁଇ ଭାଷାରେ ଶୁଣାଯାଉଛି...',
     questions: [
@@ -150,7 +150,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
     {
       id: 1,
       sender: 'bot',
-      text: kb.welcome(activeStudent?.name || 'Priya'),
+      text: kb.welcome(activeStudent?.name || 'Ananya'),
       citation: kb.citation
     }
   ])
@@ -167,7 +167,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
     setMessages([{
       id: Date.now(),
       sender: 'bot',
-      text: kb.welcome(activeStudent?.name || 'Priya'),
+      text: kb.welcome(activeStudent?.name || 'Ananya'),
       citation: kb.citation
     }])
   }, [lang, activeStudent])
@@ -290,7 +290,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           id: Date.now() + 1,
           sender: 'bot',
           text: aiResult.reply,
-          citation: aiResult.citation || 'MoTA Guidelines & Google Gemini AI',
+          citation: aiResult.citation || 'National Scholarship Guidelines & Google Gemini AI',
           model: aiResult.model
         }])
       } else {
@@ -300,7 +300,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           id: Date.now() + 1,
           sender: 'bot',
           text: fallbackReply,
-          citation: 'MoTA Knowledge Base'
+          citation: 'ScholarBridge Knowledge Base'
         }])
       }
     } catch (err) {
@@ -310,7 +310,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
         id: Date.now() + 1,
         sender: 'bot',
         text: fallback,
-        citation: 'MoTA Guidelines'
+        citation: 'ScholarBridge Guidelines'
       }])
     } finally {
       setLoading(false)
@@ -341,17 +341,17 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
             value={lang} 
             onChange={(e) => {
               setLang?.(e.target.value)
-              onToast?.(`Switched JAGO to ${e.target.options[e.target.selectedIndex].text}`, 'info')
+              onToast?.(`Switched language to ${e.target.options[e.target.selectedIndex].text}`, 'info')
             }}
             className="assistant-lang-select"
           >
             <option value="en">English (Official)</option>
-            <option value="hi">हिंदी (Hindi / Northern ST)</option>
+            <option value="hi">हिंदी (Hindi)</option>
             <option value="santhali">ᱥᱟᱱᱛᱟᱲᱤ (Santhali / Ol Chiki)</option>
             <option value="gondi">गोंडी (Gondi / Central)</option>
             <option value="ho">ᱦᱳ (Ho / Kolhan)</option>
             <option value="bodo">बड़ो (Bodo / Northeast)</option>
-            <option value="kui">କୁଇ (Kui / Kandha)</option>
+            <option value="kui">କୁଇ (Kui)</option>
           </select>
         </div>
       </div>

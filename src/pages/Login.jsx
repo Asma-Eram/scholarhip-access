@@ -31,10 +31,12 @@ export default function Login({ onLogin }) {
       <div className="login-bg" />
       <div className="login-card fade-in">
         <div className="login-header">
-          <div className="login-logo">🪶</div>
-          <h1>JAGO</h1>
-          <p>MoTA Unified Scholarship Portal</p>
-          <div className="login-subtitle">Unified access to all 5 Scheduled Tribe scholarship schemes</div>
+          <div className="login-logo">
+            <img src="/logo.png" alt="ScholarBridge Logo" className="login-logo-img" />
+          </div>
+          <h1>ScholarBridge</h1>
+          <p>National Scholarship Portal Gateway</p>
+          <div className="login-subtitle">Unified zero-touch verification for all national scholarship schemes</div>
         </div>
 
         <div className="login-steps">

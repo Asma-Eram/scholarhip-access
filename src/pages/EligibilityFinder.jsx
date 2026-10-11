@@ -44,7 +44,7 @@ export default function EligibilityFinder({
       setInstType('premier')
       setHasNetJrf('none')
       setStudyAbroad(false)
-      onToast?.(lang === 'hi' ? 'डेमो लोड: एनआईटी/आईआईटी संस्थान में एसटी छात्र' : 'Loaded Scenario: ST Student in Premier Institute (NIT/IIT)', 'info')
+      onToast?.(lang === 'hi' ? 'डेमो लोड: एनआईटी/आईआईटी संस्थान में छात्र' : 'Loaded Scenario: Student in Premier Institute (NIT/IIT)', 'info')
     } else if (type === 'phd') {
       setEduLevel('phd')
       setIncomeBand('below_6l')
@@ -58,7 +58,7 @@ export default function EligibilityFinder({
       setInstType('foreign')
       setHasNetJrf('none')
       setStudyAbroad(true)
-      onToast?.(lang === 'hi' ? 'डेमो लोड: विदेशी विश्वविद्यालय प्रवेश प्रस्ताव' : 'Loaded Scenario: ST Student with Foreign University Offer', 'info')
+      onToast?.(lang === 'hi' ? 'डेमो लोड: विदेशी विश्वविद्यालय प्रवेश प्रस्ताव' : 'Loaded Scenario: Student with Foreign University Offer', 'info')
     } else if (type === 'school') {
       setEduLevel('school_9_10')
       setIncomeBand('below_2_5l')
@@ -79,7 +79,7 @@ export default function EligibilityFinder({
       matchedSchemeId = 'nos'
       reasons.push(lang === 'hi' ? 'उम्मीदवार QS विश्व रैंकिंग विश्वविद्यालय में विदेश में मास्टर्स / पीएचडी कर रहे हैं।' : 'Candidate pursuing Masters / Ph.D. abroad in QS World Ranked University.')
       if (incomeBand === 'above_6l') {
-        warnings.push(lang === 'hi' ? 'पारिवारिक वार्षिक आय MoTA विदेश अनुदान की ₹6.00 लाख सीमा से अधिक है।' : 'Annual family income exceeds ₹6.00 Lakhs cap for MoTA Overseas grant.')
+        warnings.push(lang === 'hi' ? 'पारिवारिक वार्षिक आय विदेशी अनुदान की ₹6.00 लाख सीमा से अधिक है।' : 'Annual family income exceeds ₹6.00 Lakhs cap for Overseas Scholarship grant.')
       } else {
         reasons.push(lang === 'hi' ? 'पारिवारिक आय ₹6.00 लाख प्रति वर्ष की सीमा के भीतर है।' : 'Family income within ₹6.00 Lakhs per annum limit.')
       }
@@ -93,7 +93,7 @@ export default function EligibilityFinder({
       reasons.push(lang === 'hi' ? 'पूर्ण शिक्षण शुल्क + ₹2,000/माह निर्वाह भत्ता + ₹45,000 पुस्तकें/कंप्यूटर सहायता।' : 'Covers full tuition + ₹2,000/month maintenance allowance + ₹45,000/yr books.')
     } else if (eduLevel === 'school_9_10') {
       matchedSchemeId = 'pre-matric'
-      reasons.push(lang === 'hi' ? 'मान्यता प्राप्त स्कूल / EMRS में कक्षा 9 या 10 में अध्ययनरत एसटी छात्र।' : 'ST Student studying in Class 9 or 10 in recognized school/EMRS.')
+      reasons.push(lang === 'hi' ? 'मान्यता प्राप्त स्कूल में कक्षा 9 या 10 में अध्ययनरत छात्र।' : 'Student studying in Class 9 or 10 in recognized school.')
       reasons.push(lang === 'hi' ? '₹150 - ₹750/माह रखरखाव भत्ता + वार्षिक पुस्तक अनुदान।' : 'Monthly maintenance of ₹150 - ₹750 + annual book grant.')
     } else {
       matchedSchemeId = 'post-matric'
@@ -368,19 +368,19 @@ export default function EligibilityFinder({
               <div className="conflict-box">
                 <div className="conflict-header">
                   <AlertTriangle size={18} className="conflict-icon" />
-                  <span>{t.conflictAlertTitle || 'MoTA One-Active-Scholarship Rule Conflict'}</span>
+                  <span>{t.conflictAlertTitle || 'One-Active-Scholarship Rule Conflict'}</span>
                 </div>
                 <p className="conflict-body">
                   {lang === 'hi' ? (
                     <>
                       छात्र <strong>{activeStudent?.nameHi || activeStudent?.name}</strong> वर्तमान में{' '}
-                      <strong>{verdict.activeSchemeObj?.nameHi || verdict.activeSchemeObj?.name}</strong> (आवेदन सं: {verdict.activeApp?.id}) का लाभ प्राप्त कर रहे हैं। MoTA दिशा-निर्देश समवर्ती छात्रवृत्ति की अनुमति नहीं देते।
+                      <strong>{verdict.activeSchemeObj?.nameHi || verdict.activeSchemeObj?.name}</strong> (आवेदन सं: {verdict.activeApp?.id}) का लाभ प्राप्त कर रहे हैं। केंद्रीय दिशा-निर्देश समवर्ती छात्रवृत्ति की अनुमति नहीं देते।
                     </>
                   ) : (
                     <>
                       Student <strong>{activeStudent?.name}</strong> currently holds an active grant for{' '}
                       <strong>{verdict.activeSchemeObj?.name}</strong> (App ID: {verdict.activeApp?.id}). 
-                      MoTA guidelines prohibit simultaneous active scholarships.
+                      Central scholarship guidelines prohibit simultaneous active scholarships.
                     </>
                   )}
                 </p>
@@ -419,11 +419,11 @@ export default function EligibilityFinder({
               <ShieldCheck size={16} /> {t.readinessTitle || 'DigiLocker & APAAR Wallet Readiness'}
             </h4>
             <p className="readiness-text">
-              {t.readinessDesc || 'Verified digital credentials stored in TRISHA will be automatically linked to this application:'}
+              {t.readinessDesc || 'Verified digital credentials stored in ScholarBridge will be automatically linked to this application:'}
             </p>
             <div className="readiness-grid">
               <div className="readiness-item"><CheckCircle2 size={13} className="item-chk" /> {t.aadhaarKyc || 'Aadhaar (UIDAI e-KYC)'}</div>
-              <div className="readiness-item"><CheckCircle2 size={13} className="item-chk" /> {t.stCertDoc || 'ST Certificate (e-District)'}</div>
+              <div className="readiness-item"><CheckCircle2 size={13} className="item-chk" /> {t.stCertDoc || 'Domicile Certificate (e-District)'}</div>
               <div className="readiness-item"><CheckCircle2 size={13} className="item-chk" /> {t.apaarRecord || 'APAAR Academic Record'}</div>
               <div className="readiness-item"><CheckCircle2 size={13} className="item-chk" /> {t.bankAccountDbt || 'Bank Account (PFMS DBT)'}</div>
             </div>

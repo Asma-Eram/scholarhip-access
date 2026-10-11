@@ -203,7 +203,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
                     </td>
                     <td>
                       <div className="student-name-cell">{app.studentName}</div>
-                      <div className="caste-cert-text">Domicile: {app.domicileCertNo || app.casteCertNo}</div>
+                      <div className="domicile-cert-text">Domicile: {app.domicileCertNo || app.casteCertNo}</div>
                     </td>
                     <td>
                       <div className="roll-badge">{app.rollNumber}</div>
