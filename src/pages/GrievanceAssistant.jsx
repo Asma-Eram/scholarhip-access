@@ -162,15 +162,14 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
   const chatBottomRef = useRef(null)
   const recognitionRef = useRef(null)
 
-  // When language changes, update greeting
+  // When language changes, preserve chat history and only update greeting if empty
+  const prevLangRef = useRef(lang)
   useEffect(() => {
-    setMessages([{
-      id: Date.now(),
-      sender: 'bot',
-      text: kb.welcome(activeStudent?.name || 'Priya'),
-      citation: kb.citation
-    }])
-  }, [lang, activeStudent])
+    if (prevLangRef.current !== lang) {
+      prevLangRef.current = lang
+      // Do not wipe chat history; keep all existing messages so student can read them!
+    }
+  }, [lang])
 
   // Auto-scroll on new message
   useEffect(() => {
