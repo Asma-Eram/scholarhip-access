@@ -30,7 +30,8 @@ export default function Sidebar({
   collapsed: externalCollapsed,
   setCollapsed: externalSetCollapsed,
   userRole,
-  setUserRole
+  setUserRole,
+  onOpenHelpSupport
 }) {
   const [internalCollapsed, setInternalCollapsed] = useState(false)
   const collapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed
@@ -155,6 +156,16 @@ export default function Sidebar({
             <p className="trust-desc">Zero-Touch Verification • 100% GFR Rule 11 Audit Trail</p>
           </div>
         )}
+
+        <button 
+          className="sidebar-help-btn"
+          onClick={onOpenHelpSupport}
+          aria-label="Open Help & Support desk"
+          title={collapsed ? "Help & Support Desk" : undefined}
+        >
+          <HelpCircle size={17} aria-hidden="true" />
+          {!collapsed && <span className="help-text">Help & Support</span>}
+        </button>
 
         <button 
           className="collapse-toggle-btn"

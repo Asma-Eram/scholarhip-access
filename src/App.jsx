@@ -4,6 +4,7 @@ import Header from './components/Header'
 import MobileNav from './components/MobileNav'
 import OfflineBanner from './components/OfflineBanner'
 import ConflictModal from './components/ConflictModal'
+import HelpSupportModal from './components/HelpSupportModal'
 import Dashboard from './pages/Dashboard'
 import SchemesPage from './pages/SchemesPage'
 import ApplicationTracker from './pages/ApplicationTracker'
@@ -41,6 +42,7 @@ export default function App() {
   const [conflictData, setConflictData] = useState(null)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showNotificationsDrawer, setShowNotificationsDrawer] = useState(false)
+  const [showHelpSupportModal, setShowHelpSupportModal] = useState(false)
 
   const notifications = getLocalizedNotifications(lang)
   const localizedActiveStudent = getLocalizedStudent(activeStudent, lang)
@@ -185,6 +187,7 @@ export default function App() {
         setCollapsed={setSidebarCollapsed}
         userRole={userRole}
         setUserRole={setUserRole}
+        onOpenHelpSupport={() => setShowHelpSupportModal(true)}
       />
 
       {/* Right Content Area */}
@@ -282,6 +285,18 @@ export default function App() {
           lang={lang}
           onClose={() => { setConflictData(null); setConflictTargetScheme(null); }}
           onRelinquishAndProceed={handleRelinquishAndProceed}
+        />
+      )}
+
+      {/* Help & Support Modal */}
+      {showHelpSupportModal && (
+        <HelpSupportModal
+          lang={lang}
+          onClose={() => setShowHelpSupportModal(false)}
+          onNavigate={(tab) => {
+            setShowHelpSupportModal(false)
+            setActiveTab(tab)
+          }}
         />
       )}
 
