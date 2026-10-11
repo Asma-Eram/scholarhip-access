@@ -201,12 +201,17 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
       }
 
       recognition.onresult = (event) => {
+        if (!event.results || !event.results[0] || !event.results[0][0]) return
         const transcript = event.results[0][0].transcript
         setListening(false)
-        setInputVal(transcript)
-        onToast?.(`Voice captured: "${transcript}"`, 'success')
-        // Automatically submit the voice transcript
-        handleSend(transcript)
+        if (transcript && transcript.trim()) {
+          setInputVal(transcript)
+          onToast?.(`Voice captured: "${transcript}"`, 'success')
+          // Immediate submission of recognized voice text
+          setTimeout(() => {
+            handleSend(transcript)
+          }, 100)
+        }
       }
 
       recognition.onerror = (event) => {
