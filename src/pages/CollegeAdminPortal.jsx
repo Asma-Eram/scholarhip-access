@@ -203,7 +203,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
                     </td>
                     <td>
                       <div className="student-name-cell">{app.studentName}</div>
-                      <div className="caste-cert-text">Caste: {app.casteCertNo}</div>
+                      <div className="caste-cert-text">Domicile: {app.domicileCertNo || app.casteCertNo}</div>
                     </td>
                     <td>
                       <div className="roll-badge">{app.rollNumber}</div>
@@ -262,11 +262,11 @@ export default function CollegeAdminPortal({ lang, onToast }) {
                 </div>
                 <div className="chk-row">
                   <CheckCircle2 size={16} className="text-success" />
-                  <span>Biometric Attendance: <strong>{selectedApp.attendancePercentage}</strong> (&ge; 75% MoTA mandatory guideline)</span>
+                  <span>Biometric Attendance: <strong>{selectedApp.attendancePercentage}</strong> (&ge; 75% Central Scholarship guideline)</span>
                 </div>
                 <div className="chk-row">
                   <CheckCircle2 size={16} className="text-success" />
-                  <span>DigiLocker ST Caste Certificate verified against State Registry</span>
+                  <span>DigiLocker Domicile & Income Certificate verified against State e-District</span>
                 </div>
                 <div className="chk-row">
                   <CheckCircle2 size={16} className="text-success" />

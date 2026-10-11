@@ -42,7 +42,7 @@ export default function DocumentVault({ activeStudent, lang, onToast }) {
             </span>
             <span className="badge badge-primary">{t.zeroPaperSubmissions || 'Zero Manual Paper Submissions'}</span>
           </div>
-          <h1 className="vault-heading">{t.vaultHeading || 'Tribal Student Digital Document Vault'}</h1>
+          <h1 className="vault-heading">{t.vaultHeading || 'Digital Document Vault & Credentials'}</h1>
           <p className="vault-sub">
             {t.vaultSub || 'Verified authentic records pulled from UIDAI, State e-District, UDISE+, and National Academic Depository (NAD)'}
           </p>

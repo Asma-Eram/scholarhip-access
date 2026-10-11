@@ -15,18 +15,18 @@ import { I18N } from '../data/scholarshipData'
 import { askGemini } from '../services/geminiService'
 import './GrievanceAssistant.css'
 
-// Multilingual Knowledge Base for MoTA Tribal AI Sahayak (JAGO)
+// Multilingual Knowledge Base for ScholarBridge AI Student Advisor
 const KNOWLEDGE_BASE = {
   en: {
-    welcome: (name) => `Johar / Namaste ${name}! I am the MoTA Tribal AI Sahayak (JAGO). I can answer your questions on all 5 scholarship schemes, application tracking, DigiLocker verification, DBT payments, and any general knowledge queries in English, Hindi, Santhali, Gondi, Ho, Bodo, or Kui.`,
-    citation: 'MoTA Unified Guidelines 2026-27',
-    inputPlaceholder: 'Ask any question in English, Hindi, Santhali, Gondi...',
+    welcome: (name) => `Namaste ${name}! I am the ScholarBridge AI Student Advisor. I can answer your questions on scholarship schemes, application tracking, DigiLocker verification, DBT payments, and general academic guidelines.`,
+    citation: 'National Scholarship Guidelines 2026-27',
+    inputPlaceholder: 'Ask any question in English, Hindi, or regional languages...',
     speakingToast: 'Playing audio explanation in English...',
     questions: [
-      { q: 'What is my scholarship & DBT payment status?', a: 'Your Post-Matric Scholarship allowance (₹18,500) has been fully verified and DBT funds were successfully credited to your State Bank of India account (UTR: RBI2026091298412 on 12 September 2026).' },
-      { q: 'Can I apply for NFST fellowship if I already receive Post-Matric?', a: 'Under MoTA regulations (Rule 11/GFR 2017), simultaneous availing of multiple scholarships is strictly barred. However, TRISHA provides an automated Scheme Transition / Relinquishment NOC feature. If selected for NFST (₹37,000/mo), your Post-Matric allocation is safely transitioned without any double-dipping penalty.' },
-      { q: 'Why is my Top Class application flagged with an action required?', a: 'The State Nodal Officer requested an updated FY 2025-26 Income Certificate with a clear digital seal. You can resolve this instantly with 1-click DigiLocker sync on your Application Tracker tab.' },
-      { q: 'Which documents are auto-verified via DigiLocker?', a: 'Your Aadhaar Card, ST Caste Certificate (Jharkhand e-District), and Class 12 Marksheet are auto-verified with official digital signatures via DigiLocker and APAAR.' }
+      { q: 'What is my scholarship & DBT payment status?', a: 'Your scholarship grant (₹20,000) has been fully verified and DBT funds were successfully credited to your State Bank of India account (UTR: RBI2026091298412 on 12 September 2026).' },
+      { q: 'Can I apply for another fellowship if I already receive an active scholarship?', a: 'Under Central Scholarship regulations (Rule 11/GFR 2017), simultaneous availing of multiple scholarships is barred. However, ScholarBridge provides an automated Scheme Transition / Relinquishment NOC feature to transition safely without penalty.' },
+      { q: 'Why is my application flagged with an action required?', a: 'The Nodal Officer requested an updated Income Certificate with a clear digital seal. You can resolve this instantly with 1-click DigiLocker sync on your Application Tracker tab.' },
+      { q: 'Which documents are auto-verified via DigiLocker?', a: 'Your Aadhaar Card, State Domicile Certificate, and Class 12 Marksheet are auto-verified with official digital signatures via DigiLocker and APAAR.' }
     ]
   },
   hi: {
@@ -121,25 +121,25 @@ function generateIntelligentFallback(query, detectedLang) {
 
   if (q.includes('india') || q.includes('bharat') || q.includes('special') || q.includes('good about') || q.includes('खासियत') || q.includes('भारत')) {
     return isHi
-      ? `🇮🇳 भारत की प्रमुख विशेषताएं:\n\n• **विविधता में एकता:** 700+ मान्यता प्राप्त जनजातियां, 22 आधिकारिक भाषाएं।\n• **जनजातीय संस्कृति:** संताल, गोंड, भील, मुंडा, खासी — प्रकृति संरक्षण की धरोहर।\n• **डिजिटल अवसंरचना (DPI):** UPI, डिजिलॉकर, DBT — विश्व में सबसे तेज डिजिटल समावेशन।\n• **शीर्ष शिक्षा:** IITs, NITs, AIIMS — MoTA छात्रवृत्तियों से सुलभ।`
-      : `🇮🇳 Notable Specialties of India:\n\n• **Unity in Diversity:** 700+ Scheduled Tribes, 22 official languages, thousands of vibrant cultures.\n• **Indigenous Heritage:** Santhal, Gond, Munda, Bhil communities preserving nature & traditional knowledge.\n• **Digital Public Infrastructure:** UPI, DigiLocker, PFMS DBT — world's fastest digital inclusion.\n• **Premier Education:** IITs, IIMs, AIIMS — accessible through MoTA scholarships.`
+      ? `🇮🇳 भारत की प्रमुख विशेषताएं:\n\n• **विविधता में एकता:** 28 राज्य, 8 केंद्र शासित प्रदेश, 22 आधिकारिक भाषाएं।\n• **समृद्ध सांस्कृतिक विरासत:** सहस्राब्दियों पुरानी ज्ञान परंपरा एवं प्राकृतिक समन्वय।\n• **डिजिटल पब्लिक इन्फ्रास्ट्रक्चर (DPI):** UPI, डिजिलॉकर, PFMS DBT — विश्व का सबसे तेज़ डिजिटल समावेशन।\n• **विश्वस्तरीय उच्च शिक्षा:** IITs, NITs, IIMs, AIIMS — राष्ट्रीय छात्रवृत्तियों से सुलभ।`
+      : `🇮🇳 Notable Specialties of India:\n\n• **Unity in Diversity:** 28 states, 8 union territories, 22 official languages, rich vibrant cultures.\n• **Centuries of Academic Heritage:** World-renowned traditions of mathematics, philosophy, and sciences.\n• **Digital Public Infrastructure:** UPI, DigiLocker, PFMS DBT — world's fastest digital inclusion.\n• **Premier Higher Education:** IITs, NITs, IIMs, AIIMS — accessible through merit & need scholarships.`
   }
 
-  if ((q.includes('nfst') || q.includes('fellowship')) && (q.includes('post-matric') || q.includes('already') || q.includes('dono') || q.includes('both'))) {
+  if ((q.includes('fellowship') || q.includes('phd')) && (q.includes('post-matric') || q.includes('already') || q.includes('dono') || q.includes('both'))) {
     return isHi
-      ? `MoTA के "एक सक्रिय छात्रवृत्ति" नियम (GFR 2017 / Rule 11) के अनुसार, एक साथ दो सरकारी छात्रवृत्तियां नहीं ली जा सकतीं। हालाँकि, TRISHA पोर्टल में स्वचालित NOC सुविधा है — NFST (₹37,000/माह) के चयन पर पोस्ट-मैट्रिक बिना जुर्माने के स्थानांतरित हो जाएगी।`
-      : `Under MoTA Rule 11 (GFR 2017), simultaneous availing of multiple scholarships is barred. TRISHA provides an automated NOC wizard — if selected for NFST (₹37,000/month), your Post-Matric allocation transitions safely without penalty.`
+      ? `केंद्रीय छात्रवृत्ति नियम (GFR 2017 / Rule 11) के अनुसार, एक साथ दो सरकारी छात्रवृत्तियां नहीं ली जा सकतीं। हालाँकि, ScholarBridge पोर्टल में स्वचालित NOC सुविधा है — उच्च फैलोशिप के चयन पर पुराना आवेदन बिना जुर्माने के स्थानांतरित हो जाता है।`
+      : `Under Central Scholarship Rule 11 (GFR 2017), simultaneous availing of multiple scholarships is barred. ScholarBridge provides an automated NOC wizard — if selected for higher research fellowship, your allocation transitions safely without penalty.`
   }
 
   if (q.includes('dbt') || q.includes('payment') || q.includes('paisa') || q.includes('भुगतान')) {
     return isHi
-      ? `आपकी पोस्ट-मैट्रिक छात्रवृत्ति (₹18,500) सत्यापित हो चुकी है और 12 सितंबर 2026 को SBI खाते में DBT के माध्यम से जमा हो चुकी है (UTR: RBI2026091298412)। 'ट्रैकर' टैब से रसीद डाउनलोड करें।`
-      : `Your Post-Matric Scholarship (₹18,500) has been verified and credited to your SBI account via DBT on 12 Sep 2026 (UTR: RBI2026091298412). Download the receipt from the Tracker tab.`
+      ? `आपकी छात्रवृत्ति राशि (₹20,000) सत्यापित हो चुकी है और 12 सितंबर 2026 को SBI खाते में DBT के माध्यम से जमा हो चुकी है (UTR: RBI2026091298412)। 'ट्रैकर' टैब से रसीद डाउनलोड करें।`
+      : `Your scholarship grant (₹20,000) has been verified and credited to your SBI account via DBT on 12 Sep 2026 (UTR: RBI2026091298412). Download the receipt from the Tracker tab.`
   }
 
   return isHi
-    ? `नमस्ते! "${query}" के बारे में — जनजातीय कार्य मंत्रालय (MoTA) सभी एसटी छात्र-छात्राओं को डिजिलॉकर और DBT के माध्यम से पारदर्शी सेवाएं प्रदान करता है। कृपया अपना प्रश्न विस्तार से पूछें ताकि मैं बेहतर सहायता कर सकूँ।`
-    : `Johar! Regarding "${query}" — the Ministry of Tribal Affairs provides transparent digital services through DigiLocker and DBT to all ST students. Please elaborate your question so I can assist you better.`
+    ? `नमस्ते! "${query}" के बारे में — राष्ट्रीय छात्रवृत्ति पोर्टल (ScholarBridge) सभी छात्र-छात्राओं को डिजिलॉकर और DBT के माध्यम से पारदर्शी सेवाएं प्रदान करता है। कृपया अपना प्रश्न विस्तार से पूछें।`
+    : `Namaste! Regarding "${query}" — ScholarBridge provides transparent digital scholarship services through DigiLocker and DBT to all students. Please elaborate your question so I can assist you better.`
 }
 
 export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang, onToast }) {
@@ -328,9 +328,9 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           <div>
             <div className="assistant-badge-row">
               <span className="badge badge-primary">Multilingual Voice & NLP</span>
-              <span className="badge badge-success">MoTA AI Sahayak (JAGO)</span>
+              <span className="badge badge-success">ScholarBridge AI Advisor</span>
             </div>
-            <h1 className="assistant-title">Tribal Student Grievance & Guidance Assistant</h1>
+            <h1 className="assistant-title">Student Policy & Guidance Assistant</h1>
           </div>
         </div>
 

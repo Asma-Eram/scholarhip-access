@@ -5,6 +5,7 @@ import {
   Clock, 
   ShieldCheck, 
   Users, 
+  UserCheck, 
   Bot,
   Sparkles,
   MoreHorizontal,
@@ -45,10 +46,10 @@ export default function MobileNav({ activeTab, setActiveTab, lang, setLang, defi
   // Extra features inside "More" Sheet
   const secondaryTabs = [
     { id: 'documents', label: l.vault, sub: t.vaultSub || 'Verified Credentials & Academic Records', icon: ShieldCheck },
-    { id: 'family', label: l.family, sub: t.portfolioSub || 'Track Multi-Child Family Grants', icon: Users }
+    { id: 'profile', label: 'My Profile', sub: 'Verified Credentials & Institutional Data', icon: UserCheck }
   ]
 
-  const isMoreActive = activeTab === 'documents' || activeTab === 'family'
+  const isMoreActive = activeTab === 'documents' || activeTab === 'profile'
 
   return (
     <>

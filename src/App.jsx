@@ -8,7 +8,7 @@ import Dashboard from './pages/Dashboard'
 import SchemesPage from './pages/SchemesPage'
 import ApplicationTracker from './pages/ApplicationTracker'
 import DocumentVault from './pages/DocumentVault'
-import FamilyOverview from './pages/FamilyOverview'
+import Profile from './pages/Profile'
 import GrievanceAssistant from './pages/GrievanceAssistant'
 import EligibilityFinder from './pages/EligibilityFinder'
 import CollegeAdminPortal from './pages/CollegeAdminPortal'
@@ -67,7 +67,7 @@ export default function App() {
   const handleRelinquishAndProceed = () => {
     if (!conflictTargetScheme) return
     const newApp = {
-      id: `APP-MOTA-2026-${conflictTargetScheme.shortName.toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: `APP-CENTRAL-2026-${conflictTargetScheme.shortName.toUpperCase().replace(/\s+/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`,
       schemeId: conflictTargetScheme.id,
       portal: conflictTargetScheme.portal,
       appliedDate: '2026-09-27',
@@ -79,10 +79,10 @@ export default function App() {
       statusType: 'primary',
       lastActionDate: '2026-09-27',
       stages: [
-        { id: 1, title: 'DigiLocker Identity & ST Verification', date: '2026-09-27', done: true, remarks: 'Verified via MoTA Central Registry' },
+        { id: 1, title: 'DigiLocker Identity & Domicile Verification', date: '2026-09-27', done: true, remarks: 'Verified via National e-District API' },
         { id: 2, title: 'Institution Bonafide & Ranking Verification', date: null, done: false, active: true },
-        { id: 3, title: 'State Tribal Welfare Directorate Clearance', date: null, done: false },
-        { id: 4, title: 'MoTA National Central Committee Sanction', date: null, done: false },
+        { id: 3, title: 'State Higher Education Directorate Clearance', date: null, done: false },
+        { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
         { id: 5, title: 'PFMS Direct Benefit Transfer', date: null, done: false }
       ],
       dbtDetails: null,
@@ -150,7 +150,7 @@ export default function App() {
   }
 
   const handleOfflineSync = () => {
-    addToast(t.offlineActiveMsg || 'Synchronizing offline queue with MoTA Central Cluster...', 'info')
+    addToast(t.offlineActiveMsg || 'Synchronizing offline queue with Central Scholarship Server...', 'info')
     setTimeout(() => { setOfflineMode(false); addToast(t.lifetimeValid || 'Offline sync complete! Records reconciled.', 'success'); }, 1400)
   }
 
@@ -164,7 +164,8 @@ export default function App() {
       case 'tracker': return 'Live Application Tracker'
       case 'college': return 'College Admin Desk'
       case 'documents': return 'DigiLocker Document Vault'
-      case 'family': return 'Household & Sibling Pool'
+      case 'profile':
+      case 'family': return 'My Profile & Credentials'
       case 'eligibility': return 'Smart Grant Matcher'
       case 'assistant': return 'AI Policy Advisor'
       default: return 'ScholarBridge Portal'
@@ -249,16 +250,11 @@ export default function App() {
           {activeTab === 'documents' && (
             <DocumentVault activeStudent={localizedActiveStudent} lang={lang} onToast={addToast} />
           )}
-          {activeTab === 'family' && (
-            <FamilyOverview
-              household={localizedHousehold}
+          {(activeTab === 'profile' || activeTab === 'family') && (
+            <Profile
               activeStudent={localizedActiveStudent}
+              household={localizedHousehold}
               lang={lang}
-              onSelectStudent={(member) => { 
-                const raw = household.members.find(m => m.id === member.id) || member
-                setActiveStudent(raw)
-                addToast(member.name, 'info')
-              }}
               onToast={addToast}
             />
           )}
@@ -296,7 +292,7 @@ export default function App() {
             <div className="drawer-header">
               <div className="drawer-title-row">
                 <Bell size={18} />
-                <h2>{t.ministry || 'MoTA Notifications'}</h2>
+                <h2>{t.ministry || 'Scholarship Notifications'}</h2>
               </div>
               <button className="close-btn" onClick={() => setShowNotificationsDrawer(false)}>
                 <X size={18} />

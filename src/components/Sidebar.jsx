@@ -5,6 +5,7 @@ import {
   Clock, 
   ShieldCheck, 
   Users, 
+  UserCheck, 
   Bot,
   Sparkles,
   ChevronLeft,
@@ -41,8 +42,7 @@ export default function Sidebar({
     { id: 'schemes', label: 'All Scholarships', icon: Compass },
     { id: 'tracker', label: 'Live Application Tracker', icon: Clock, badge: deficiencyCount > 0 ? `${deficiencyCount} Alert` : null },
     { id: 'documents', label: 'DigiLocker Vault', icon: ShieldCheck },
-    { id: 'eligibility', label: 'Smart Grant Matcher', icon: Sparkles, isAI: true },
-    { id: 'family', label: 'Household & Siblings', icon: Users },
+    { id: 'profile', label: 'My Profile & Credentials', icon: UserCheck },
   ]
 
   const adminNavItems = [

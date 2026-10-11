@@ -110,58 +110,20 @@ export default function Header({
             </button>
           )}
 
-          {/* Student Profile Switcher (When in Student Mode) */}
-          {userRole === 'student' && household?.members && (
-            <div className="dropdown-wrap">
-              <button 
-                className="header-pill member-switch-pill"
-                onClick={() => { setShowMemberMenu(!showMemberMenu); setShowLangMenu(false); }}
-                aria-label={`Current student profile: ${activeStudent.name}. Click to switch student.`}
-                title="Switch active student profile"
-                aria-expanded={showMemberMenu}
-              >
-                <div className="mini-avatar" aria-hidden="true">{activeStudent.avatarInitials}</div>
-                <div className="mini-student-info">
-                  <span className="mini-student-name">{activeStudent.name.split(' ')[0]}</span>
-                  <span className="mini-student-status">Active</span>
-                </div>
-                <ChevronDown size={12} className={showMemberMenu ? 'arrow-flipped' : ''} aria-hidden="true" />
-              </button>
-
-              {showMemberMenu && (
-                <div className="dropdown-panel member-panel fade-in" role="menu">
-                  <div className="panel-header">
-                    <span className="panel-title">Registered Students</span>
-                    <span className="badge badge-primary">{household.members.length}</span>
-                  </div>
-                  <div className="member-list">
-                    {household.members.map(member => (
-                      <button
-                        key={member.id}
-                        className={`member-item ${member.id === activeStudent.id ? 'active-member-item' : ''}`}
-                        onClick={() => {
-                          setActiveStudent(member);
-                          setShowMemberMenu(false);
-                        }}
-                        role="menuitem"
-                        aria-label={`Select student ${member.name}`}
-                      >
-                        <div className="member-avatar" aria-hidden="true">{member.avatarInitials}</div>
-                        <div className="member-item-info">
-                          <div className="member-name-row">
-                            <span className="member-item-name">{member.name}</span>
-                            {member.id === activeStudent.id && (
-                              <CheckCircle2 size={13} className="text-success" aria-hidden="true" />
-                            )}
-                          </div>
-                          <span className="member-item-meta">{member.institution || member.educationLevel}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+          {/* Student Profile Pill (When in Student Mode) */}
+          {userRole === 'student' && activeStudent && (
+            <button 
+              className="header-pill member-switch-pill"
+              onClick={() => onNavigate?.('profile')}
+              aria-label={`Student profile: ${activeStudent.name}. Click to view credentials.`}
+              title="View My Profile & Credentials"
+            >
+              <div className="mini-avatar" aria-hidden="true">{activeStudent.avatarInitials || 'AS'}</div>
+              <div className="mini-student-info">
+                <span className="mini-student-name">{activeStudent.name?.split(' ')[0] || 'Ananya'}</span>
+                <span className="mini-student-status">Active</span>
+              </div>
+            </button>
           )}
 
           {/* Notifications Bell */}

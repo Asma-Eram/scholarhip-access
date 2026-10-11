@@ -197,7 +197,7 @@ export default function Dashboard({
           <div className="kpi-info">
             <span className="kpi-label">DigiLocker Synced Docs</span>
             <span className="kpi-value">5 Documents Verified</span>
-            <span className="kpi-subtext">Aadhaar, Caste, Income, Marks</span>
+            <span className="kpi-subtext">Aadhaar, Domicile, Income, Marks</span>
           </div>
           <ChevronRight size={16} className="kpi-arrow" aria-hidden="true" />
         </div>

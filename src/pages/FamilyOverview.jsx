@@ -43,7 +43,7 @@ export default function FamilyOverview({
       <section className="gov-card family-head-card">
         <div className="head-info-col">
           <div className="family-badges-row">
-            <span className="badge badge-primary">{t.familyRegistry || 'MoTA Unified Tribal Family Registry'}</span>
+            <span className="badge badge-primary">{t.familyRegistry || 'National Student Credentials Registry'}</span>
             <span className="badge badge-neutral">{t.rationCard || 'Ration Card:'} {household.rationCardNumber}</span>
           </div>
 
@@ -171,7 +171,7 @@ export default function FamilyOverview({
                 <input 
                   type="text" 
                   required
-                  placeholder="e.g. Mangal Munda"
+                  placeholder="e.g. Rahul Sharma"
                   value={newChildName}
                   onChange={(e) => setNewChildName(e.target.value)}
                   className="form-input"

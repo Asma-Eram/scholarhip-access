@@ -3,8 +3,8 @@ import { AppContext } from '../App'
 import { MOCK_DOCUMENTS } from '../data/mockData'
 import './Documents.css'
 
-const TYPE_ICONS = { identity:'🪪', caste:'📜', income:'💰', academic:'🎓', bank:'🏦' }
-const TYPE_LABELS = { identity:'Identity', caste:'Caste/ST', income:'Income', academic:'Academic', bank:'Bank' }
+const TYPE_ICONS = { identity:'🪪', domicile:'📜', income:'💰', academic:'🎓', bank:'🏦' }
+const TYPE_LABELS = { identity:'Identity', domicile:'Domicile/Address', income:'Income', academic:'Academic', bank:'Bank' }
 
 export default function Documents() {
   const { lang, addToast } = useContext(AppContext)

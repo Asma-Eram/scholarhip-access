@@ -30,7 +30,7 @@ export default function AutofillModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const selectedCollege = AISHE_DIRECTORY.find(c => c.aisheCode === selectedAishe) || AISHE_DIRECTORY[0]
-  const casteDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-ST-01')
+  const domicileDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-DOM-01') || DIGILOCKER_VAULT[0]
   const incomeDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-INC-03')
   const apaarDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-APAAR-05')
   const aadhaarDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-AADHAAR-02')
@@ -100,12 +100,12 @@ export default function AutofillModal({
               </div>
 
               <div className="field-group">
-                <label>Category / Domicile Certificate Ref.</label>
+                <label>State Domicile Certificate Ref.</label>
                 <div className="verified-input-wrapper">
-                  <input type="text" value={`${casteDoc?.certNumber || 'IND/VERIFIED/2024/889104'} (DigiLocker Synced)`} readOnly />
+                  <input type="text" value={`${domicileDoc?.certNumber || 'JH/DOM/2024/491028'} (DigiLocker Synced)`} readOnly />
                   <CheckCircle2 size={16} className="valid-chk" />
                 </div>
-                <span className="sub-helper">Issuing Authority: {casteDoc?.issuer || 'State Revenue / e-District'}</span>
+                <span className="sub-helper">Issuing Authority: {domicileDoc?.issuer || 'State Revenue / e-District'}</span>
               </div>
 
               <div className="field-group">
@@ -185,7 +185,7 @@ export default function AutofillModal({
                 onChange={(e) => setConsentGiven(e.target.checked)} 
               />
               <span>
-                I authorize TRISHA to forward my DigiLocker verified certificates, Aadhaar e-KYC token, and APAAR academic credentials to <strong>{selectedCollege.name}</strong> and Ministry of Tribal Affairs for automated verification.
+                I authorize ScholarBridge to forward my DigiLocker verified certificates, Aadhaar e-KYC token, and APAAR academic credentials to <strong>{selectedCollege.name}</strong> and Central Scholarship Directorate for automated verification.
               </span>
             </label>
           </div>

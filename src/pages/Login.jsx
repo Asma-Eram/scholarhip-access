@@ -91,12 +91,12 @@ export default function Login({ onLogin }) {
               <div>
                 <div style={{fontWeight:600,marginBottom:4}}>Connect DigiLocker</div>
                 <div style={{fontSize:12,color:'var(--text2)'}}>
-                  Auto-fetch your ST Certificate, Aadhaar & academic documents. No re-uploading needed.
+                  Auto-fetch your Domicile Certificate, Aadhaar & academic documents. No re-uploading needed.
                 </div>
               </div>
             </div>
             <div className="dl-perms">
-              {['ST / Caste Certificate', 'Aadhaar Card', 'Marksheets & Degrees', 'Income Certificate'].map(p => (
+              {['State Domicile Certificate', 'Aadhaar Card', 'Marksheets & Degrees', 'Income Certificate'].map(p => (
                 <div key={p} className="dl-perm-item">✅ {p}</div>
               ))}
             </div>
@@ -108,9 +108,9 @@ export default function Login({ onLogin }) {
         )}
 
         <div className="login-footer">
-          <span>Ministry of Tribal Affairs | Govt. of India</span>
+          <span>National Scholarship Gateway | Ministry of Education</span>
           <div className="login-logos">
-            <span>🇮🇳</span> <span>GoI</span> <span>·</span> <span>MoTA</span>
+            <span>🇮🇳</span> <span>GoI</span> <span>·</span> <span>ScholarBridge</span>
           </div>
         </div>
       </div>

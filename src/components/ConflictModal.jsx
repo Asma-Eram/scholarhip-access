@@ -149,10 +149,10 @@ export default function ConflictModal({
         ) : step === 'relinquish_form' ? (
           <div className="relinquish-body fade-in">
             <div className="relinquish-instructions">
-              <h3 className="section-subheading">MoTA Form 4B: Automated Scheme Transition Declaration</h3>
+              <h3 className="section-subheading">Central Scheme Transition Declaration (GFR Rule 11)</h3>
               <p className="section-para">
-                By submitting this digital declaration via Aadhaar e-Sign, you authorize the Ministry of Tribal Affairs 
-                to place a provisional hold on your existing Post-Matric allocation in the event your 
+                By submitting this digital declaration via Aadhaar e-Sign, you authorize the Central Scholarship Directorate & PFMS 
+                to place a provisional hold on your existing allocation in the event your 
                 application for <strong>{targetSchemeName}</strong> is selected on merit.
               </p>
             </div>
