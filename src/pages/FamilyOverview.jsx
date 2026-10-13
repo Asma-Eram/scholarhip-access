@@ -43,12 +43,12 @@ export default function FamilyOverview({
       <section className="gov-card family-head-card">
         <div className="head-info-col">
           <div className="family-badges-row">
-            <span className="badge badge-primary">{t.familyRegistry || 'MoTA Unified Tribal Family Registry'}</span>
+            <span className="badge badge-primary">{t.familyRegistry || 'National Student Credentials Registry'}</span>
             <span className="badge badge-neutral">{t.rationCard || 'Ration Card:'} {household.rationCardNumber}</span>
           </div>
 
           <h1 className="family-household-title">
-            {household.headOfHousehold}'s {t.household || 'Household'} ({household.tribalGroup})
+            {household.headOfHousehold}'s {t.household || 'Household'} ({household.category || household.tribalGroup || 'General / Merit Candidate'})
           </h1>
 
           <div className="family-loc-row">
@@ -61,7 +61,7 @@ export default function FamilyOverview({
           <div className="stat-pill-box">
             <span className="pill-box-label">{t.totalHouseholdDbt || 'Total Household DBT Received'}</span>
             <span className="pill-box-val">{household.totalDisbursedToHousehold}</span>
-            <span className="pill-box-sub">{t.across5Schemes || 'Across 5 MoTA Schemes'}</span>
+            <span className="pill-box-sub">{t.across5Schemes || 'Across 5 National Scholarship Schemes'}</span>
           </div>
 
           <button 
@@ -132,7 +132,7 @@ export default function FamilyOverview({
                     <div className="no-active-scheme-notice">
                       <GraduationCap size={20} className="notice-icon" />
                       <div>
-                        <strong>{t.currentGrant || 'Eligible for NFST Doctoral Fellowship'}</strong>
+                        <strong>{t.currentGrant || 'Eligible for Doctoral Research Fellowship'}</strong>
                         <p>{t.switchMemberOrExplore || 'No active scholarship currently availed. Student is eligible to apply.'}</p>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ export default function FamilyOverview({
                 <input 
                   type="text" 
                   required
-                  placeholder="e.g. Mangal Munda"
+                  placeholder="e.g. Rahul Sharma"
                   value={newChildName}
                   onChange={(e) => setNewChildName(e.target.value)}
                   className="form-input"
@@ -185,7 +185,7 @@ export default function FamilyOverview({
                   onChange={(e) => setNewChildClass(e.target.value)}
                   className="form-select"
                 >
-                  <option>Class IX (Eklavya Model Residential School)</option>
+                  <option>Class IX (Govt. Model Senior Secondary)</option>
                   <option>Class X (Govt. High School)</option>
                   <option>Diploma / Polytechnic 1st Year</option>
                   <option>Undergraduate Degree (College)</option>

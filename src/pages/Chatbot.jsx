@@ -5,19 +5,14 @@ import './Chatbot.css'
 // ── GEMINI API KEY — Replace with your key from aistudio.google.com ──
 const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'
 
-const SYSTEM_PROMPT = `You are JAGO, the official AI assistant for India's Ministry of Tribal Affairs (MoTA) Scholarship Portal. 
-You help Scheduled Tribe (ST) students with:
-1. All 5 MoTA scholarship schemes:
-   - Pre-Matric Scholarship (NSP, Class 9-10, ₹150-750/month)
-   - Post-Matric Scholarship (NSP, after Class 10, ₹230-1200/month)
-   - Top Class Scholarship (NSP, IIT/NIT/AIIMS, full fees + ₹2000/month)
-   - NFST - National Fellowship for ST (SFMP Canara Bank, MPhil/PhD, ₹37000-42000/month)
-   - NOS - National Overseas Scholarship (NOS Portal, Masters/PhD abroad, full fees + allowance)
-2. DigiLocker integration for document verification
+const SYSTEM_PROMPT = `You are the official AI assistant for ScholarBridge - National Scholarship Portal. 
+You help students with:
+1. National scholarship schemes (Pre-Matric, Post-Matric, Central Top Class Premier, National Fellowships)
+2. DigiLocker integration for zero-touch document verification
 3. DBT payment tracking
 4. Eligibility criteria, documents needed, deadlines
-5. APAAR, OTR, UDISE+ verification processes
-Always be helpful, supportive, and respond in simple language. If asked in Hindi, reply in Hindi. Keep answers concise (3-5 sentences max). Start with "Namaste! I'm JAGO 🙏" on first message only.`
+5. APAAR, OTR, AISHE verification processes
+Always be helpful, supportive, and respond in simple language. If asked in Hindi, reply in Hindi. Keep answers concise (3-5 sentences max). Start with "Namaste! I'm your ScholarBridge Assistant 🙏" on first message only.`
 
 const QUICK_QUESTIONS = [
   'Which scholarship am I eligible for?',
@@ -46,7 +41,7 @@ async function callGemini(messages, lang) {
       body: JSON.stringify({
         contents: [
           { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
-          { role: 'model', parts: [{ text: 'Namaste! I am JAGO 🙏 How can I help you with your MoTA scholarship today?' }] },
+          { role: 'model', parts: [{ text: 'Namaste! I am ScholarBridge AI Assistant 🙏 How can I help you with your scholarship today?' }] },
           ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.content }] }))
         ],
         generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
@@ -63,30 +58,30 @@ function getFallbackResponse(query, lang) {
   const q = query.toLowerCase()
   const hi = lang === 'hi'
   if (q.includes('eligib') || q.includes('योग्य')) return hi
-    ? 'MoTA की 5 योजनाएं हैं: Pre-Matric (Class 9-10), Post-Matric (Class 10 के बाद), Top Class (IIT/NIT/AIIMS), NFST (M.Phil/Ph.D), NOS (विदेश में पढ़ाई)। आपकी शिक्षा के स्तर के अनुसार योजना चुनें।'
-    : 'MoTA has 5 schemes: Pre-Matric (Class 9-10), Post-Matric (after Class 10), Top Class (IIT/NIT/AIIMS), NFST (MPhil/PhD), NOS (studying abroad). Choose based on your study level.'
+    ? 'राष्ट्रीय छात्रवृत्ति की प्रमुख योजनाएं हैं: Pre-Matric (Class 9-10), Post-Matric (Class 10 के बाद), Top Class (IIT/NIT/AIIMS), राष्ट्रीय अनुसंधान फैलोशिप, एवं विदेशी अध्ययन। आपकी शिक्षा के स्तर के अनुसार योजना चुनें।'
+    : 'National scholarship schemes include: Pre-Matric (Class 9-10), Post-Matric (after Class 10), Central Top Class (IIT/NIT/AIIMS), National Research Fellowship, and Overseas Studies. Choose based on your study level.'
   if (q.includes('document') || q.includes('दस्तावेज़')) return hi
-    ? 'सभी योजनाओं के लिए आवश्यक: आधार कार्ड, ST प्रमाण पत्र, आय प्रमाण पत्र, पिछली मार्कशीट, बैंक पासबुक। DigiLocker से इन्हें स्वचालित रूप से प्राप्त किया जा सकता है।'
-    : 'Common documents for all schemes: Aadhaar, ST Certificate, Income Certificate (< ₹2.5L/year), Previous marksheet, Bank passbook. DigiLocker can auto-fetch most of these.'
+    ? 'सभी योजनाओं के लिए आवश्यक: आधार कार्ड, निवास प्रमाण पत्र, आय प्रमाण पत्र, पिछली मार्कशीट, बैंक पासबुक। DigiLocker से इन्हें स्वचालित रूप से प्राप्त किया जा सकता है।'
+    : 'Common documents for all schemes: Aadhaar, Domicile Certificate, Income Certificate (< ₹2.5L/year), Previous marksheet, Bank passbook. DigiLocker can auto-fetch most of these.'
   if (q.includes('dbt') || q.includes('payment') || q.includes('भुगतान')) return hi
     ? 'DBT स्थिति देखने के लिए "My Applications" → scheme → Status tab पर जाएं। UTR नंबर से बैंक में भी जांच सकते हैं। सामान्यतः sanction के 7-10 दिन बाद transfer होता है।'
     : 'To check DBT status, go to My Applications → select scheme → Status tab. The UTR number is shown once transferred. DBT usually happens 7-10 days after sanction.'
   if (q.includes('nfst') || q.includes('nos') || q.includes('fellowship')) return hi
-    ? 'NFST भारत में M.Phil/Ph.D के लिए है (₹37,000-42,000/माह, SFMP/Canara Bank portal)। NOS विदेश में Master\'s/Ph.D के लिए है (पूरी फीस + भत्ता, NOS Portal)। दोनों एक साथ नहीं लिए जा सकते।'
-    : 'NFST is for MPhil/PhD in India (₹37,000-42,000/month via SFMP Canara Bank). NOS is for Masters/PhD abroad (full fees + allowance via NOS Portal). You cannot avail both simultaneously.'
+    ? 'राष्ट्रीय अनुसंधान फैलोशिप भारत में M.Phil/Ph.D के लिए है (₹37,000-42,000/माह)। विदेशी अध्ययन योजना विदेश में Master\'s/Ph.D के लिए है (पूरी फीस + भत्ता)। दोनों एक साथ नहीं लिए जा सकते।'
+    : 'National Research Fellowship is for MPhil/PhD in India (₹37,000-42,000/month). Overseas Fellowship is for Masters/PhD abroad (full fees + allowance). You cannot avail both simultaneously.'
   if (q.includes('top class') || q.includes('iit') || q.includes('nit')) return hi
-    ? 'Top Class Scholarship IIT, NIT, AIIMS, IIM जैसे शीर्ष संस्थानों में ST छात्रों के लिए है। पूरी ट्यूशन फीस + ₹2,000/माह + ₹45,000/वर्ष (किताबें) मिलते हैं। NSP portal पर आवेदन करें।'
-    : 'Top Class Scholarship covers ST students in premier institutes like IIT, NIT, AIIMS, IIM. Benefits: Full tuition fee + ₹2,000/month maintenance + ₹45,000/year for books. Apply on NSP portal.'
+    ? 'Top Class Scholarship IIT, NIT, AIIMS, IIM जैसे शीर्ष संस्थानों में मेधावी छात्रों के लिए है। पूरी ट्यूशन फीस + ₹2,000/माह + ₹45,000/वर्ष (किताबें) मिलते हैं। NSP portal पर आवेदन करें।'
+    : 'Top Class Scholarship covers merit students in premier institutes like IIT, NIT, AIIMS, IIM. Benefits: Full tuition fee + ₹2,000/month maintenance + ₹45,000/year for books. Apply on NSP portal.'
   return hi
-    ? 'नमस्ते! मैं JAGO हूं 🙏 मैं MoTA छात्रवृत्ति योजनाओं, पात्रता, दस्तावेज़ और भुगतान स्थिति में मदद कर सकता हूं। आप क्या जानना चाहते हैं?'
-    : 'Namaste! I\'m JAGO 🙏 I can help you with MoTA scholarship schemes, eligibility, documents, and payment status. What would you like to know?'
+    ? 'नमस्ते! मैं ScholarBridge AI सहायक हूं 🙏 मैं छात्रवृत्ति योजनाओं, पात्रता, दस्तावेज़ और भुगतान स्थिति में मदद कर सकता हूं। आप क्या जानना चाहते हैं?'
+    : 'Namaste! I\'m ScholarBridge AI Assistant 🙏 I can help you with scholarship schemes, eligibility, documents, and payment status. What would you like to know?'
 }
 
 export default function Chatbot() {
   const { lang } = useContext(AppContext)
   const hi = lang === 'hi'
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: `Namaste! I'm JAGO 🙏\n\nI'm your official MoTA scholarship assistant. I can help you with:\n• Eligibility for all 5 schemes\n• Required documents\n• Application status\n• DBT payment tracking\n\nHow can I help you today?` }
+    { role: 'assistant', content: `Namaste! I'm ScholarBridge AI Assistant 🙏\n\nI'm your official scholarship assistant. I can help you with:\n• Eligibility for all major schemes\n• Required documents & DigiLocker\n• Application status\n• DBT payment tracking\n\nHow can I help you today?` }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -111,8 +106,8 @@ export default function Chatbot() {
       <div className="chatbot-header">
         <div className="chatbot-avatar">🤖</div>
         <div>
-          <div className="chatbot-name">JAGO Assistant</div>
-          <div className="chatbot-status">● {hi?'ऑनलाइन':'Online'} · MoTA Official AI</div>
+          <div className="chatbot-name">ScholarBridge AI Assistant</div>
+          <div className="chatbot-status">● {hi?'ऑनलाइन':'Online'} · Official Scholarship AI</div>
         </div>
         <div className="chatbot-lang-note">{hi?'हिंदी में पूछें':'Ask in Hindi too!'}</div>
       </div>

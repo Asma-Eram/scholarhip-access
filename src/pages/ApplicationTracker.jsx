@@ -70,7 +70,7 @@ export default function ApplicationTracker({
         <div>
           <h1 className="tracker-title">{t.trackerTitle || 'End-to-End Application & Verification Tracker'}</h1>
           <p className="tracker-sub">
-            {t.trackerSub || 'Real-time synchronization across Institute, State Tribal Welfare Directorate, MoTA, and PFMS'}
+            {t.trackerSub || 'Real-time synchronization across Institute, State Directorate of Higher Education, and PFMS'}
           </p>
         </div>
 
@@ -134,11 +134,11 @@ export default function ApplicationTracker({
             <p className="whats-next-desc">
               {isDisbursed ? (
                 <>
-                  Funds have been directly released by MoTA / PFMS into your Aadhaar-seeded bank account. Keep your UTR receipt for institutional fee submission records.
+                  Funds have been directly released by Central Scholarship Directorate / PFMS into your Aadhaar-seeded bank account. Keep your UTR receipt for institutional fee submission records.
                 </>
               ) : hasDeficiency ? (
                 <>
-                  Your College Nodal Officer or State Welfare Directorate has requested an updated document or clarification. Please re-verify via DigiLocker live sync below.
+                  Your College Nodal Officer or State Higher Education Directorate has requested an updated document or clarification. Please re-verify via DigiLocker live sync below.
                 </>
               ) : (
                 <>
@@ -246,8 +246,9 @@ export default function ApplicationTracker({
                 <button 
                   className="btn btn-warning"
                   onClick={() => onResolveDeficiency(selectedApp.id)}
+                  aria-label="Re-verify via DigiLocker Live Sync"
                 >
-                  <ShieldCheck size={16} />
+                  <ShieldCheck size={16} aria-hidden="true" />
                   <span>{t.reverifyDigilocker || 'Re-verify via DigiLocker Live Sync'}</span>
                 </button>
               </div>
@@ -298,8 +299,9 @@ export default function ApplicationTracker({
               <button 
                 className="btn btn-secondary btn-full dbt-download-btn"
                 onClick={() => onDownloadSlip(selectedApp)}
+                aria-label="Download PDF Sanction Receipt"
               >
-                <Download size={15} />
+                <Download size={15} aria-hidden="true" />
                 <span>{t.downloadAcknowledgement || 'Download PDF Sanction Receipt'}</span>
               </button>
             </div>
@@ -316,8 +318,8 @@ export default function ApplicationTracker({
           {/* Quick Helpline Support Box */}
           <div className="gov-card helpline-card">
             <h4><HelpCircle size={15} /> {t.needAssistance || 'Need Help with Verification?'}</h4>
-            <p>{t.helplineDesc || 'Connect with the Tribal Welfare Toll-Free Grievance Cell or your institutional representative.'}</p>
-            <div className="helpline-num">1800-11-7788 (Toll Free)</div>
+            <p>{t.helplineDesc || 'Connect with the National Scholarship Portal Toll-Free Grievance Cell or your institutional representative.'}</p>
+            <div className="helpline-num">1800-11-2255 (Toll Free)</div>
           </div>
         </div>
       </div>

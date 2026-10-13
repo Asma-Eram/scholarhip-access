@@ -11,8 +11,8 @@ export default function Schemes() {
 
   return (
     <div className="schemes-page fade-in">
-      <h2 className="page-title">{hi ? 'सभी 5 MoTA योजनाएं' : 'All 5 MoTA Schemes'}</h2>
-      <p className="page-sub">{hi ? 'एक ही प्लेटफॉर्म पर सभी अनुसूचित जनजाति छात्रवृत्ति' : 'All Scheduled Tribe scholarships on one platform'}</p>
+      <h2 className="page-title">{hi ? 'सभी 5 राष्ट्रीय छात्रवृत्ति योजनाएं' : 'All 5 National Scholarship Schemes'}</h2>
+      <p className="page-sub">{hi ? 'एक ही प्लेटफॉर्म पर सभी केंद्रीय व मेरिट छात्रवृत्तियां' : 'All central and merit-based scholarships on one unified platform'}</p>
 
       <div className="portal-map">
         <div className="portal-item">

@@ -30,7 +30,7 @@ export default function AutofillModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const selectedCollege = AISHE_DIRECTORY.find(c => c.aisheCode === selectedAishe) || AISHE_DIRECTORY[0]
-  const casteDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-ST-01')
+  const domicileDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-DOM-01') || DIGILOCKER_VAULT[0]
   const incomeDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-INC-03')
   const apaarDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-APAAR-05')
   const aadhaarDoc = DIGILOCKER_VAULT.find(d => d.id === 'DOC-AADHAAR-02')
@@ -57,19 +57,19 @@ export default function AutofillModal({
   }
 
   return (
-    <div className="modal-overlay fade-in" onClick={onClose}>
+    <div className="modal-overlay fade-in" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="autofill-scheme-title">
       <div className="autofill-modal-card" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
         <div className="autofill-modal-header">
           <div className="header-badge-title">
-            <span className="badge badge-success"><Sparkles size={12} /> DigiLocker Zero-Touch Autofill</span>
-            <h2>{scheme.name}</h2>
+            <span className="badge badge-success"><Sparkles size={12} aria-hidden="true" /> DigiLocker Zero-Touch Autofill</span>
+            <h2 id="autofill-scheme-title">{scheme.name}</h2>
             <p className="scheme-subtitle">
               Application for <strong>{student.name}</strong> • Code: <strong>{scheme.code}</strong>
             </p>
           </div>
           <button className="close-btn" onClick={onClose} aria-label="Close modal">
-            <X size={20} />
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 
@@ -100,12 +100,12 @@ export default function AutofillModal({
               </div>
 
               <div className="field-group">
-                <label>ST Caste Certificate Ref.</label>
+                <label>State Domicile Certificate Ref.</label>
                 <div className="verified-input-wrapper">
-                  <input type="text" value={`${casteDoc?.certNumber || 'JH/ST/2023/889104'} (DigiLocker)`} readOnly />
+                  <input type="text" value={`${domicileDoc?.certNumber || 'JH/DOM/2024/491028'} (DigiLocker Synced)`} readOnly />
                   <CheckCircle2 size={16} className="valid-chk" />
                 </div>
-                <span className="sub-helper">Issuing Authority: {casteDoc?.issuer}</span>
+                <span className="sub-helper">Issuing Authority: {domicileDoc?.issuer || 'State Revenue / e-District'}</span>
               </div>
 
               <div className="field-group">
@@ -114,7 +114,7 @@ export default function AutofillModal({
                   <input type="text" value={`${incomeDoc?.certNumber || 'JH/INC/2025/110482'} (₹1,85,000/yr)`} readOnly />
                   <CheckCircle2 size={16} className="valid-chk" />
                 </div>
-                <span className="sub-helper">Within &le; ₹2.50L MoTA Guideline Cap</span>
+                <span className="sub-helper">Within &le; ₹2.50L Central Guideline Cap</span>
               </div>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function AutofillModal({
                 onChange={(e) => setConsentGiven(e.target.checked)} 
               />
               <span>
-                I authorize TRISHA to forward my DigiLocker verified certificates, Aadhaar e-KYC token, and APAAR academic credentials to <strong>{selectedCollege.name}</strong> and Ministry of Tribal Affairs for automated verification.
+                I authorize ScholarBridge to forward my DigiLocker verified certificates, Aadhaar e-KYC token, and APAAR academic credentials to <strong>{selectedCollege.name}</strong> and Central Scholarship Directorate for automated verification.
               </span>
             </label>
           </div>

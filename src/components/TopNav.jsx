@@ -11,10 +11,10 @@ export default function TopNav() {
   return (
     <nav className="top-nav">
       <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-        <div className="logo-icon">🪶</div>
+        <div className="logo-icon">🎓</div>
         <div>
-          <div className="logo-text">JAGO</div>
-          <div className="logo-sub">MoTA Scholarship Portal</div>
+          <div className="logo-text">ScholarBridge</div>
+          <div className="logo-sub">National Scholarship Portal</div>
         </div>
       </div>
       <div className="top-nav-right">

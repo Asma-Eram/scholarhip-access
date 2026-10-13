@@ -42,24 +42,24 @@ export default function ConflictModal({
   if (!conflictData) return null
 
   return (
-    <div className="modal-overlay fade-in">
+    <div className="modal-overlay fade-in" role="dialog" aria-modal="true" aria-labelledby="conflict-dialog-title">
       <div className="modal-content gov-card">
         {/* Modal Top Header */}
         <div className="modal-header">
           <div className="modal-title-group">
             <div className="audit-icon-wrap">
-              <ShieldAlert size={22} className="audit-icon" />
+              <ShieldAlert size={22} className="audit-icon" aria-hidden="true" />
             </div>
             <div>
               <div className="audit-badge-row">
-                <span className="badge badge-danger">{t.antiDuplicationEngine || 'MoTA Central Anti-Duplication Engine'}</span>
+                <span className="badge badge-danger">{t.antiDuplicationEngine || 'Central Anti-Duplication Engine'}</span>
                 <span className="badge badge-neutral">{t.ruleClause || 'Rule 11 / GFR 2017'}</span>
               </div>
-              <h2 className="modal-heading">{t.conflictDetectedHeading || 'Cross-Portal Scheme Conflict Detected'}</h2>
+              <h2 id="conflict-dialog-title" className="modal-heading">{t.conflictDetectedHeading || 'Cross-Portal Scheme Conflict Detected'}</h2>
             </div>
           </div>
-          <button className="close-btn" onClick={onClose} title="Dismiss">
-            <X size={18} />
+          <button className="close-btn" onClick={onClose} title="Dismiss" aria-label="Dismiss conflict dialog">
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -119,7 +119,7 @@ export default function ConflictModal({
             <div className="policy-citation-card">
               <div className="citation-header">
                 <FileText size={16} />
-                <span>{t.federatedRegistryAudit || 'Official MoTA Guideline Clause'}</span>
+                <span>{t.federatedRegistryAudit || 'Official Central Scholarship Guideline Clause'}</span>
               </div>
               <p className="citation-text">"{conflictData.policyClause}"</p>
               {conflictData.recommendation && (
@@ -149,10 +149,10 @@ export default function ConflictModal({
         ) : step === 'relinquish_form' ? (
           <div className="relinquish-body fade-in">
             <div className="relinquish-instructions">
-              <h3 className="section-subheading">MoTA Form 4B: Automated Scheme Transition Declaration</h3>
+              <h3 className="section-subheading">Central Scheme Transition Declaration (GFR Rule 11)</h3>
               <p className="section-para">
-                By submitting this digital declaration via Aadhaar e-Sign, you authorize the Ministry of Tribal Affairs 
-                to place a provisional hold on your existing Post-Matric allocation in the event your 
+                By submitting this digital declaration via Aadhaar e-Sign, you authorize the Central Scholarship Directorate & PFMS 
+                to place a provisional hold on your existing allocation in the event your 
                 application for <strong>{targetSchemeName}</strong> is selected on merit.
               </p>
             </div>
@@ -194,7 +194,7 @@ export default function ConflictModal({
             <CheckCircle2 size={54} className="success-check-icon" />
             <h3 className="success-title">{t.relinquishSuccessTitle || 'Automated Transition Request Generated'}</h3>
             <p className="success-para">
-              MoTA Conflict Clearance Reference: <strong>NOC-MOTA-2026-JH9182</strong>
+              Conflict Clearance Reference: <strong>NOC-CENTRAL-2026-JH9182</strong>
             </p>
             <p className="success-sub">
               {t.relinquishSuccessMsg || 'Your provisional application has been registered with automated NOC.'}

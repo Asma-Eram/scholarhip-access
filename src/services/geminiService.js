@@ -12,9 +12,9 @@ export async function askGemini({ query, lang = 'en', activeStudent }) {
         language: lang,
         studentProfile: activeStudent ? {
           name: activeStudent.name,
-          category: activeStudent.category || 'Scheduled Tribe',
+          category: activeStudent.category || 'General / Merit Candidate',
           institution: activeStudent.institution,
-          currentScheme: activeStudent.applications?.[0]?.schemeId || 'Post-Matric ST'
+          currentScheme: activeStudent.applications?.[0]?.schemeId || 'Central Sector CSSS'
         } : null
       })
     })
@@ -26,7 +26,7 @@ export async function askGemini({ query, lang = 'en', activeStudent }) {
           success: true,
           reply: data.reply,
           model: data.model || 'Gemini 3.8 Flash',
-          citation: data.citation || 'MoTA Guidelines & Live Gemini AI'
+          citation: data.citation || 'National Scholarship Guidelines & Live AI'
         }
       }
     }

@@ -15,55 +15,55 @@ import { I18N } from '../data/scholarshipData'
 import { askGemini } from '../services/geminiService'
 import './GrievanceAssistant.css'
 
-// Multilingual Knowledge Base for MoTA Tribal AI Sahayak (JAGO)
+// Multilingual Knowledge Base for ScholarBridge AI Student Advisor
 const KNOWLEDGE_BASE = {
   en: {
-    welcome: (name) => `Johar / Namaste ${name}! I am the MoTA Tribal AI Sahayak (JAGO). I can answer your questions on all 5 scholarship schemes, application tracking, DigiLocker verification, DBT payments, and any general knowledge queries in English, Hindi, Santhali, Gondi, Ho, Bodo, or Kui.`,
-    citation: 'MoTA Unified Guidelines 2026-27',
-    inputPlaceholder: 'Ask any question in English, Hindi, Santhali, Gondi...',
+    welcome: (name) => `Namaste ${name}! I am the ScholarBridge AI Student Advisor. I can answer your questions on scholarship schemes, application tracking, DigiLocker verification, DBT payments, and general academic guidelines.`,
+    citation: 'National Scholarship Guidelines 2026-27',
+    inputPlaceholder: 'Ask any question in English, Hindi, or regional languages...',
     speakingToast: 'Playing audio explanation in English...',
     questions: [
-      { q: 'What is my scholarship & DBT payment status?', a: 'Your Post-Matric Scholarship allowance (₹18,500) has been fully verified and DBT funds were successfully credited to your State Bank of India account (UTR: RBI2026091298412 on 12 September 2026).' },
-      { q: 'Can I apply for NFST fellowship if I already receive Post-Matric?', a: 'Under MoTA regulations (Rule 11/GFR 2017), simultaneous availing of multiple scholarships is strictly barred. However, TRISHA provides an automated Scheme Transition / Relinquishment NOC feature. If selected for NFST (₹37,000/mo), your Post-Matric allocation is safely transitioned without any double-dipping penalty.' },
-      { q: 'Why is my Top Class application flagged with an action required?', a: 'The State Nodal Officer requested an updated FY 2025-26 Income Certificate with a clear digital seal. You can resolve this instantly with 1-click DigiLocker sync on your Application Tracker tab.' },
-      { q: 'Which documents are auto-verified via DigiLocker?', a: 'Your Aadhaar Card, ST Caste Certificate (Jharkhand e-District), and Class 12 Marksheet are auto-verified with official digital signatures via DigiLocker and APAAR.' }
+      { q: 'What is my scholarship & DBT payment status?', a: 'Your scholarship grant (₹20,000) has been fully verified and DBT funds were successfully credited to your State Bank of India account (UTR: RBI2026091298412 on 12 September 2026).' },
+      { q: 'Can I apply for another fellowship if I already receive an active scholarship?', a: 'Under Central Scholarship regulations (Rule 11/GFR 2017), simultaneous availing of multiple scholarships is barred. However, ScholarBridge provides an automated Scheme Transition / Relinquishment NOC feature to transition safely without penalty.' },
+      { q: 'Why is my application flagged with an action required?', a: 'The Nodal Officer requested an updated Income Certificate with a clear digital seal. You can resolve this instantly with 1-click DigiLocker sync on your Application Tracker tab.' },
+      { q: 'Which documents are auto-verified via DigiLocker?', a: 'Your Aadhaar Card, State Domicile Certificate, and Class 12 Marksheet are auto-verified with official digital signatures via DigiLocker and APAAR.' }
     ]
   },
   hi: {
-    welcome: (name) => `जोहार / नमस्ते ${name}! मैं जनजातीय कार्य मंत्रालय (MoTA) का 'जनजातीय एआई सहायक (JAGO)' हूँ। मैं सभी 5 छात्रवृत्ति योजनाओं, डीबीटी भुगतान स्थिति, डिजिलॉकर सत्यापन, और शिक्षा एवं सामान्य ज्ञान से जुड़े किसी भी प्रश्न में आपकी पूरी सहायता कर सकता हूँ।`,
-    citation: 'जनजातीय कार्य मंत्रालय दिशा-निर्देश 2026-27',
+    welcome: (name) => `नमस्ते ${name}! मैं ScholarBridge का आधिकारिक एआई सहायक हूँ। मैं सभी राष्ट्रीय छात्रवृत्ति योजनाओं, डीबीटी भुगतान स्थिति, डिजिलॉकर सत्यापन, और शिक्षा से जुड़े किसी भी प्रश्न में आपकी पूरी सहायता कर सकता हूँ।`,
+    citation: 'राष्ट्रीय छात्रवृत्ति पोर्टल दिशा-निर्देश 2026-27',
     inputPlaceholder: 'हिंदी, संथाली, गोंडी या अंग्रेजी में प्रश्न पूछें...',
     speakingToast: 'हिंदी में ध्वनि संदेश सुनाया जा रहा है...',
     questions: [
       { q: 'मेरी छात्रवृत्ति और डीबीटी भुगतान की स्थिति क्या है?', a: 'आपकी पोस्ट-मैट्रिक छात्रवृत्ति (₹18,500) पूरी तरह सत्यापित हो चुकी है और डीबीटी राशि 12 सितंबर 2026 को आपके भारतीय स्टेट बैंक (SBI) खाते में सफलतापूर्वक जमा हो चुकी है (UTR: RBI2026091298412)।' },
-      { q: 'क्या पोस्ट-मैट्रिक के साथ NFST फेलोशिप भी मिल सकती है?', a: 'जनजातीय कार्य मंत्रालय के "एक सक्रिय छात्रवृत्ति" नियम (GFR 2017) के तहत आप एक साथ दो छात्रवृत्तियां नहीं ले सकते। हालांकि, TRISHA में स्वचालित अनापत्ति प्रमाण पत्र (NOC) की सुविधा है।' },
+      { q: 'क्या पोस्ट-मैट्रिक के साथ उच्च अनुसंधान फेलोशिप भी मिल सकती है?', a: 'राष्ट्रीय छात्रवृत्ति नियमों (GFR 2017) के तहत आप एक साथ दो सरकारी छात्रवृत्तियां नहीं ले सकते। हालांकि, ScholarBridge में स्वचालित अनापत्ति प्रमाण पत्र (NOC) की सुविधा है।' },
       { q: 'मेरे टॉप क्लास आवेदन पर कार्रवाई क्यों दिखाई दे रही है?', a: 'राज्य नोडल अधिकारी द्वारा वर्ष 2025-26 के आय प्रमाण पत्र के पुनः सत्यापन का अनुरोध किया गया है। आप "ट्रैकर" टैब में जाकर डिजिलॉकर लाइव सिंक द्वारा इसे तुरंत ठीक कर सकते हैं।' },
-      { q: 'डिजिलॉकर से कौन से दस्तावेज़ सत्यापित हैं?', a: 'आपका आधार कार्ड, एसटी जाति प्रमाण पत्र (ई-डिस्ट्रिक्ट) एवं कक्षा 12 की अंकतालिका डिजिलॉकर और APAAR के माध्यम से डिजिटल रूप से सत्यापित हैं।' }
+      { q: 'डिजिलॉकर से कौन से दस्तावेज़ सत्यापित हैं?', a: 'आपका आधार कार्ड, मूल निवास प्रमाण पत्र (ई-डिस्ट्रिक्ट) एवं कक्षा 12 की अंकतालिका डिजिलॉकर और APAAR के माध्यम से डिजिटल रूप से सत्यापित हैं।' }
     ]
   },
   santhali: {
-    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ᱡᱚᱱᱡᱟᱹᱛᱤᱭᱟᱹᱨᱤ ᱢᱚᱱᱛᱨᱟᱲᱚᱭ (MoTA) ᱨᱤᱱᱤᱡ 'ᱟᱹᱫᱤᱵᱟᱹᱥᱤ ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ (JAGO)' ᱠᱟᱱᱟᱹᱧ᱾`,
-    citation: 'MoTA ᱟᱹᱫᱤᱵᱟᱹᱥᱤ ᱱᱤᱭᱟᱹᱢ ᱒᱐᱒᱖-᱒᱗',
+    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ScholarBridge ᱨᱤᱱᱤᱡ 'ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ' ᱠᱟᱱᱟᱹᱧ᱾`,
+    citation: 'ScholarBridge ᱱᱤᱭᱟᱹᱢ ᱒᱐᱒᱖-᱒᱗',
     inputPlaceholder: 'ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ...',
     speakingToast: 'ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ ᱟᱲᱟᱝ ᱥᱟᱰᱮ ᱪᱟᱹᱞᱩ ᱟᱠᱟᱱᱟ...',
     questions: [
       { q: 'ᱤᱧᱟᱜ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱟᱨ ᱴᱟᱠᱟ ᱧᱟᱢ ᱨᱮᱱᱟᱜ ᱦᱟᱞᱚᱛ ᱪᱮᱫ ᱠᱟᱱᱟ?', a: 'ᱟᱢᱟᱜ ᱯᱳᱥᱴ-ᱢᱮᱴᱨᱤᱠ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ (₹18,500) ᱯᱩᱨᱟᱹ ᱡᱟᱸᱪ ᱦᱩᱭ ᱟᱠᱟᱱᱟ ᱟᱨ SBI ᱵᱮᱸᱠ ᱮᱠᱟᱣᱩᱱᱴ ᱨᱮ ᱴᱟᱠᱟ ᱥᱮᱴᱮᱨ ᱟᱠᱟᱱᱟ᱾' },
-      { q: 'ᱯᱳᱥᱴ-ᱢᱮᱴᱨᱤᱠ ᱛᱟᱦᱮᱸᱱ ᱛᱩᱞᱩᱡ NFST ᱯᱷᱮᱞᱳᱥᱤᱯ ᱧᱟᱢᱚᱜ-ᱟ ᱥᱮ ᱵᱟᱝ?', a: 'MoTA ᱨᱮᱱᱟᱜ ᱢᱤᱫ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱱᱤᱭᱟᱹᱢ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱨᱭᱟ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱢᱤᱫ ᱫᱷᱟᱣ ᱨᱮ ᱵᱟᱝ ᱧᱟᱢᱚᱜ-ᱟ᱾ ᱢᱮᱱᱠᱷᱟᱱ TRISHA ᱨᱮ ᱟᱡ ᱛᱮᱜᱮ NOC ᱵᱮᱱᱟᱣ ᱠᱟᱛᱮ NFST ᱨᱮ ᱵᱚᱫᱚᱞ ᱜᱟᱱᱚᱜ-ᱟ᱾' }
+      { q: 'ᱯᱳᱥᱴ-ᱢᱮᱴᱨᱤᱠ ᱛᱟᱦᱮᱸᱱ ᱛᱩᱞᱩᱡ ᱰᱚᱠᱴᱚᱨᱟᱞ ᱯᱷᱮᱞᱳᱥᱤᱯ ᱧᱟᱢᱚᱜ-ᱟ ᱥᱮ ᱵᱟᱝ?', a: 'ScholarBridge ᱨᱮᱱᱟᱜ ᱢᱤᱫ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱱᱤᱭᱟᱹᱢ ᱞᱮᱠᱟᱛᱮ ᱵᱟᱨᱭᱟ ᱥᱠᱚᱞᱟᱨᱥᱤᱯ ᱢᱤᱫ ᱫᱷᱟᱣ ᱨᱮ ᱵᱟᱝ ᱧᱟᱢᱚᱜ-ᱟ᱾ ᱢᱮᱱᱠᱷᱟᱱ ScholarBridge ᱨᱮ ᱟᱡ ᱛᱮᱜᱮ NOC ᱵᱮᱱᱟᱣ ᱠᱟᱛᱮ ᱵᱚᱫᱚᱞ ᱜᱟᱱᱚᱜ-ᱟ᱾' }
     ]
   },
   gondi: {
-    welcome: (name) => `सेवा जोहार / राम-राम ${name}! नन्ना जनजातीय मंत्रालय (MoTA) ना 'सहायी संगी (JAGO)' आन।`,
-    citation: 'MoTA गोंडी सेवा नियम 2026-27',
+    welcome: (name) => `सेवा जोहार / राम-राम ${name}! नन्ना ScholarBridge ना 'सहायी संगी' आन।`,
+    citation: 'ScholarBridge सेवा नियम 2026-27',
     inputPlaceholder: 'गोंडी ते सवाल कीम...',
     speakingToast: 'गोंडी ते आवाज चालू मंता...',
     questions: [
       { q: 'मावा छात्रवृत्ति अउर DBT पैसा ना हाल बोर मंता?', a: 'नीवा पोस्ट-मैट्रिक छात्रवृत्ति (₹18,500) जांच पूरो आता अउर SBI बैंक खाता ते पैसा जमा आता।' },
-      { q: 'पोस्ट-मैट्रिक कज्या NFST फेलोशिप मिलि की?', a: 'MoTA ना नियम मुतालिक एक बेर ते रोंड (2) छात्रवृत्ति मिले वयो। पण TRISHA ते ऑटोमैटिक NOC कीसी NFST ते जासे सुविधा मंता।' }
+      { q: 'पोस्ट-मैट्रिक कज्या उच्च अनुसंधान फेलोशिप मिलि की?', a: 'ScholarBridge ना नियम मुतालिक एक बेर ते रोंड (2) छात्रवृत्ति मिले वयो। पण ScholarBridge ते ऑटोमैटिक NOC कीसी जासे सुविधा मंता।' }
     ]
   },
   ho: {
-    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ᱢᱚᱱᱛᱨᱤ ᱢᱟᱰᱮᱨ (MoTA) ᱨᱤᱱᱤᱡ 'ᱦᱳ ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ (JAGO)' ᱠᱟᱱᱟᱹᱧ᱾`,
-    citation: 'MoTA ᱦᱳ ᱫᱤᱥᱟᱹ-ᱩᱫᱩᱜ ᱒᱐᱒᱖-᱒᱗',
+    welcome: (name) => `ᱡᱚᱦᱟᱨ ${name}! ᱤᱧ ᱫᱚ ScholarBridge ᱨᱤᱱᱤᱡ 'ᱮᱟᱭ ᱜᱚᱲᱚᱣᱟᱱ' ᱠᱟᱱᱟᱹᱧ᱾`,
+    citation: 'ScholarBridge ᱫᱤᱥᱟᱹ-ᱩᱫᱩᱜ ᱒᱐᱒᱖-᱒᱗',
     inputPlaceholder: 'ᱦᱳ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ...',
     speakingToast: 'ᱦᱳ ᱛᱮ ᱟᱲᱟᱝ ᱥᱟᱰᱮ ᱪᱟᱹᱞᱩ ᱟᱠᱟᱱᱟ...',
     questions: [
@@ -71,8 +71,8 @@ const KNOWLEDGE_BASE = {
     ]
   },
   bodo: {
-    welcome: (name) => `खुलुमबाय ${name}! आं जनजातीय मन्त्रालय (MoTA) नि 'बर\' एआइ मददगिरि (JAGO)'।`,
-    citation: 'MoTA बर\' बिथोन 2026-27',
+    welcome: (name) => `खुलुमबाय ${name}! आं ScholarBridge नि 'एआइ मददगिरि'।`,
+    citation: 'ScholarBridge बिथोन 2026-27',
     inputPlaceholder: 'बर\' रावजों सों...',
     speakingToast: 'बर\' रावजों खोनासं...',
     questions: [
@@ -80,8 +80,8 @@ const KNOWLEDGE_BASE = {
     ]
   },
   kui: {
-    welcome: (name) => `ଜୁହାର ${name}! ମୁଁ ଜନଜାତି କଲ୍ୟାଣ ମନ୍ତ୍ରଣାଳୟ (MoTA) ର 'କୁଇ ଏଆଇ ସହାୟକ (JAGO)'।`,
-    citation: 'MoTA କୁଇ ନିୟମାବଳୀ ୨୦୨୬-୨୭',
+    welcome: (name) => `ଜୁହାର ${name}! ମୁଁ ScholarBridge ର 'ଏଆଇ ସହାୟକ'।`,
+    citation: 'ScholarBridge ନିୟମାବଳୀ ୨୦୨୬-୨᱗',
     inputPlaceholder: 'କୁଇ ଭାଷାରେ ପ୍ରଶ୍ନ ପଚାରନ୍ତୁ...',
     speakingToast: 'କୁଇ ଭାଷାରେ ଶୁଣାଯାଉଛି...',
     questions: [
@@ -121,25 +121,25 @@ function generateIntelligentFallback(query, detectedLang) {
 
   if (q.includes('india') || q.includes('bharat') || q.includes('special') || q.includes('good about') || q.includes('खासियत') || q.includes('भारत')) {
     return isHi
-      ? `🇮🇳 भारत की प्रमुख विशेषताएं:\n\n• **विविधता में एकता:** 700+ मान्यता प्राप्त जनजातियां, 22 आधिकारिक भाषाएं।\n• **जनजातीय संस्कृति:** संताल, गोंड, भील, मुंडा, खासी — प्रकृति संरक्षण की धरोहर।\n• **डिजिटल अवसंरचना (DPI):** UPI, डिजिलॉकर, DBT — विश्व में सबसे तेज डिजिटल समावेशन।\n• **शीर्ष शिक्षा:** IITs, NITs, AIIMS — MoTA छात्रवृत्तियों से सुलभ।`
-      : `🇮🇳 Notable Specialties of India:\n\n• **Unity in Diversity:** 700+ Scheduled Tribes, 22 official languages, thousands of vibrant cultures.\n• **Indigenous Heritage:** Santhal, Gond, Munda, Bhil communities preserving nature & traditional knowledge.\n• **Digital Public Infrastructure:** UPI, DigiLocker, PFMS DBT — world's fastest digital inclusion.\n• **Premier Education:** IITs, IIMs, AIIMS — accessible through MoTA scholarships.`
+      ? `🇮🇳 भारत की प्रमुख विशेषताएं:\n\n• **विविधता में एकता:** 28 राज्य, 8 केंद्र शासित प्रदेश, 22 आधिकारिक भाषाएं।\n• **समृद्ध सांस्कृतिक विरासत:** सहस्राब्दियों पुरानी ज्ञान परंपरा एवं प्राकृतिक समन्वय।\n• **डिजिटल पब्लिक इन्फ्रास्ट्रक्चर (DPI):** UPI, डिजिलॉकर, PFMS DBT — विश्व का सबसे तेज़ डिजिटल समावेशन।\n• **विश्वस्तरीय उच्च शिक्षा:** IITs, NITs, IIMs, AIIMS — राष्ट्रीय छात्रवृत्तियों से सुलभ।`
+      : `🇮🇳 Notable Specialties of India:\n\n• **Unity in Diversity:** 28 states, 8 union territories, 22 official languages, rich vibrant cultures.\n• **Centuries of Academic Heritage:** World-renowned traditions of mathematics, philosophy, and sciences.\n• **Digital Public Infrastructure:** UPI, DigiLocker, PFMS DBT — world's fastest digital inclusion.\n• **Premier Higher Education:** IITs, NITs, IIMs, AIIMS — accessible through merit & need scholarships.`
   }
 
-  if ((q.includes('nfst') || q.includes('fellowship')) && (q.includes('post-matric') || q.includes('already') || q.includes('dono') || q.includes('both'))) {
+  if ((q.includes('fellowship') || q.includes('phd')) && (q.includes('post-matric') || q.includes('already') || q.includes('dono') || q.includes('both'))) {
     return isHi
-      ? `MoTA के "एक सक्रिय छात्रवृत्ति" नियम (GFR 2017 / Rule 11) के अनुसार, एक साथ दो सरकारी छात्रवृत्तियां नहीं ली जा सकतीं। हालाँकि, TRISHA पोर्टल में स्वचालित NOC सुविधा है — NFST (₹37,000/माह) के चयन पर पोस्ट-मैट्रिक बिना जुर्माने के स्थानांतरित हो जाएगी।`
-      : `Under MoTA Rule 11 (GFR 2017), simultaneous availing of multiple scholarships is barred. TRISHA provides an automated NOC wizard — if selected for NFST (₹37,000/month), your Post-Matric allocation transitions safely without penalty.`
+      ? `केंद्रीय छात्रवृत्ति नियम (GFR 2017 / Rule 11) के अनुसार, एक साथ दो सरकारी छात्रवृत्तियां नहीं ली जा सकतीं। हालाँकि, ScholarBridge पोर्टल में स्वचालित NOC सुविधा है — उच्च फैलोशिप के चयन पर पुराना आवेदन बिना जुर्माने के स्थानांतरित हो जाता है।`
+      : `Under Central Scholarship Rule 11 (GFR 2017), simultaneous availing of multiple scholarships is barred. ScholarBridge provides an automated NOC wizard — if selected for higher research fellowship, your allocation transitions safely without penalty.`
   }
 
   if (q.includes('dbt') || q.includes('payment') || q.includes('paisa') || q.includes('भुगतान')) {
     return isHi
-      ? `आपकी पोस्ट-मैट्रिक छात्रवृत्ति (₹18,500) सत्यापित हो चुकी है और 12 सितंबर 2026 को SBI खाते में DBT के माध्यम से जमा हो चुकी है (UTR: RBI2026091298412)। 'ट्रैकर' टैब से रसीद डाउनलोड करें।`
-      : `Your Post-Matric Scholarship (₹18,500) has been verified and credited to your SBI account via DBT on 12 Sep 2026 (UTR: RBI2026091298412). Download the receipt from the Tracker tab.`
+      ? `आपकी छात्रवृत्ति राशि (₹20,000) सत्यापित हो चुकी है और 12 सितंबर 2026 को SBI खाते में DBT के माध्यम से जमा हो चुकी है (UTR: RBI2026091298412)। 'ट्रैकर' टैब से रसीद डाउनलोड करें।`
+      : `Your scholarship grant (₹20,000) has been verified and credited to your SBI account via DBT on 12 Sep 2026 (UTR: RBI2026091298412). Download the receipt from the Tracker tab.`
   }
 
   return isHi
-    ? `नमस्ते! "${query}" के बारे में — जनजातीय कार्य मंत्रालय (MoTA) सभी एसटी छात्र-छात्राओं को डिजिलॉकर और DBT के माध्यम से पारदर्शी सेवाएं प्रदान करता है। कृपया अपना प्रश्न विस्तार से पूछें ताकि मैं बेहतर सहायता कर सकूँ।`
-    : `Johar! Regarding "${query}" — the Ministry of Tribal Affairs provides transparent digital services through DigiLocker and DBT to all ST students. Please elaborate your question so I can assist you better.`
+    ? `नमस्ते! "${query}" के बारे में — राष्ट्रीय छात्रवृत्ति पोर्टल (ScholarBridge) सभी छात्र-छात्राओं को डिजिलॉकर और DBT के माध्यम से पारदर्शी सेवाएं प्रदान करता है। कृपया अपना प्रश्न विस्तार से पूछें।`
+    : `Namaste! Regarding "${query}" — ScholarBridge provides transparent digital scholarship services through DigiLocker and DBT to all students. Please elaborate your question so I can assist you better.`
 }
 
 export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang, onToast }) {
@@ -150,7 +150,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
     {
       id: 1,
       sender: 'bot',
-      text: kb.welcome(activeStudent?.name || 'Priya'),
+      text: kb.welcome(activeStudent?.name || 'Ananya'),
       citation: kb.citation
     }
   ])
@@ -300,7 +300,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           id: Date.now() + 1,
           sender: 'bot',
           text: aiResult.reply,
-          citation: aiResult.citation || 'MoTA Guidelines & Google Gemini AI',
+          citation: aiResult.citation || 'National Scholarship Guidelines & Google Gemini AI',
           model: aiResult.model
         }])
       } else {
@@ -310,7 +310,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           id: Date.now() + 1,
           sender: 'bot',
           text: fallbackReply,
-          citation: 'MoTA Knowledge Base'
+          citation: 'ScholarBridge Knowledge Base'
         }])
       }
     } catch (err) {
@@ -320,7 +320,7 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
         id: Date.now() + 1,
         sender: 'bot',
         text: fallback,
-        citation: 'MoTA Guidelines'
+        citation: 'ScholarBridge Guidelines'
       }])
     } finally {
       setLoading(false)
@@ -338,9 +338,9 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           <div>
             <div className="assistant-badge-row">
               <span className="badge badge-primary">Multilingual Voice & NLP</span>
-              <span className="badge badge-success">MoTA AI Sahayak (JAGO)</span>
+              <span className="badge badge-success">ScholarBridge AI Advisor</span>
             </div>
-            <h1 className="assistant-title">Tribal Student Grievance & Guidance Assistant</h1>
+            <h1 className="assistant-title">Student Policy & Guidance Assistant</h1>
           </div>
         </div>
 
@@ -351,17 +351,17 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
             value={lang} 
             onChange={(e) => {
               setLang?.(e.target.value)
-              onToast?.(`Switched JAGO to ${e.target.options[e.target.selectedIndex].text}`, 'info')
+              onToast?.(`Switched language to ${e.target.options[e.target.selectedIndex].text}`, 'info')
             }}
             className="assistant-lang-select"
           >
             <option value="en">English (Official)</option>
-            <option value="hi">हिंदी (Hindi / Northern ST)</option>
+            <option value="hi">हिंदी (Hindi)</option>
             <option value="santhali">ᱥᱟᱱᱛᱟᱲᱤ (Santhali / Ol Chiki)</option>
             <option value="gondi">गोंडी (Gondi / Central)</option>
             <option value="ho">ᱦᱳ (Ho / Kolhan)</option>
             <option value="bodo">बड़ो (Bodo / Northeast)</option>
-            <option value="kui">କୁଇ (Kui / Kandha)</option>
+            <option value="kui">କୁଇ (Kui)</option>
           </select>
         </div>
       </div>

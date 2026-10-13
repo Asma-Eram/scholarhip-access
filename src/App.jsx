@@ -4,15 +4,15 @@ import Header from './components/Header'
 import MobileNav from './components/MobileNav'
 import OfflineBanner from './components/OfflineBanner'
 import ConflictModal from './components/ConflictModal'
+import HelpSupportModal from './components/HelpSupportModal'
 import Dashboard from './pages/Dashboard'
 import SchemesPage from './pages/SchemesPage'
 import ApplicationTracker from './pages/ApplicationTracker'
 import DocumentVault from './pages/DocumentVault'
-import FamilyOverview from './pages/FamilyOverview'
+import Profile from './pages/Profile'
 import GrievanceAssistant from './pages/GrievanceAssistant'
 import EligibilityFinder from './pages/EligibilityFinder'
 import CollegeAdminPortal from './pages/CollegeAdminPortal'
-import HelpSupportModal from './components/HelpSupportModal'
 import { HOUSEHOLD_DATA, SCHEMES, CONFLICT_RULES, I18N } from './data/scholarshipData'
 import { 
   getLocalizedStudent, 
@@ -31,6 +31,7 @@ import {
 import './App.css'
 
 export default function App() {
+  const [userRole, setUserRole] = useState('student')
   const [household, setHousehold] = useState(HOUSEHOLD_DATA)
   const [activeStudent, setActiveStudent] = useState(HOUSEHOLD_DATA.members[0])
   const [lang, setLang] = useState('en')
@@ -68,7 +69,7 @@ export default function App() {
   const handleRelinquishAndProceed = () => {
     if (!conflictTargetScheme) return
     const newApp = {
-      id: `APP-MOTA-2026-${conflictTargetScheme.shortName.toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: `APP-CENTRAL-2026-${conflictTargetScheme.shortName.toUpperCase().replace(/\s+/g, '')}-${Math.floor(1000 + Math.random() * 9000)}`,
       schemeId: conflictTargetScheme.id,
       portal: conflictTargetScheme.portal,
       appliedDate: '2026-09-27',
@@ -80,10 +81,10 @@ export default function App() {
       statusType: 'primary',
       lastActionDate: '2026-09-27',
       stages: [
-        { id: 1, title: 'DigiLocker Identity & ST Verification', date: '2026-09-27', done: true, remarks: 'Verified via MoTA Central Registry' },
+        { id: 1, title: 'DigiLocker Identity & Domicile Verification', date: '2026-09-27', done: true, remarks: 'Verified via National e-District API' },
         { id: 2, title: 'Institution Bonafide & Ranking Verification', date: null, done: false, active: true },
-        { id: 3, title: 'State Tribal Welfare Directorate Clearance', date: null, done: false },
-        { id: 4, title: 'MoTA National Central Committee Sanction', date: null, done: false },
+        { id: 3, title: 'State Higher Education Directorate Clearance', date: null, done: false },
+        { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
         { id: 5, title: 'PFMS Direct Benefit Transfer', date: null, done: false }
       ],
       dbtDetails: null,
@@ -100,9 +101,9 @@ export default function App() {
 
   const handleAutofillSubmit = (appData) => {
     const newApp = {
-      id: `APP-MOTA-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: `APP-SB-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
       schemeId: appData.schemeId,
-      portal: 'NSP / AISHE Synced',
+      portal: 'ScholarBridge / DigiLocker Synced',
       appliedDate: new Date().toISOString().split('T')[0],
       academicSession: '2026-27',
       sanctionAmount: appData.tuitionFeeClaim || '₹1,25,000 / year',
@@ -113,11 +114,11 @@ export default function App() {
       lastActionDate: new Date().toISOString().split('T')[0],
       institution: appData.collegeName,
       stages: [
-        { id: 1, title: 'DigiLocker Identity & ST Verification', date: new Date().toISOString().split('T')[0], done: true, remarks: 'Verified via MoTA Central Registry' },
+        { id: 1, title: 'DigiLocker Identity & Marksheets Sync', date: new Date().toISOString().split('T')[0], done: true, remarks: 'Verified via DigiLocker Cryptographic Hash' },
         { id: 2, title: `Institution Bonafide Verification (${appData.collegeName})`, date: null, done: false, active: true },
-        { id: 3, title: 'State Tribal Welfare Directorate Clearance', date: null, done: false },
-        { id: 4, title: 'MoTA National Central Committee Sanction', date: null, done: false },
-        { id: 5, title: 'PFMS Direct Benefit Transfer Credit', date: null, done: false }
+        { id: 3, title: 'State Directorate Clearance Audit', date: null, done: false },
+        { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
+        { id: 5, title: 'PFMS Direct Benefit Transfer (DBT)', date: null, done: false }
       ],
       dbtDetails: null,
       deficiencies: []
@@ -125,7 +126,7 @@ export default function App() {
     const updatedMembers = household.members.map(m => m.id === activeStudent.id ? { ...m, applications: [newApp, ...m.applications] } : m)
     setHousehold(prev => ({ ...prev, members: updatedMembers }))
     setActiveStudent(prev => ({ ...prev, applications: [newApp, ...prev.applications] }))
-    addToast(`One-Click Application ${newApp.id} generated & sent to ${appData.collegeName}!`, 'success')
+    addToast(`One-Click Application ${newApp.id} submitted via DigiLocker and forwarded to ${appData.collegeName}!`, 'success')
     setActiveTab('tracker')
   }
 
@@ -151,7 +152,7 @@ export default function App() {
   }
 
   const handleOfflineSync = () => {
-    addToast(t.offlineActiveMsg || 'Synchronizing offline queue with MoTA Central Cluster...', 'info')
+    addToast(t.offlineActiveMsg || 'Synchronizing offline queue with Central Scholarship Server...', 'info')
     setTimeout(() => { setOfflineMode(false); addToast(t.lifetimeValid || 'Offline sync complete! Records reconciled.', 'success'); }, 1400)
   }
 
@@ -160,14 +161,16 @@ export default function App() {
 
   const getTabLabel = (tab) => {
     switch (tab) {
-      case 'dashboard': return t.dashboard
-      case 'schemes': return t.schemes
-      case 'tracker': return t.applications
-      case 'documents': return t.documents
-      case 'family': return t.family
-      case 'eligibility': return t.eligibility || 'Eligibility Engine'
-      case 'assistant': return t.assistant
-      default: return t.dashboard
+      case 'dashboard': return 'Student Overview'
+      case 'schemes': return 'All Scholarships Directory'
+      case 'tracker': return 'Live Application Tracker'
+      case 'college': return 'College Admin Desk'
+      case 'documents': return 'DigiLocker Document Vault'
+      case 'profile':
+      case 'family': return 'My Profile & Credentials'
+      case 'eligibility': return 'Smart Grant Matcher'
+      case 'assistant': return 'AI Policy Advisor'
+      default: return 'ScholarBridge Portal'
     }
   }
 
@@ -182,6 +185,8 @@ export default function App() {
         activeStudent={localizedActiveStudent}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
+        userRole={userRole}
+        setUserRole={setUserRole}
         onOpenHelpSupport={() => setShowHelpSupportModal(true)}
       />
 
@@ -203,6 +208,8 @@ export default function App() {
           onOpenNotifications={() => setShowNotificationsDrawer(true)}
           activeTabLabel={getTabLabel(activeTab)}
           onNavigate={setActiveTab}
+          userRole={userRole}
+          setUserRole={setUserRole}
         />
 
         {/* Offline Banner */}
@@ -246,16 +253,11 @@ export default function App() {
           {activeTab === 'documents' && (
             <DocumentVault activeStudent={localizedActiveStudent} lang={lang} onToast={addToast} />
           )}
-          {activeTab === 'family' && (
-            <FamilyOverview
-              household={localizedHousehold}
+          {(activeTab === 'profile' || activeTab === 'family') && (
+            <Profile
               activeStudent={localizedActiveStudent}
+              household={localizedHousehold}
               lang={lang}
-              onSelectStudent={(member) => { 
-                const raw = household.members.find(m => m.id === member.id) || member
-                setActiveStudent(raw)
-                addToast(member.name, 'info')
-              }}
               onToast={addToast}
             />
           )}
@@ -305,7 +307,7 @@ export default function App() {
             <div className="drawer-header">
               <div className="drawer-title-row">
                 <Bell size={18} />
-                <h2>{t.ministry || 'MoTA Notifications'}</h2>
+                <h2>{t.ministry || 'Scholarship Notifications'}</h2>
               </div>
               <button className="close-btn" onClick={() => setShowNotificationsDrawer(false)}>
                 <X size={18} />

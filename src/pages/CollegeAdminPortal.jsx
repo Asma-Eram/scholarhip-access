@@ -47,7 +47,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
           ...a,
           collegeStatus: 'approved',
           status: 'verified_by_college',
-          remarks: `Bonafide enrollment & course fees certified by ${currentCollege.nodalOfficer.name} on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State Tribal Welfare Directorate.`
+          remarks: `Bonafide enrollment & course fees certified by ${currentCollege.nodalOfficer.name} on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State / Central Directorate.`
         }
       }
       return a
@@ -82,7 +82,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
               <Building2 size={24} />
             </div>
             <div>
-              <div className="portal-tag">MoTA AISHE Institute Verification Node</div>
+              <div className="portal-tag">ScholarBridge AISHE Institutional Nodal Desk</div>
               <h1 className="college-name">{currentCollege.name}</h1>
               <div className="college-meta">
                 <span>AISHE Code: <strong>{currentCollege.aisheCode}</strong></span> • 
@@ -93,11 +93,13 @@ export default function CollegeAdminPortal({ lang, onToast }) {
           </div>
 
           <div className="institute-switcher">
-            <label>Switch Institute Context:</label>
+            <label htmlFor="aishe-select-dropdown">Switch Institute Context:</label>
             <select 
+              id="aishe-select-dropdown"
               value={selectedAishe} 
               onChange={(e) => { setSelectedAishe(e.target.value); setSelectedApp(null); }}
               className="aishe-select"
+              aria-label="Switch Institute Context"
             >
               {AISHE_DIRECTORY.map(c => (
                 <option key={c.aisheCode} value={c.aisheCode}>
@@ -133,12 +135,13 @@ export default function CollegeAdminPortal({ lang, onToast }) {
       <div className="gov-card college-table-card">
         <div className="table-toolbar">
           <div className="search-box">
-            <Search size={18} className="search-icon" />
+            <Search size={18} className="search-icon" aria-hidden="true" />
             <input 
               type="text" 
               placeholder="Search by student name, roll no, or App ID..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search applications by student name, roll number, or application ID"
             />
           </div>
 
@@ -200,7 +203,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
                     </td>
                     <td>
                       <div className="student-name-cell">{app.studentName}</div>
-                      <div className="caste-cert-text">Caste: {app.casteCertNo}</div>
+                      <div className="domicile-cert-text">Domicile: {app.domicileCertNo || app.casteCertNo}</div>
                     </td>
                     <td>
                       <div className="roll-badge">{app.rollNumber}</div>
@@ -259,11 +262,11 @@ export default function CollegeAdminPortal({ lang, onToast }) {
                 </div>
                 <div className="chk-row">
                   <CheckCircle2 size={16} className="text-success" />
-                  <span>Biometric Attendance: <strong>{selectedApp.attendancePercentage}</strong> (&ge; 75% MoTA mandatory guideline)</span>
+                  <span>Biometric Attendance: <strong>{selectedApp.attendancePercentage}</strong> (&ge; 75% Central Scholarship guideline)</span>
                 </div>
                 <div className="chk-row">
                   <CheckCircle2 size={16} className="text-success" />
-                  <span>DigiLocker ST Caste Certificate verified against State Registry</span>
+                  <span>DigiLocker Domicile & Income Certificate verified against State e-District</span>
                 </div>
                 <div className="chk-row">
                   <CheckCircle2 size={16} className="text-success" />

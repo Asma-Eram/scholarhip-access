@@ -1,84 +1,277 @@
-import { useContext } from 'react'
-import { AppContext } from '../App'
-import { MOCK_STUDENT } from '../data/mockData'
+import React, { useState } from 'react'
+import { 
+  ShieldCheck, 
+  CheckCircle2, 
+  GraduationCap, 
+  Building2, 
+  CreditCard, 
+  FileText, 
+  Award, 
+  RefreshCw, 
+  Download, 
+  ExternalLink,
+  UserCheck,
+  Calendar,
+  MapPin,
+  Mail,
+  Phone,
+  Sparkles,
+  Lock
+} from 'lucide-react'
 import './Profile.css'
 
-export default function Profile() {
-  const { lang, addToast } = useContext(AppContext)
-  const hi = lang === 'hi'
-  const s = MOCK_STUDENT
+export default function Profile({ activeStudent, lang = 'en', onToast }) {
+  const [syncing, setSyncing] = useState(false)
+  const student = activeStudent || {}
 
-  const rows = [
-    { label: hi?'APAAR ID':'APAAR ID', value: s.apaarId, icon: '🎓' },
-    { label: hi?'OTR ID':'OTR ID', value: s.otrId, icon: '📋' },
-    { label: hi?'Aadhaar':'Aadhaar', value: s.aadhaar, icon: '🪪' },
-    { label: hi?'ST प्रमाण पत्र':'ST Certificate', value: s.stCertificate, icon: '📜' },
-    { label: hi?'जनजाति':'Tribe', value: s.tribe, icon: '🪶' },
-    { label: hi?'राज्य':'State', value: `${s.district}, ${s.state}`, icon: '📍' },
-    { label: hi?'वार्षिक आय':'Annual Income', value: s.income, icon: '💰' },
-    { label: hi?'संस्थान':'Institution', value: s.institution, icon: '🏛️' },
-    { label: hi?'कोर्स':'Course', value: `${s.course} · ${s.year}`, icon: '📚' },
-  ]
+  const handleSync = () => {
+    setSyncing(true)
+    onToast?.('Contacting DigiLocker & National Academic Depository...', 'info')
+    setTimeout(() => {
+      setSyncing(false)
+      onToast?.('All 5 credentials verified against State e-District & UIDAI!', 'success')
+    }, 1200)
+  }
+
+  const handleDownloadSummary = () => {
+    onToast?.('Downloading Cryptographically Verified Student Credential Summary (PDF)...', 'success')
+  }
 
   return (
-    <div className="profile-page fade-in">
-      {/* Avatar */}
-      <div className="profile-header">
-        <div className="profile-avatar">
-          {s.name.split(' ').map(n=>n[0]).join('')}
-        </div>
-        <div className="profile-name">{hi ? s.nameHi : s.name}</div>
-        <div className="profile-id">ID: {s.id}</div>
-        <div className="profile-badges">
-          <span className="badge badge-purple">ST · {s.tribe}</span>
-          <span className="badge badge-success">✅ DigiLocker</span>
-          <span className="badge badge-info">APAAR Linked</span>
-        </div>
-      </div>
+    <div className="profile-container fade-in">
+      {/* Top Banner / Hero Card */}
+      <div className="gov-card profile-hero-card">
+        <div className="profile-hero-inner">
+          <div className="profile-avatar-wrap">
+            <div className="profile-avatar-circle">
+              {student.avatarInitials || 'AS'}
+            </div>
+            <span className="profile-online-badge" title="Identity Verified & Active">
+              <CheckCircle2 size={16} />
+            </span>
+          </div>
 
-      {/* Info Rows */}
-      <div className="card profile-info">
-        {rows.map((r, i) => (
-          <div key={i} className="profile-row">
-            <span className="profile-row-icon">{r.icon}</span>
-            <div className="profile-row-content">
-              <div className="profile-row-label">{r.label}</div>
-              <div className="profile-row-value">{r.value}</div>
+          <div className="profile-hero-details">
+            <div className="profile-tags-row">
+              <span className="badge badge-success">
+                <ShieldCheck size={12} /> DigiLocker Verified Scholar
+              </span>
+              <span className="badge badge-primary">
+                Aadhaar e-KYC Active
+              </span>
+              <span className="badge badge-neutral">
+                Category: General / Open Merit
+              </span>
+            </div>
+
+            <h1 className="profile-fullname">{student.name || 'Ananya Sharma'}</h1>
+            <p className="profile-headline">
+              {student.academicProgram || 'B.Tech in Computer Science & Engineering'} • {student.institution || 'National Institute of Technology (NIT) Jamshedpur'}
+            </p>
+
+            <div className="profile-meta-chips">
+              <div className="meta-chip">
+                <span className="meta-label">Roll Number:</span>
+                <span className="meta-val">2023UGCS042</span>
+              </div>
+              <div className="meta-chip">
+                <span className="meta-label">APAAR ID:</span>
+                <span className="meta-val">{student.apaarId || 'APAAR-2023-JH-77192'}</span>
+              </div>
+              <div className="meta-chip">
+                <span className="meta-label">Academic Status:</span>
+                <span className="meta-val text-success">Regular Full-Time (Year 3)</span>
+              </div>
             </div>
           </div>
-        ))}
+
+          <div className="profile-hero-actions">
+            <button 
+              className="btn btn-secondary btn-sm"
+              onClick={handleSync}
+              disabled={syncing}
+            >
+              <RefreshCw size={14} className={syncing ? 'spinning-sync' : ''} />
+              <span>{syncing ? 'Syncing...' : 'Sync DigiLocker'}</span>
+            </button>
+            <button 
+              className="btn btn-primary btn-sm"
+              onClick={handleDownloadSummary}
+            >
+              <Download size={14} />
+              <span>Download Summary</span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Verification Status */}
-      <div className="card verify-card">
-        <div className="verify-title">🔐 {hi?'सत्यापन स्थिति':'Verification Status'}</div>
-        {[
-          { label: 'DigiLocker', status: true },
-          { label: 'Aadhaar (UIDAI)', status: true },
-          { label: 'ST Certificate (e-District)', status: true },
-          { label: 'APAAR Academic ID', status: true },
-          { label: 'OTR (NSP)', status: true },
-          { label: 'Income Certificate', status: false, note: 'Pending re-upload' },
-        ].map((v, i) => (
-          <div key={i} className="verify-row">
-            <span>{v.label}</span>
+      {/* 3-Column Credential Layout */}
+      <div className="profile-grid">
+        {/* Card 1: Academic Credentials */}
+        <div className="gov-card profile-section-card">
+          <div className="profile-card-header">
+            <div className="icon-badge bg-blue-tint">
+              <GraduationCap size={18} />
+            </div>
             <div>
-              {v.status
-                ? <span className="badge badge-success">✅ Verified</span>
-                : <span className="badge badge-warning">⚠️ {v.note}</span>
-              }
+              <h2 className="profile-card-title">Academic & Institutional Profile</h2>
+              <p className="profile-card-sub">Verified by AISHE & Dean Academic Affairs</p>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* Actions */}
-      <button className="btn btn-outline btn-full" onClick={() => addToast('Profile updated!', 'success')}>
-        ✏️ {hi?'प्रोफ़ाइल अपडेट करें':'Update Profile'}
-      </button>
-      <button className="btn btn-full" style={{background:'#fee2e2',color:'#dc2626',border:'1px solid #fca5a5'}} onClick={() => addToast('Logged out', 'info')}>
-        🚪 {hi?'लॉगआउट':'Logout'}
-      </button>
+          <div className="profile-field-list">
+            <div className="profile-field-row">
+              <span className="field-label">Institution</span>
+              <span className="field-value font-semibold">National Institute of Technology (NIT) Jamshedpur</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">AISHE Code</span>
+              <span className="field-value">U-0205 (NIRF Top 100 INI)</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Program & Branch</span>
+              <span className="field-value">B.Tech - Computer Science & Engineering</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Current Standing</span>
+              <span className="field-value">Semester 5 (3rd Year)</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Cumulative GPA (CGPA)</span>
+              <span className="field-value font-bold text-success">8.85 / 10.0 (AISHE Verified)</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Class XII Senior Secondary</span>
+              <span className="field-value font-bold">94.2% (CBSE Central Board)</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Biometric Attendance</span>
+              <span className="field-value font-bold text-success">88.5% (Above 75% Norm)</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: DigiLocker Verified Documents */}
+        <div className="gov-card profile-section-card">
+          <div className="profile-card-header">
+            <div className="icon-badge bg-purple-tint">
+              <FileText size={18} />
+            </div>
+            <div>
+              <h2 className="profile-card-title">Digital Credentials & Certificates</h2>
+              <p className="profile-card-sub">Zero-Touch Cryptographic Verification</p>
+            </div>
+          </div>
+
+          <div className="profile-doc-list">
+            <div className="profile-doc-item">
+              <div className="doc-icon-wrap">
+                <CheckCircle2 size={16} className="text-success" />
+              </div>
+              <div className="doc-info">
+                <div className="doc-name">Aadhaar Identity (UIDAI e-KYC)</div>
+                <div className="doc-sub">UIDAI • Linked with Aadhaar Seeding</div>
+              </div>
+              <span className="badge badge-sm badge-success">Verified</span>
+            </div>
+
+            <div className="profile-doc-item">
+              <div className="doc-icon-wrap">
+                <CheckCircle2 size={16} className="text-success" />
+              </div>
+              <div className="doc-info">
+                <div className="doc-name">State Domicile Certificate</div>
+                <div className="doc-sub">JH/DOM/2024/491028 • Revenue Dept.</div>
+              </div>
+              <span className="badge badge-sm badge-success">Verified</span>
+            </div>
+
+            <div className="profile-doc-item">
+              <div className="doc-icon-wrap">
+                <CheckCircle2 size={16} className="text-success" />
+              </div>
+              <div className="doc-info">
+                <div className="doc-name">Annual Income Certificate</div>
+                <div className="doc-sub">JH/INC/2025/110482 • ₹2,10,000 / year</div>
+              </div>
+              <span className="badge badge-sm badge-success">Verified</span>
+            </div>
+
+            <div className="profile-doc-item">
+              <div className="doc-icon-wrap">
+                <CheckCircle2 size={16} className="text-success" />
+              </div>
+              <div className="doc-info">
+                <div className="doc-name">Class XII Board Marksheet</div>
+                <div className="doc-sub">CBSE/2024/881290 • 94.2% Marks Verified</div>
+              </div>
+              <span className="badge badge-sm badge-success">Verified</span>
+            </div>
+
+            <div className="profile-doc-item">
+              <div className="doc-icon-wrap">
+                <CheckCircle2 size={16} className="text-success" />
+              </div>
+              <div className="doc-info">
+                <div className="doc-name">APAAR One Nation Student ID</div>
+                <div className="doc-sub">APAAR-2023-JH-77192 • Min. of Education</div>
+              </div>
+              <span className="badge badge-sm badge-success">Lifetime Valid</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: Banking & DBT Details */}
+        <div className="gov-card profile-section-card">
+          <div className="profile-card-header">
+            <div className="icon-badge bg-green-tint">
+              <CreditCard size={18} />
+            </div>
+            <div>
+              <h2 className="profile-card-title">Banking & DBT Direct Credit</h2>
+              <p className="profile-card-sub">PFMS / NPCI Validated Account</p>
+            </div>
+          </div>
+
+          <div className="profile-field-list">
+            <div className="profile-field-row">
+              <span className="field-label">Beneficiary Bank</span>
+              <span className="field-value font-semibold">State Bank of India</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Branch</span>
+              <span className="field-value">NIT Jamshedpur Campus Branch</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Bank Account</span>
+              <span className="field-value font-mono">XXXX-XXXX-8910</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">IFSC Code</span>
+              <span className="field-value font-mono">SBIN0001882</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">NPCI Aadhaar Seeding</span>
+              <span className="field-value font-bold text-success">
+                Active & Seeded (DBT Ready)
+              </span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">Last Disbursed Grant</span>
+              <span className="field-value font-bold text-primary">₹20,000 (Central Sector CSSS)</span>
+            </div>
+            <div className="profile-field-row">
+              <span className="field-label">PFMS UTR Number</span>
+              <span className="field-value font-mono text-xs">RBI2026091298412</span>
+            </div>
+          </div>
+
+          <div className="dbt-shield-notice">
+            <ShieldCheck size={16} className="text-success" />
+            <span>Funds are transferred directly from Government of India to your Aadhaar-seeded bank account with zero middleman deductions.</span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
