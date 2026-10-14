@@ -27,24 +27,25 @@ import './SchemesPage.css'
 
 export function checkSchemeQualification(student, scheme) {
   const studentLevel = (student?.educationLevel || 'Under-Graduate').toLowerCase()
-  const studentProgram = (student?.academicProgram || '').toLowerCase()
+  const studentProgram = (student?.academicProgram || 'B.Tech in CSE').toLowerCase()
   const text = (scheme.id + ' ' + scheme.targetGroup + ' ' + scheme.description + ' ' + (scheme.eligibilityCriteria || []).join(' ')).toLowerCase()
+  const streams = scheme.applicableStreams || []
 
-  // 1. Pre-matric (school 9-10)
-  if (scheme.id === 'pre-matric' || (text.includes('class 9') && !text.includes('undergraduate'))) {
+  // 1. School Level (Pre-Matric, NMMS)
+  if (scheme.id === 'pre-matric' || scheme.id === 'nmms-merit' || streams.includes('school') || streams.includes('class9')) {
     if (studentLevel.includes('school') || studentLevel.includes('secondary')) {
       return { eligible: true, badge: 'Eligible (School Level Match)' }
     }
     return {
       eligible: false,
-      badge: 'Not Eligible (Requires Class IX–X)',
-      reason: 'Open only to School Students (Class 9–10). You are currently enrolled in Undergraduate College.'
+      badge: 'Not Eligible (Requires Class IX–XII)',
+      reason: 'Open only to School Students (Class 9–12). You are currently enrolled in Undergraduate College.'
     }
   }
 
   // 2. Doctoral / Research (Ph.D / M.Phil)
-  if (scheme.id === 'nfst' || scheme.id === 'pmrf' || text.includes('ph.d') || text.includes('doctoral') || text.includes('m.phil')) {
-    if (studentLevel.includes('ph.d') || studentLevel.includes('doctoral') || studentProgram.includes('ph.d')) {
+  if (scheme.id === 'nfst' || scheme.id === 'pmrf' || streams.includes('phd') || streams.includes('doctoral')) {
+    if (studentLevel.includes('phd') || studentLevel.includes('doctoral') || studentProgram.includes('phd')) {
       return { eligible: true, badge: 'Eligible (Doctoral Level Match)' }
     }
     return {
@@ -55,7 +56,7 @@ export function checkSchemeQualification(student, scheme) {
   }
 
   // 3. Overseas / Study Abroad
-  if (scheme.id === 'nos' || text.includes('top 500') || text.includes('study abroad')) {
+  if (scheme.id === 'nos' || streams.includes('study_abroad')) {
     return {
       eligible: false,
       badge: 'Requires Foreign University Offer',
@@ -63,10 +64,46 @@ export function checkSchemeQualification(student, scheme) {
     }
   }
 
-  // 4. Undergraduate / Engineering / College / Girls in STEM / Premier
+  // 4. Basic / Natural Sciences Specific (e.g. DST INSPIRE SHE)
+  if (scheme.id === 'dst-inspire' || (streams.includes('bsc') && !streams.includes('btech') && !streams.includes('general_ug'))) {
+    if (studentProgram.includes('b.sc') || studentProgram.includes('m.sc') || studentProgram.includes('basic sciences')) {
+      return { eligible: true, badge: 'Eligible (B.Sc / M.Sc Science Match)' }
+    }
+    return {
+      eligible: false,
+      badge: 'Stream Mismatch (Requires B.Sc / M.Sc)',
+      reason: 'Exclusively for B.Sc/M.Sc Natural & Basic Sciences. Engineering/B.Tech is not covered under DST INSPIRE-SHE.'
+    }
+  }
+
+  // 5. Medical & Health Sciences (e.g. MBBS, BDS, Nursing)
+  if (scheme.id === 'health-sciences-merit' || (streams.includes('mbbs') && !streams.includes('btech') && !streams.includes('general_ug'))) {
+    if (studentProgram.includes('mbbs') || studentProgram.includes('bds') || studentProgram.includes('nursing') || studentProgram.includes('medical')) {
+      return { eligible: true, badge: 'Eligible (Medical Stream Match)' }
+    }
+    return {
+      eligible: false,
+      badge: 'Stream Mismatch (Requires MBBS/Health Sciences)',
+      reason: 'Exclusively for MBBS, BDS, B.Pharm, and Nursing degrees. Current enrollment: Engineering / B.Tech.'
+    }
+  }
+
+  // 6. Commerce & Management Specific (e.g. Aditya Birla UG)
+  if (scheme.id === 'aditya-birla-ug' || (streams.includes('bcom') && !streams.includes('btech') && !streams.includes('general_ug'))) {
+    if (studentProgram.includes('b.com') || studentProgram.includes('bba') || studentProgram.includes('commerce') || studentProgram.includes('economics')) {
+      return { eligible: true, badge: 'Eligible (Commerce Degree Match)' }
+    }
+    return {
+      eligible: false,
+      badge: 'Stream Mismatch (Requires B.Com/BBA)',
+      reason: 'Exclusively for Commerce, BBA, and Economics students. Current enrollment: B.Tech in CSE.'
+    }
+  }
+
+  // 7. General UG, Engineering, B.Tech, Women in STEM (LIC, Tata, CSSS, Post-Matric, Top Class, Pragati)
   return {
     eligible: true,
-    badge: 'Eligible (UG Degree Match)'
+    badge: 'Eligible (Degree & Level Match)'
   }
 }
 
@@ -85,13 +122,16 @@ export default function SchemesPage({
   const t = I18N[lang] || I18N.en
 
   const categories = [
-    { id: 'ALL', label: 'All Scholarships' },
-    { id: 'Central Sector', label: 'Central Sector (Govt)' },
-    { id: 'Women in STEM', label: 'Women in STEM' },
-    { id: 'Research & Innovation', label: 'Research & Fellowships' },
-    { id: 'Corporate / CSR Grants', label: 'Corporate & CSR Grants' },
-    { id: 'International Higher Education', label: 'Study Abroad (Top 500)' },
-    { id: 'Higher Secondary & College', label: 'Post-Matric & College' }
+    { id: 'ALL', label: 'All Schemes (16)' },
+    { id: 'Central Sector', label: '🏛️ Central Govt & NSP' },
+    { id: 'Corporate / CSR Grants', label: '🏢 Corporate & CSR Grants' },
+    { id: 'Commerce', label: '📊 Commerce & Business (B.Com/BBA)' },
+    { id: 'Pure Sciences', label: '🔬 Basic Sciences (B.Sc)' },
+    { id: 'Medical', label: '🩺 Medical & Allied Health' },
+    { id: 'Women in STEM', label: '👩‍🎓 Women in STEM' },
+    { id: 'School Education', label: '🎒 School (Class 9–12)' },
+    { id: 'Research & Innovation', label: '🎓 Ph.D & Fellowships' },
+    { id: 'International Higher Education', label: '✈️ Study Abroad (Top 500)' }
   ]
 
   const evaluatedSchemes = SCHEMES.map(scheme => ({
@@ -100,16 +140,29 @@ export default function SchemesPage({
   }))
 
   const filteredSchemes = evaluatedSchemes.filter(scheme => {
+    const streams = scheme.applicableStreams || []
     const matchesCategory = filterCategory === 'ALL' || 
       scheme.category === filterCategory ||
-      (filterCategory === 'Central Sector' && (scheme.portal === 'NSP' || scheme.category?.includes('Central')))
+      (filterCategory === 'Central Sector' && (scheme.portal === 'NSP' || scheme.category?.includes('Central'))) ||
+      (filterCategory === 'Corporate / CSR Grants' && (scheme.category?.includes('Corporate') || scheme.verificationType === 'direct_provider')) ||
+      (filterCategory === 'Commerce' && (streams.includes('bcom') || streams.includes('bba') || scheme.category?.includes('Commerce'))) ||
+      (filterCategory === 'Pure Sciences' && (streams.includes('bsc') || scheme.category?.includes('Sciences'))) ||
+      (filterCategory === 'Medical' && (streams.includes('mbbs') || scheme.category?.includes('Medical'))) ||
+      (filterCategory === 'School Education' && (streams.includes('school') || scheme.category?.includes('School')))
 
-    const matchesQuery = 
-      scheme.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.shortName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.targetGroup.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.category.toLowerCase().includes(searchQuery.toLowerCase())
+    const q = searchQuery.toLowerCase().trim()
+    const streamsText = (scheme.applicableStreams || []).join(' ').toLowerCase()
+    const criteriaText = (scheme.eligibilityCriteria || []).join(' ').toLowerCase()
+    const matchesQuery = !q ||
+      scheme.name.toLowerCase().includes(q) ||
+      scheme.description.toLowerCase().includes(q) ||
+      scheme.shortName.toLowerCase().includes(q) ||
+      scheme.targetGroup.toLowerCase().includes(q) ||
+      scheme.category.toLowerCase().includes(q) ||
+      scheme.portal.toLowerCase().includes(q) ||
+      (scheme.verificationType || '').toLowerCase().includes(q) ||
+      streamsText.includes(q) ||
+      criteriaText.includes(q)
 
     const matchesEligibility = 
       eligibilityFilter === 'ALL' ||
@@ -265,6 +318,15 @@ export default function SchemesPage({
                       <AlertCircle size={12} /> {scheme.qualificationCheck.badge}
                     </span>
                   )}
+                  {scheme.verificationType === 'direct_provider' ? (
+                    <span className="badge badge-direct-provider" title="Direct Philanthropic/CSR Grant - Disbursed directly without institutional nodal desk approval">
+                      <Building2 size={12} /> Direct to Foundation
+                    </span>
+                  ) : (
+                    <span className="badge badge-college-approval" title="Government NSP/State Scheme - Requires verification by College AISHE Nodal Officer">
+                      <Landmark size={12} /> College Verification
+                    </span>
+                  )}
                   <span className="badge badge-primary">{scheme.category}</span>
                   <span className="portal-code-tag">{scheme.portal}</span>
                 </div>
@@ -336,6 +398,19 @@ export default function SchemesPage({
                   {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
                 </button>
 
+                {scheme.officialUrl && (
+                  <a 
+                    href={scheme.officialUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="btn btn-secondary official-portal-btn"
+                    title={`Visit official website: ${scheme.officialUrl}`}
+                  >
+                    <span>Official Portal</span>
+                    <Globe size={13} />
+                  </a>
+                )}
+
                 {!isEligible ? (
                   <button
                     type="button"
@@ -360,7 +435,7 @@ export default function SchemesPage({
                     ) : (
                       <>
                         <Zap size={15} className="zap-icon" />
-                        <span>1-Click Apply with DigiLocker</span>
+                        <span>1-Click Apply</span>
                         <ArrowRight size={15} />
                       </>
                     )}

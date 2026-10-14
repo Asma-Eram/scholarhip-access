@@ -167,27 +167,57 @@ export default function App() {
   }
 
   const handleAutofillSubmit = (appData) => {
+    const isDirectProvider = appData.verificationType === 'direct_provider'
     const appId = `APP-SB-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
+    
+    const stages = isDirectProvider ? [
+      { 
+        id: 1, 
+        title: appData.applicationMode === 'manual' ? 'Scanned Document OCR Verification' : 'DigiLocker Identity & Marksheets Sync', 
+        date: new Date().toISOString().split('T')[0], 
+        done: true, 
+        remarks: appData.applicationMode === 'manual' ? 'OCR Vision extracted authentic certificate hash' : 'Verified via DigiLocker Cryptographic Hash' 
+      },
+      { 
+        id: 2, 
+        title: 'Institutional Bonafide: Pre-Certified (Direct Foundation Grant)', 
+        date: new Date().toISOString().split('T')[0], 
+        done: true, 
+        remarks: 'Direct philanthropic grant — exempt from institutional nodal officer roadblock' 
+      },
+      { id: 3, title: 'Foundation Trust Scrutiny Board Review', date: null, done: false, active: true },
+      { id: 4, title: 'Corporate Philanthropic Grant Sanction', date: null, done: false },
+      { id: 5, title: 'Direct Bank Transfer / College Ledger Credit', date: null, done: false }
+    ] : [
+      { 
+        id: 1, 
+        title: appData.applicationMode === 'manual' ? 'Scanned Document OCR Verification' : 'DigiLocker Identity & Marksheets Sync', 
+        date: new Date().toISOString().split('T')[0], 
+        done: true, 
+        remarks: appData.applicationMode === 'manual' ? 'OCR Vision extracted authentic certificate hash' : 'Verified via DigiLocker Cryptographic Hash' 
+      },
+      { id: 2, title: `Institution Bonafide Verification (${appData.collegeName})`, date: null, done: false, active: true },
+      { id: 3, title: 'State Directorate Clearance Audit', date: null, done: false },
+      { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
+      { id: 5, title: 'PFMS Direct Benefit Transfer (DBT)', date: null, done: false }
+    ]
+
     const newApp = {
       id: appId,
       schemeId: appData.schemeId,
-      portal: 'ScholarBridge / DigiLocker Synced',
+      portal: isDirectProvider ? 'Direct Foundation Gateway' : 'ScholarBridge / DigiLocker Synced',
       appliedDate: new Date().toISOString().split('T')[0],
       academicSession: '2026-27',
       sanctionAmount: appData.tuitionFeeClaim || '₹1,25,000 / year',
-      currentStageIndex: 2,
+      currentStageIndex: isDirectProvider ? 3 : 2,
       status: 'under_review',
-      statusText: `Forwarded to ${appData.collegeName} for Level-1 Bonafide Certification`,
-      statusType: 'primary',
+      statusText: isDirectProvider 
+        ? `Transmitted directly to ${appData.schemeName} Trust Board. (No college verification required)` 
+        : `Forwarded to ${appData.collegeName} for Level-1 Bonafide Certification`,
+      statusType: isDirectProvider ? 'success' : 'primary',
       lastActionDate: new Date().toISOString().split('T')[0],
       institution: appData.collegeName,
-      stages: [
-        { id: 1, title: 'DigiLocker Identity & Marksheets Sync', date: new Date().toISOString().split('T')[0], done: true, remarks: 'Verified via DigiLocker Cryptographic Hash' },
-        { id: 2, title: `Institution Bonafide Verification (${appData.collegeName})`, date: null, done: false, active: true },
-        { id: 3, title: 'State Directorate Clearance Audit', date: null, done: false },
-        { id: 4, title: 'Central Sanction Committee Approval', date: null, done: false },
-        { id: 5, title: 'PFMS Direct Benefit Transfer (DBT)', date: null, done: false }
-      ],
+      stages: stages,
       dbtDetails: null,
       deficiencies: []
     }
@@ -197,36 +227,42 @@ export default function App() {
     setHousehold(prev => ({ ...prev, members: updatedMembers }))
     setActiveStudent(prev => ({ ...prev, applications: [newApp, ...prev.applications] }))
 
-    // 2. Automatically dispatch to College Institutional Nodal Desk!
-    const newCollegeApp = {
-      id: appId,
-      studentId: activeStudent.id,
-      studentName: activeStudent.name,
-      rollNumber: appData.rollNumber || '2023UGCS042',
-      apaarId: activeStudent.apaarId || 'APAAR-2023-JH-77192',
-      aadhaarMasked: activeStudent.aadhaarMasked || 'XXXX-XXXX-4521',
-      schemeId: appData.schemeId,
-      schemeName: appData.schemeName,
-      aisheCode: appData.aisheCode || 'U-0205',
-      instituteName: appData.collegeName || 'National Institute of Technology (NIT) Jamshedpur',
-      courseName: activeStudent.academicProgram || 'B.Tech - Computer Science & Engineering (3rd Year)',
-      totalFeeClaimed: appData.tuitionFeeClaim || '₹1,25,000 (Tuition)',
-      appliedDate: new Date().toISOString().split('T')[0],
-      status: 'under_review',
-      collegeStatus: 'pending',
-      remarks: 'Fresh submission via 1-Click DigiLocker. Awaiting Institutional Nodal Officer bonafide certification.',
-      attendancePercentage: '92.4%',
-      bonafideValid: true,
-      casteCertNo: 'JH/DOM/2024/491028',
-      domicileCertNo: 'JH/DOM/2024/491028',
-      incomeCertNo: 'JH/INC/2025/110482',
-      incomeAmount: '₹2,10,000 / annum',
-      digilockerVerified: true,
-      isFreshSubmission: true
+    // 2. If college verification is mandatory, dispatch to College Institutional Nodal Desk
+    if (!isDirectProvider) {
+      const newCollegeApp = {
+        id: appId,
+        studentId: activeStudent.id,
+        studentName: activeStudent.name,
+        rollNumber: appData.rollNumber || '2023UGCS042',
+        apaarId: activeStudent.apaarId || 'APAAR-2023-JH-77192',
+        aadhaarMasked: activeStudent.aadhaarMasked || 'XXXX-XXXX-4521',
+        schemeId: appData.schemeId,
+        schemeName: appData.schemeName,
+        aisheCode: appData.aisheCode || 'U-0205',
+        instituteName: appData.collegeName || 'National Institute of Technology (NIT) Jamshedpur',
+        courseName: activeStudent.academicProgram || 'B.Tech - Computer Science & Engineering (3rd Year)',
+        totalFeeClaimed: appData.tuitionFeeClaim || '₹1,25,000 (Tuition)',
+        appliedDate: new Date().toISOString().split('T')[0],
+        status: 'under_review',
+        collegeStatus: 'pending',
+        remarks: appData.applicationMode === 'manual' 
+          ? 'Fresh submission via Verified Scanned OCR. Awaiting Institutional Nodal Officer bonafide certification.'
+          : 'Fresh submission via 1-Click DigiLocker. Awaiting Institutional Nodal Officer bonafide certification.',
+        attendancePercentage: '92.4%',
+        bonafideValid: true,
+        casteCertNo: 'JH/DOM/2024/491028',
+        domicileCertNo: 'JH/DOM/2024/491028',
+        incomeCertNo: 'JH/INC/2025/110482',
+        incomeAmount: '₹2,10,000 / annum',
+        digilockerVerified: appData.applicationMode === 'digilocker',
+        isFreshSubmission: true
+      }
+      setCollegeApplications(prev => [newCollegeApp, ...prev])
+      addToast(`Application ${appId} submitted and forwarded to ${appData.collegeName} Nodal Desk for Level-1 approval!`, 'success')
+    } else {
+      addToast(`Application ${appId} submitted directly to Foundation Trust (No College Desk Required)!`, 'success')
     }
-    setCollegeApplications(prev => [newCollegeApp, ...prev])
 
-    addToast(`One-Click Application ${appId} submitted via DigiLocker and forwarded to ${appData.collegeName} Nodal Desk for Level-1 approval!`, 'success')
     setActiveTab('tracker')
   }
 

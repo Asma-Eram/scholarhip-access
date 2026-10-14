@@ -37,7 +37,10 @@ export const SCHEMES = [
     faqs: [
       { q: 'Who is eligible to apply for this scholarship?', a: 'Any regular student enrolled in Class 9 or 10 in a recognized school with annual family income under ₹2.50 Lakhs is eligible.' },
       { q: 'Can siblings in the same family also apply?', a: 'Yes, eligible students apply individually based on their own academic records and Aadhaar verification.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://scholarships.gov.in',
+    applicableStreams: ['school', 'secondary', 'class9', 'class10', 'intermediate']
   },
   {
     id: 'post-matric',
@@ -72,7 +75,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Is fee paid directly to the institute or student?', a: 'Under DBT 2.0 norms, non-refundable institutional fees are credited directly to verified AISHE institutions, while maintenance allowances go to the student Aadhaar-seeded account.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://scholarships.gov.in',
+    applicableStreams: ['general_ug', 'btech', 'engineering', 'bcom', 'bba', 'ba', 'bsc', 'diploma', 'undergraduate', 'postgraduate']
   },
   {
     id: 'top-class',
@@ -105,7 +111,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Can I claim Top Class if I previously received Post-Matric?', a: 'Yes, but once Top Class is sanctioned, previous basic grants are seamlessly transitioned to prevent dual claiming.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://scholarships.gov.in',
+    applicableStreams: ['iit', 'nit', 'aiims', 'iim', 'nlu', 'engineering', 'medicine', 'premier', 'btech', 'mbbs']
   },
   {
     id: 'nfst',
@@ -139,7 +148,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'How is monthly fellowship paid?', a: 'Monthly scholar continuation certificates are signed digitally by the university guide on SFMP, releasing monthly DBT directly to the scholar.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://canarabank.com/fellowships',
+    applicableStreams: ['phd', 'mphil', 'doctoral', 'research']
   },
   {
     id: 'nos',
@@ -174,7 +186,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Can I apply before receiving the foreign visa?', a: 'Yes. A formal Sanction Letter is issued which you submit to the foreign embassy for visa facilitation.' }
-    ]
+    ],
+    verificationType: 'direct_provider',
+    officialUrl: 'https://nos.gov.in',
+    applicableStreams: ['study_abroad', 'masters', 'phd', 'top500', 'foreign']
   },
   {
     id: 'csss',
@@ -208,7 +223,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Is this scholarship renewable every year?', a: 'Yes, renewed annually up to 5 years subject to securing minimum 50% marks in semester examinations.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://scholarships.gov.in',
+    applicableStreams: ['general_ug', 'bcom', 'bba', 'ba', 'bsc', 'btech', 'undergraduate', 'postgraduate']
   },
   {
     id: 'aicte-pragati',
@@ -242,7 +260,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Can I use the grant to buy a laptop?', a: 'Yes, the ₹50,000 annual allowance can be used for college tuition, books, equipment, and laptop purchase.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://www.aicte-india.org/schemes/students-development-schemes',
+    applicableStreams: ['btech', 'engineering', 'diploma', 'women_in_stem', 'technical']
   },
   {
     id: 'pmrf',
@@ -275,7 +296,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Is there an age limit for PMRF?', a: 'Candidates must satisfy standard Ph.D admission age norms set by participating premier institutions.' }
-    ]
+    ],
+    verificationType: 'college',
+    officialUrl: 'https://www.pmrf.in',
+    applicableStreams: ['phd', 'doctoral', 'research', 'iit', 'iisc', 'gate']
   },
   {
     id: 'reliance-foundation',
@@ -308,7 +332,10 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Does this scholarship require repayment?', a: 'No, this is a 100% non-repayable philanthropic scholarship grant.' }
-    ]
+    ],
+    verificationType: 'direct_provider',
+    officialUrl: 'https://scholarships.reliancefoundation.org',
+    applicableStreams: ['general_ug', 'btech', 'bcom', 'bba', 'bsc', 'ba', 'undergraduate', 'postgraduate']
   },
   {
     id: 'tata-trusts',
@@ -341,6 +368,219 @@ export const SCHEMES = [
     ],
     faqs: [
       { q: 'Is the fee paid to student or college?', a: 'The sanctioned tuition scholarship is credited directly to the college account for student ledger credit.' }
+    ],
+    verificationType: 'direct_provider',
+    officialUrl: 'https://www.tatatrusts.org',
+    applicableStreams: ['engineering', 'medicine', 'bsc', 'btech', 'undergraduate', 'pure sciences']
+  },
+  {
+    id: 'dst-inspire',
+    code: 'DST-INSPIRE-11',
+    name: 'INSPIRE Scholarship for Higher Education (SHE) - DST Govt. of India',
+    nameHi: 'उच्च शिक्षा हेतु इंस्पायर छात्रवृत्ति (डीएसटी भारत सरकार)',
+    shortName: 'INSPIRE SHE (Science)',
+    portal: 'DST INSPIRE',
+    portalFullName: 'Department of Science & Technology (online-inspire.gov.in)',
+    targetGroup: 'B.Sc, B.S., and Int. M.Sc Students in Basic & Natural Sciences',
+    category: 'Pure & Applied Sciences',
+    fundingRatio: '100% Central Sector (Ministry of Science & Technology)',
+    disbursementFreq: 'Direct Benefit Transfer (PFMS)',
+    amountRange: '₹80,000 / year (₹60,000 grant + ₹20,000 research mentorship)',
+    hostellerAllowance: '₹5,000 / month',
+    dayScholarAllowance: '₹5,000 / month',
+    bookGrant: '₹20,000 / year summer research mentorship allowance',
+    deadline: '2026-11-25',
+    verificationType: 'direct_provider',
+    officialUrl: 'https://online-inspire.gov.in',
+    applicableStreams: ['bsc', 'msc', 'science', 'natural sciences', 'mathematics', 'physics', 'chemistry', 'biology'],
+    description: 'Flagship national initiative of the Department of Science & Technology to encourage meritorious students to pursue undergraduate and postgraduate education in Natural and Basic Sciences.',
+    eligibilityCriteria: [
+      'Enrolled in regular full-time B.Sc, B.S., or 5-year Integrated M.Sc program in Natural or Basic Sciences',
+      'Secured position within the top 1% in Class XII Board examination across India or rank in JEE/NEET/KVPY',
+      'Age limit between 17 and 22 years at time of admission'
+    ],
+    mandatoryDocuments: [
+      { id: 'class12_cert', name: 'Class 12th Board Scorecard (Top 1% Rank Proof)', source: 'DigiLocker' },
+      { id: 'bonafide_science', name: 'B.Sc Institutional Enrollment Endorsement Form', source: 'College Principal' },
+      { id: 'aadhaar_doc', name: 'Aadhaar e-KYC Seeded Bank Account', source: 'UIDAI' }
+    ],
+    faqs: [
+      { q: 'Is B.Tech or Engineering eligible for INSPIRE SHE?', a: 'No, INSPIRE SHE is exclusively dedicated to students enrolled in Basic & Natural Sciences (B.Sc / B.S. / Int. M.Sc).' }
+    ]
+  },
+  {
+    id: 'lic-golden-jubilee',
+    code: 'LIC-GJF-12',
+    name: 'LIC Golden Jubilee Scholarship for Commerce, Arts & Science',
+    nameHi: 'एलआईसी स्वर्ण जयंती छात्रवृत्ति',
+    shortName: 'LIC Golden Jubilee',
+    portal: 'LIC Foundation',
+    portalFullName: 'LIC Golden Jubilee Foundation Portal (licindia.in)',
+    targetGroup: 'Students pursuing B.Com, BBA, BA, B.Sc, ITI, or Professional Diplomas',
+    category: 'Commerce & General Degrees',
+    fundingRatio: '100% Philanthropic Sponsorship (LIC GJF)',
+    disbursementFreq: 'Annual / Bi-annual Installments via Direct Transfer',
+    amountRange: '₹20,000 – ₹40,000 / year',
+    hostellerAllowance: 'Covered under annual grant',
+    dayScholarAllowance: 'Covered under annual grant',
+    bookGrant: 'Covered under annual grant',
+    deadline: '2026-12-20',
+    verificationType: 'direct_provider',
+    officialUrl: 'https://licindia.in/golden-jubilee-scholarship',
+    applicableStreams: ['bcom', 'bba', 'ba', 'bsc', 'commerce', 'arts', 'management', 'intermediate', 'diploma'],
+    description: 'Empowers meritorious students from economically weaker households pursuing graduation in Commerce (B.Com/BBA), Humanities (BA), Science (B.Sc), and recognized diploma programs.',
+    eligibilityCriteria: [
+      'Passed Class XII examination with at least 60% marks or equivalent grade',
+      'Enrolled in regular full-time undergraduate degree (B.Com, BBA, BA, B.Sc) or recognized technical diploma',
+      'Annual family income from all sources must not exceed ₹2.50 Lakhs per annum'
+    ],
+    mandatoryDocuments: [
+      { id: 'class12_marksheet', name: 'Class 12th Board Marksheet', source: 'DigiLocker' },
+      { id: 'income_cert', name: 'Competent Authority Income Certificate (< ₹2.50L)', source: 'DigiLocker / Revenue' },
+      { id: 'college_id', name: 'College Admission Slip & Identity Card', source: 'College Registrar' }
+    ],
+    faqs: [
+      { q: 'Can B.Com and BBA students apply?', a: 'Yes! Students pursuing regular graduation in Commerce (B.Com, BBA) are fully eligible under the General Graduation stream.' }
+    ]
+  },
+  {
+    id: 'aditya-birla-ug',
+    code: 'CSR-ABC-13',
+    name: 'Aditya Birla Capital Education Scholarship for Commerce & Professional Studies',
+    nameHi: 'आदित्य बिड़ला कैपिटल उच्च शिक्षा छात्रवृत्ति',
+    shortName: 'Aditya Birla Capital Grant',
+    portal: 'Aditya Birla CSR',
+    portalFullName: 'Aditya Birla Capital Foundation Gateway (adityabirlacapital.com)',
+    targetGroup: 'Undergraduate Students in B.Com, BBA, Economics, and Professional Programs',
+    category: 'Commerce & Management',
+    fundingRatio: '100% Corporate Social Responsibility (CSR)',
+    disbursementFreq: 'Annual Direct Scholarship Credit',
+    amountRange: 'Up to ₹60,000 / year (Tuition Fee Grant)',
+    hostellerAllowance: 'Direct fee offset',
+    dayScholarAllowance: 'Direct fee offset',
+    bookGrant: 'Covered under annual aid',
+    deadline: '2026-11-15',
+    verificationType: 'direct_provider',
+    officialUrl: 'https://www.adityabirlacapital.com/csr',
+    applicableStreams: ['bcom', 'bba', 'commerce', 'management', 'economics', 'finance'],
+    description: 'Provides holistic financial support to meritorious undergraduate students enrolled in Commerce, Business Administration, Economics, and allied management disciplines.',
+    eligibilityCriteria: [
+      'Enrolled in 1st, 2nd, or 3rd year of undergraduate degree in B.Com, BBA, Economics, or Management',
+      'Minimum 60% aggregate in Class XII board examination and subsequent college semesters',
+      'Annual parental family income must not exceed ₹6.00 Lakhs per annum'
+    ],
+    mandatoryDocuments: [
+      { id: 'marksheet_college', name: 'Previous Examination Grade Card / Marksheet', source: 'DigiLocker' },
+      { id: 'income_proof', name: 'Family Income Certificate / Form 16', source: 'Revenue Authority' },
+      { id: 'college_fee_slip', name: 'Current Academic Year College Fee Receipt', source: 'College Accounts' }
+    ],
+    faqs: [
+      { q: 'Is this scholarship open to second and third-year students?', a: 'Yes, students enrolled in any year of an undergraduate Commerce or Management degree are eligible.' }
+    ]
+  },
+  {
+    id: 'sahu-jain',
+    code: 'SJT-ARTS-14',
+    name: 'Sahu Jain Trust Educational Merit-cum-Means Grant for Humanities & Arts',
+    nameHi: 'साहू जैन ट्रस्ट कला एवं मानविकी छात्रवृत्ति',
+    shortName: 'Sahu Jain Trust Grant',
+    portal: 'Sahu Jain Trust',
+    portalFullName: 'Sahu Jain Trust Philanthropic Gateway (sahujaintrust.timesofindia.com)',
+    targetGroup: 'Students pursuing BA, MA, Journalism, Social Work, and Humanities Courses',
+    category: 'Humanities & Social Sciences',
+    fundingRatio: '100% Philanthropic Merit Sponsorship',
+    disbursementFreq: 'Annual Direct Cheque / Bank Transfer',
+    amountRange: '₹25,000 – ₹50,000 / year',
+    hostellerAllowance: 'Included in grant',
+    dayScholarAllowance: 'Included in grant',
+    bookGrant: 'Study and book allowance included',
+    deadline: '2026-11-30',
+    verificationType: 'direct_provider',
+    officialUrl: 'https://sahujaintrust.timesofindia.com',
+    applicableStreams: ['ba', 'ma', 'humanities', 'arts', 'journalism', 'social work', 'languages', 'history'],
+    description: 'Promotes higher education in Humanities, Fine Arts, Journalism, Languages, and Social Sciences for meritorious students demonstrating academic dedication and financial need.',
+    eligibilityCriteria: [
+      'Enrolled in recognized Indian college or university in BA, MA, Journalism, or Social Work',
+      'Consistent academic record with at least 55% in preceding annual examination',
+      'Financial need demonstrated through valid local revenue income certificate'
+    ],
+    mandatoryDocuments: [
+      { id: 'marksheet_doc', name: 'Graduation / Class XII Verified Marksheet', source: 'DigiLocker' },
+      { id: 'income_doc', name: 'Family Income Certificate', source: 'SDM / Tehsildar' },
+      { id: 'bonafide_letter', name: 'Department Head Admission Bonafide', source: 'University Dept.' }
+    ],
+    faqs: [
+      { q: 'Can students studying BA Literature apply?', a: 'Yes, students enrolled in BA/MA across all Humanities, Languages, History, and Social Sciences streams can apply.' }
+    ]
+  },
+  {
+    id: 'health-sciences-merit',
+    code: 'MOHFW-MED-15',
+    name: 'National Health Sciences & Medical Undergraduate Fellowship',
+    nameHi: 'राष्ट्रीय स्वास्थ्य विज्ञान एवं चिकित्सा स्नातक फैलोशिप',
+    shortName: 'Health Sciences Fellowship',
+    portal: 'MoHFW / State Gateway',
+    portalFullName: 'Ministry of Health & Family Welfare Gateway (mohfw.gov.in)',
+    targetGroup: 'Students admitted to MBBS, BDS, B.Pharm, B.Sc Nursing, and Allied Health Sciences',
+    category: 'Medical & Healthcare',
+    fundingRatio: 'Centrally Sponsored Medical Grant',
+    disbursementFreq: 'Annual Direct College & Living Support',
+    amountRange: '₹75,000 / year (Tuition + Clinical Equipment Grant)',
+    hostellerAllowance: '₹3,500 / month hostel allowance',
+    dayScholarAllowance: '₹1,500 / month',
+    bookGrant: '₹10,000 / year medical textbooks & diagnostic equipment allowance',
+    deadline: '2026-12-15',
+    verificationType: 'college',
+    officialUrl: 'https://main.mohfw.gov.in',
+    applicableStreams: ['mbbs', 'bds', 'bpharm', 'nursing', 'medical', 'health', 'healthcare'],
+    description: 'Supports future medical professionals pursuing undergraduate degrees in Medicine, Dental Surgery, Pharmacy, and Nursing in recognized government and premier medical colleges.',
+    eligibilityCriteria: [
+      'Qualified NEET-UG and admitted to regular MBBS, BDS, B.Pharm, or B.Sc Nursing degree program',
+      'Gross parental family annual income from all sources must not exceed ₹4.50 Lakhs per annum',
+      'Must maintain satisfactory clinical training attendance and academic marks each year'
+    ],
+    mandatoryDocuments: [
+      { id: 'neet_scorecard', name: 'NEET-UG All-India Scorecard & Rank Letter', source: 'NTA' },
+      { id: 'medical_bonafide', name: 'Medical College Bonafide with AISHE Code', source: 'Dean Medical College' },
+      { id: 'income_cert', name: 'Income Certificate (< ₹4.50 Lakhs)', source: 'DigiLocker' }
+    ],
+    faqs: [
+      { q: 'Does this cover clinical equipment like stethoscopes?', a: 'Yes, the ₹75,000 annual grant includes a dedicated allowance for medical textbooks and clinical equipment.' }
+    ]
+  },
+  {
+    id: 'nmms-merit',
+    code: 'MOE-NMMS-16',
+    name: 'National Means-cum-Merit Scholarship Scheme (NMMSS)',
+    nameHi: 'राष्ट्रीय साधन-सह-योग्यता छात्रवृत्ति योजना',
+    shortName: 'NMMS School Merit',
+    portal: 'NSP',
+    portalFullName: 'National Scholarship Portal / Department of School Education (NSP)',
+    targetGroup: 'Meritorious Class IX, X, XI, and XII Secondary & Senior Secondary Students',
+    category: 'School Education',
+    fundingRatio: '100% Central Sector Scheme (Department of School Education & Literacy)',
+    disbursementFreq: 'Direct Monthly DBT via State Bank of India',
+    amountRange: '₹12,000 / year (₹1,000 / month from Class IX to XII)',
+    hostellerAllowance: 'Covered under monthly grant',
+    dayScholarAllowance: 'Covered under monthly grant',
+    bookGrant: 'Covered under annual grant',
+    deadline: '2026-10-31',
+    verificationType: 'college',
+    officialUrl: 'https://scholarships.gov.in',
+    applicableStreams: ['school', 'class 9', 'class 10', 'class 11', 'class 12', 'intermediate', 'secondary'],
+    description: 'Centrally sponsored flagship initiative to arrest drop-out rates after Class VIII and enable talented students from economically weaker sections to complete secondary and higher secondary education.',
+    eligibilityCriteria: [
+      'Cleared State-level NMMS Selection Examination conducted at Class VIII stage',
+      'Parental income from all sources must not exceed ₹3.50 Lakhs per annum',
+      'Studying as regular student in Government, Local Body, or Government-aided school in Classes IX to XII'
+    ],
+    mandatoryDocuments: [
+      { id: 'nmms_roll', name: 'State NMMS Merit Examination Result Certificate', source: 'SCERT / State Board' },
+      { id: 'school_admission', name: 'Class IX-XII School Admission Verification Letter', source: 'Headmaster / Principal' },
+      { id: 'aadhaar_doc', name: 'Aadhaar e-KYC Seeded Bank Account', source: 'UIDAI' }
+    ],
+    faqs: [
+      { q: 'Is NMMS renewable up to Class 12?', a: 'Yes, it continues uninterrupted from Class 9 through Class 12 subject to securing at least 55% marks in annual exams.' }
     ]
   }
 ]
