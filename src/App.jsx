@@ -13,6 +13,7 @@ import Profile from './pages/Profile'
 import GrievanceAssistant from './pages/GrievanceAssistant'
 import EligibilityFinder from './pages/EligibilityFinder'
 import CollegeAdminPortal from './pages/CollegeAdminPortal'
+import Login from './pages/Login'
 import { HOUSEHOLD_DATA, SCHEMES, CONFLICT_RULES, I18N } from './data/scholarshipData'
 import { 
   getLocalizedStudent, 
@@ -32,6 +33,7 @@ import './App.css'
 
 export default function App() {
   const [userRole, setUserRole] = useState('student')
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [household, setHousehold] = useState(HOUSEHOLD_DATA)
   const [activeStudent, setActiveStudent] = useState(HOUSEHOLD_DATA.members[0])
   const [lang, setLang] = useState('en')
@@ -174,6 +176,30 @@ export default function App() {
     }
   }
 
+  if (!isLoggedIn) {
+    return (
+      <div className="login-wrapper">
+        <Login
+          onLogin={() => {
+            setIsLoggedIn(true)
+            addToast(`Welcome back, ${localizedActiveStudent.name}!`, 'success')
+          }}
+          onToast={addToast}
+        />
+        {/* Toast Stack */}
+        <div className="toast-stack" aria-live="polite">
+          {toasts.map(toast => (
+            <div key={toast.id} className={`toast-item toast-${toast.type} fade-in`}>
+              {toast.type === 'success' ? <CheckCircle2 size={16} /> : toast.type === 'warning' ? <AlertTriangle size={16} /> : <Info size={16} />}
+              <span className="toast-msg">{toast.message}</span>
+              <button className="toast-x" onClick={() => setToasts(t => t.filter(x => x.id !== toast.id))}><X size={13} /></button>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="app-layout">
       {/* Left Sidebar */}
@@ -188,6 +214,10 @@ export default function App() {
         userRole={userRole}
         setUserRole={setUserRole}
         onOpenHelpSupport={() => setShowHelpSupportModal(true)}
+        onLogout={() => {
+          setIsLoggedIn(false)
+          addToast('Logged out of ScholarBridge session', 'info')
+        }}
       />
 
       {/* Right Content Area */}

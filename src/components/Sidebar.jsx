@@ -31,7 +31,8 @@ export default function Sidebar({
   setCollapsed: externalSetCollapsed,
   userRole,
   setUserRole,
-  onOpenHelpSupport
+  onOpenHelpSupport,
+  onLogout
 }) {
   const [internalCollapsed, setInternalCollapsed] = useState(false)
   const collapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed
@@ -166,6 +167,18 @@ export default function Sidebar({
           <HelpCircle size={17} aria-hidden="true" />
           {!collapsed && <span className="help-text">Help & Support</span>}
         </button>
+
+        {onLogout && (
+          <button 
+            className="sidebar-logout-btn"
+            onClick={onLogout}
+            aria-label="Logout of session"
+            title={collapsed ? "Student Logout" : undefined}
+          >
+            <LogOut size={16} aria-hidden="true" />
+            {!collapsed && <span className="logout-text">Student Logout</span>}
+          </button>
+        )}
 
         <button 
           className="collapse-toggle-btn"

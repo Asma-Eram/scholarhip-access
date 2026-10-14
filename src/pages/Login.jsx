@@ -1,29 +1,30 @@
-import { useState, useContext } from 'react'
-import { AppContext } from '../App'
+import { useState } from 'react'
 import './Login.css'
 
-export default function Login({ onLogin }) {
-  const [phone, setPhone] = useState('')
+export default function Login({ onLogin, onToast }) {
+  const [phone, setPhone] = useState('9876543210')
   const [otp, setOtp] = useState('')
   const [step, setStep] = useState(1) // 1=phone, 2=otp, 3=digilocker
   const [loading, setLoading] = useState(false)
-  const { addToast } = useContext(AppContext)
+  const addToast = (msg, type) => {
+    if (onToast) onToast(msg, type)
+  }
 
   const sendOtp = () => {
     if (phone.length < 10) return addToast('Enter valid 10-digit mobile number', 'warning')
     setLoading(true)
-    setTimeout(() => { setLoading(false); setStep(2); addToast('OTP sent: 123456 (demo)', 'success') }, 1200)
+    setTimeout(() => { setLoading(false); setStep(2); addToast('OTP sent: 123456 (demo)', 'success') }, 800)
   }
 
   const verifyOtp = () => {
     if (otp !== '123456') return addToast('Wrong OTP. Use 123456 for demo', 'warning')
     setLoading(true)
-    setTimeout(() => { setLoading(false); setStep(3) }, 1000)
+    setTimeout(() => { setLoading(false); setStep(3) }, 700)
   }
 
   const linkDigilocker = () => {
     setLoading(true)
-    setTimeout(() => { setLoading(false); addToast('DigiLocker linked successfully!', 'success'); setTimeout(onLogin, 800) }, 1500)
+    setTimeout(() => { setLoading(false); addToast('DigiLocker linked successfully!', 'success'); setTimeout(onLogin, 600) }, 1000)
   }
 
   return (
@@ -62,7 +63,15 @@ export default function Login({ onLogin }) {
             <button className="btn btn-primary btn-full" onClick={sendOtp} disabled={loading}>
               {loading ? <span className="spinner" /> : 'Send OTP'}
             </button>
-            <div className="login-hint">OTP will be sent to Aadhaar-registered mobile</div>
+            <button 
+              type="button" 
+              className="btn-text" 
+              style={{ marginTop: 8, width: '100%', fontSize: '13px', fontWeight: 600, color: 'var(--royal-700)' }} 
+              onClick={onLogin}
+            >
+              ⚡ Instant Demo Access (Skip Login)
+            </button>
+            <div className="login-hint">OTP will be sent to Aadhaar-registered mobile (Demo: <strong>123456</strong>)</div>
           </div>
         )}
 
