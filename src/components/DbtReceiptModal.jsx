@@ -1,4 +1,5 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { 
   X, 
   Printer, 
@@ -34,7 +35,7 @@ export default function DbtReceiptModal({ app, student, onClose, onToast }) {
     if (onToast) onToast('Certified PFMS DBT Disbursement Receipt saved as PDF', 'success')
   }
 
-  return (
+  const modalNode = (
     <div className="receipt-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="receipt-title">
       <div className="receipt-modal-card fade-in" onClick={e => e.stopPropagation()}>
         
@@ -236,4 +237,6 @@ export default function DbtReceiptModal({ app, student, onClose, onToast }) {
       </div>
     </div>
   )
+
+  return typeof document !== 'undefined' ? createPortal(modalNode, document.body) : modalNode
 }

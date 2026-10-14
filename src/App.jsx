@@ -15,6 +15,7 @@ import EligibilityFinder from './pages/EligibilityFinder'
 import CollegeAdminPortal from './pages/CollegeAdminPortal'
 import Login from './pages/Login'
 import { HOUSEHOLD_DATA, SCHEMES, CONFLICT_RULES, I18N } from './data/scholarshipData'
+import { COLLEGE_APPLICATION_STORE } from './data/aisheData'
 import { 
   getLocalizedStudent, 
   getLocalizedHousehold, 
@@ -36,6 +37,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true)
   const [household, setHousehold] = useState(HOUSEHOLD_DATA)
   const [activeStudent, setActiveStudent] = useState(HOUSEHOLD_DATA.members[0])
+  const [collegeApplications, setCollegeApplications] = useState(COLLEGE_APPLICATION_STORE)
   const [lang, setLang] = useState('en')
   const [activeTab, setActiveTab] = useState('dashboard')
   const [offlineMode, setOfflineMode] = useState(false)
@@ -102,8 +104,9 @@ export default function App() {
   }
 
   const handleAutofillSubmit = (appData) => {
+    const appId = `APP-SB-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
     const newApp = {
-      id: `APP-SB-2026-${(appData.schemeName?.substring(0, 3) || 'SCH').toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: appId,
       schemeId: appData.schemeId,
       portal: 'ScholarBridge / DigiLocker Synced',
       appliedDate: new Date().toISOString().split('T')[0],
@@ -111,7 +114,7 @@ export default function App() {
       sanctionAmount: appData.tuitionFeeClaim || '₹1,25,000 / year',
       currentStageIndex: 2,
       status: 'under_review',
-      statusText: `Forwarded to ${appData.collegeName} for Bonafide Certification`,
+      statusText: `Forwarded to ${appData.collegeName} for Level-1 Bonafide Certification`,
       statusType: 'primary',
       lastActionDate: new Date().toISOString().split('T')[0],
       institution: appData.collegeName,
@@ -125,11 +128,134 @@ export default function App() {
       dbtDetails: null,
       deficiencies: []
     }
+
+    // 1. Sync into Student and Household records
     const updatedMembers = household.members.map(m => m.id === activeStudent.id ? { ...m, applications: [newApp, ...m.applications] } : m)
     setHousehold(prev => ({ ...prev, members: updatedMembers }))
     setActiveStudent(prev => ({ ...prev, applications: [newApp, ...prev.applications] }))
-    addToast(`One-Click Application ${newApp.id} submitted via DigiLocker and forwarded to ${appData.collegeName}!`, 'success')
+
+    // 2. Automatically dispatch to College Institutional Nodal Desk!
+    const newCollegeApp = {
+      id: appId,
+      studentId: activeStudent.id,
+      studentName: activeStudent.name,
+      rollNumber: appData.rollNumber || '2023UGCS042',
+      apaarId: activeStudent.apaarId || 'APAAR-2023-JH-77192',
+      aadhaarMasked: activeStudent.aadhaarMasked || 'XXXX-XXXX-4521',
+      schemeId: appData.schemeId,
+      schemeName: appData.schemeName,
+      aisheCode: appData.aisheCode || 'U-0205',
+      instituteName: appData.collegeName || 'National Institute of Technology (NIT) Jamshedpur',
+      courseName: activeStudent.academicProgram || 'B.Tech - Computer Science & Engineering (3rd Year)',
+      totalFeeClaimed: appData.tuitionFeeClaim || '₹1,25,000 (Tuition)',
+      appliedDate: new Date().toISOString().split('T')[0],
+      status: 'under_review',
+      collegeStatus: 'pending',
+      remarks: 'Fresh submission via 1-Click DigiLocker. Awaiting Institutional Nodal Officer bonafide certification.',
+      attendancePercentage: '92.4%',
+      bonafideValid: true,
+      casteCertNo: 'JH/DOM/2024/491028',
+      domicileCertNo: 'JH/DOM/2024/491028',
+      incomeCertNo: 'JH/INC/2025/110482',
+      incomeAmount: '₹2,10,000 / annum',
+      digilockerVerified: true,
+      isFreshSubmission: true
+    }
+    setCollegeApplications(prev => [newCollegeApp, ...prev])
+
+    addToast(`One-Click Application ${appId} submitted via DigiLocker and forwarded to ${appData.collegeName} Nodal Desk for Level-1 approval!`, 'success')
     setActiveTab('tracker')
+  }
+
+  const handleCollegeApprove = (appId) => {
+    // 1. Update College Desk applications
+    setCollegeApplications(prev => prev.map(a => {
+      if (a.id === appId) {
+        return {
+          ...a,
+          collegeStatus: 'approved',
+          status: 'verified_by_college',
+          remarks: `Bonafide enrollment & course fees certified by Institute Nodal Officer on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State / Central Directorate.`
+        }
+      }
+      return a
+    }))
+
+    // 2. Automatically advance Student Live Application Tracker (Stage 2 certified!)
+    const approveInApps = (apps) => apps.map(app => {
+      if (app.id === appId) {
+        return {
+          ...app,
+          status: 'under_review',
+          statusText: 'Stage 2 Certified: Bonafide Approved by College Nodal Officer',
+          currentStageIndex: 3,
+          stages: app.stages.map(st => {
+            if (st.id === 2) {
+              return { 
+                ...st, 
+                done: true, 
+                active: false, 
+                date: new Date().toISOString().split('T')[0], 
+                remarks: 'Bonafide enrollment, fees & attendance certified by Institute Nodal Officer' 
+              }
+            }
+            if (st.id === 3) {
+              return { ...st, active: true }
+            }
+            return st
+          })
+        }
+      }
+      return app
+    })
+
+    setHousehold(prev => ({
+      ...prev,
+      members: prev.members.map(m => ({ ...m, applications: approveInApps(m.applications) }))
+    }))
+    setActiveStudent(prev => ({
+      ...prev,
+      applications: approveInApps(prev.applications)
+    }))
+    addToast(`College Nodal Desk: Certified Bonafide & Approved application ${appId}! Sent to State Clearance.`, 'success')
+  }
+
+  const handleCollegeFlagDeficiency = (appId, reason) => {
+    setCollegeApplications(prev => prev.map(a => {
+      if (a.id === appId) {
+        return {
+          ...a,
+          collegeStatus: 'deficiency',
+          status: 'deficiency_flagged',
+          remarks: `Deficiency Raised by College: ${reason}`
+        }
+      }
+      return a
+    }))
+
+    const flagInApps = (apps) => apps.map(app => {
+      if (app.id === appId) {
+        return {
+          ...app,
+          status: 'action_required',
+          statusText: `Deficiency Raised by College: ${reason}`,
+          deficiencies: [
+            { id: `DEF-CLG-${Date.now()}`, message: reason, date: new Date().toISOString().split('T')[0] }
+          ]
+        }
+      }
+      return app
+    })
+
+    setHousehold(prev => ({
+      ...prev,
+      members: prev.members.map(m => ({ ...m, applications: flagInApps(m.applications) }))
+    }))
+    setActiveStudent(prev => ({
+      ...prev,
+      applications: flagInApps(prev.applications)
+    }))
+    addToast(`College Nodal Desk: Dispatched deficiency notice for ${appId}`, 'warning')
   }
 
   const handleResolveDeficiency = (appId) => {
@@ -278,6 +404,9 @@ export default function App() {
             <CollegeAdminPortal
               lang={lang}
               onToast={addToast}
+              applications={collegeApplications}
+              onApprove={handleCollegeApprove}
+              onFlagDeficiency={handleCollegeFlagDeficiency}
             />
           )}
           {activeTab === 'documents' && (

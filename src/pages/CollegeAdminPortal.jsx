@@ -17,11 +17,20 @@ import {
   AlertCircle
 } from 'lucide-react'
 import { AISHE_DIRECTORY, COLLEGE_APPLICATION_STORE } from '../data/aisheData'
+import { createPortal } from 'react-dom'
 import './CollegeAdminPortal.css'
 
-export default function CollegeAdminPortal({ lang, onToast }) {
+export default function CollegeAdminPortal({ 
+  lang, 
+  onToast,
+  applications: externalApplications,
+  onApprove: externalOnApprove,
+  onFlagDeficiency: externalOnFlagDeficiency
+}) {
   const [selectedAishe, setSelectedAishe] = useState('U-0205') // Default: NIT Jamshedpur
-  const [applications, setApplications] = useState(COLLEGE_APPLICATION_STORE)
+  const [internalApplications, setInternalApplications] = useState(COLLEGE_APPLICATION_STORE)
+  const applications = externalApplications || internalApplications
+
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('ALL') // 'ALL' | 'pending' | 'approved' | 'deficiency'
   const [selectedApp, setSelectedApp] = useState(null)
@@ -34,42 +43,50 @@ export default function CollegeAdminPortal({ lang, onToast }) {
     const matchesCollege = app.aisheCode === selectedAishe
     const matchesStatus = statusFilter === 'ALL' || app.collegeStatus === statusFilter
     const matchesSearch = 
-      app.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.rollNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.id.toLowerCase().includes(searchQuery.toLowerCase())
+      (app.studentName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (app.rollNumber || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (app.id || '').toLowerCase().includes(searchQuery.toLowerCase())
     return matchesCollege && matchesStatus && matchesSearch
   })
 
   const handleApprove = (appId) => {
-    setApplications(prev => prev.map(a => {
-      if (a.id === appId) {
-        return {
-          ...a,
-          collegeStatus: 'approved',
-          status: 'verified_by_college',
-          remarks: `Bonafide enrollment & course fees certified by ${currentCollege.nodalOfficer.name} on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State / Central Directorate.`
+    if (externalOnApprove) {
+      externalOnApprove(appId)
+    } else {
+      setInternalApplications(prev => prev.map(a => {
+        if (a.id === appId) {
+          return {
+            ...a,
+            collegeStatus: 'approved',
+            status: 'verified_by_college',
+            remarks: `Bonafide enrollment & course fees certified by ${currentCollege.nodalOfficer.name} on ${new Date().toLocaleDateString('en-GB')}. Forwarded to State / Central Directorate.`
+          }
         }
-      }
-      return a
-    }))
+        return a
+      }))
+      onToast?.(`Application ${appId} Approved & Certified by College Nodal Desk!`, 'success')
+    }
     setSelectedApp(null)
-    onToast?.(`Application ${appId} Approved & Certified by College Nodal Desk!`, 'success')
   }
 
   const handleFlagDeficiency = (appId) => {
-    setApplications(prev => prev.map(a => {
-      if (a.id === appId) {
-        return {
-          ...a,
-          collegeStatus: 'deficiency',
-          status: 'deficiency_flagged',
-          remarks: `Deficiency Raised by College: ${deficiencyReason}. Student notified to re-upload.`
+    if (externalOnFlagDeficiency) {
+      externalOnFlagDeficiency(appId, deficiencyReason)
+    } else {
+      setInternalApplications(prev => prev.map(a => {
+        if (a.id === appId) {
+          return {
+            ...a,
+            collegeStatus: 'deficiency',
+            status: 'deficiency_flagged',
+            remarks: `Deficiency Raised by College: ${deficiencyReason}. Student notified to re-upload.`
+          }
         }
-      }
-      return a
-    }))
+        return a
+      }))
+      onToast?.(`Deficiency Notice dispatched to student for ${appId}`, 'warning')
+    }
     setSelectedApp(null)
-    onToast?.(`Deficiency Notice dispatched to student for ${appId}`, 'warning')
   }
 
   return (
@@ -241,7 +258,7 @@ export default function CollegeAdminPortal({ lang, onToast }) {
       </div>
 
       {/* Review & Certification Drawer/Modal */}
-      {selectedApp && (
+      {selectedApp && typeof document !== 'undefined' && createPortal(
         <div className="modal-overlay fade-in" onClick={() => setSelectedApp(null)}>
           <div className="college-review-modal" onClick={(e) => e.stopPropagation()}>
             <div className="review-modal-header">
@@ -304,7 +321,8 @@ export default function CollegeAdminPortal({ lang, onToast }) {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
