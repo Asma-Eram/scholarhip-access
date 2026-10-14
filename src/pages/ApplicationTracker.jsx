@@ -22,6 +22,7 @@ import {
 import { SCHEMES, I18N } from '../data/scholarshipData'
 import { getLocalizedSchemes } from '../data/localizationEngine'
 import { AISHE_DIRECTORY } from '../data/aisheData'
+import DbtReceiptModal from '../components/DbtReceiptModal'
 import './ApplicationTracker.css'
 
 export default function ApplicationTracker({ 
@@ -34,6 +35,7 @@ export default function ApplicationTracker({
   const localizedSchemes = getLocalizedSchemes(SCHEMES, lang)
   const applications = activeStudent.applications || []
   const [selectedAppId, setSelectedAppId] = useState(applications[0]?.id || null)
+  const [showReceiptModal, setShowReceiptModal] = useState(false)
 
   const selectedApp = applications.find(a => a.id === selectedAppId) || applications[0]
   const schemeMeta = localizedSchemes.find(s => s.id === selectedApp?.schemeId) || {}
@@ -297,12 +299,15 @@ export default function ApplicationTracker({
               </div>
 
               <button 
-                className="btn btn-secondary btn-full dbt-download-btn"
-                onClick={() => onDownloadSlip(selectedApp)}
-                aria-label="Download PDF Sanction Receipt"
+                className="btn btn-primary btn-full dbt-download-btn"
+                onClick={() => {
+                  setShowReceiptModal(true)
+                  if (onDownloadSlip) onDownloadSlip(selectedApp)
+                }}
+                aria-label="View and Download Certified PFMS DBT Sanction Receipt"
               >
-                <Download size={15} aria-hidden="true" />
-                <span>{t.downloadAcknowledgement || 'Download PDF Sanction Receipt'}</span>
+                <FileText size={15} aria-hidden="true" />
+                <span>View & Print Certified DBT Receipt</span>
               </button>
             </div>
           ) : (
@@ -323,6 +328,15 @@ export default function ApplicationTracker({
           </div>
         </div>
       </div>
+
+      {/* Certified Government PFMS DBT Receipt Modal */}
+      {showReceiptModal && (
+        <DbtReceiptModal
+          app={selectedApp}
+          student={activeStudent}
+          onClose={() => setShowReceiptModal(false)}
+        />
+      )}
     </div>
   )
 }

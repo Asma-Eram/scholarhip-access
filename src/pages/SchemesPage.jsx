@@ -25,6 +25,51 @@ import { SCHEMES, CONFLICT_RULES, I18N } from '../data/scholarshipData'
 import AutofillModal from '../components/AutofillModal'
 import './SchemesPage.css'
 
+export function checkSchemeQualification(student, scheme) {
+  const studentLevel = (student?.educationLevel || 'Under-Graduate').toLowerCase()
+  const studentProgram = (student?.academicProgram || '').toLowerCase()
+  const text = (scheme.id + ' ' + scheme.targetGroup + ' ' + scheme.description + ' ' + (scheme.eligibilityCriteria || []).join(' ')).toLowerCase()
+
+  // 1. Pre-matric (school 9-10)
+  if (scheme.id === 'pre-matric' || (text.includes('class 9') && !text.includes('undergraduate'))) {
+    if (studentLevel.includes('school') || studentLevel.includes('secondary')) {
+      return { eligible: true, badge: 'Eligible (School Level Match)' }
+    }
+    return {
+      eligible: false,
+      badge: 'Not Eligible (Requires Class IX–X)',
+      reason: 'Open only to School Students (Class 9–10). You are currently enrolled in Undergraduate College.'
+    }
+  }
+
+  // 2. Doctoral / Research (Ph.D / M.Phil)
+  if (scheme.id === 'nfst' || scheme.id === 'pmrf' || text.includes('ph.d') || text.includes('doctoral') || text.includes('m.phil')) {
+    if (studentLevel.includes('ph.d') || studentLevel.includes('doctoral') || studentProgram.includes('ph.d')) {
+      return { eligible: true, badge: 'Eligible (Doctoral Level Match)' }
+    }
+    return {
+      eligible: false,
+      badge: 'Not Eligible (Requires Ph.D / PG)',
+      reason: 'Exclusively for registered full-time Ph.D / Master’s research scholars. Your current level is Under-Graduate.'
+    }
+  }
+
+  // 3. Overseas / Study Abroad
+  if (scheme.id === 'nos' || text.includes('top 500') || text.includes('study abroad')) {
+    return {
+      eligible: false,
+      badge: 'Requires Foreign University Offer',
+      reason: 'Mandatory unconditional admission offer letter from QS World Top 500 foreign university.'
+    }
+  }
+
+  // 4. Undergraduate / Engineering / College / Girls in STEM / Premier
+  return {
+    eligible: true,
+    badge: 'Eligible (UG Degree Match)'
+  }
+}
+
 export default function SchemesPage({ 
   activeStudent, 
   lang, 
@@ -33,6 +78,7 @@ export default function SchemesPage({
   onSubmitAutofillApp
 }) {
   const [filterCategory, setFilterCategory] = useState('ALL')
+  const [eligibilityFilter, setEligibilityFilter] = useState('ALL') // 'ALL' | 'ELIGIBLE_ONLY' | 'INELIGIBLE_ONLY'
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedSchemeId, setExpandedSchemeId] = useState(null)
   const [autofillTargetScheme, setAutofillTargetScheme] = useState(null)
@@ -48,7 +94,12 @@ export default function SchemesPage({
     { id: 'Higher Secondary & College', label: 'Post-Matric & College' }
   ]
 
-  const filteredSchemes = SCHEMES.filter(scheme => {
+  const evaluatedSchemes = SCHEMES.map(scheme => ({
+    ...scheme,
+    qualificationCheck: checkSchemeQualification(activeStudent, scheme)
+  }))
+
+  const filteredSchemes = evaluatedSchemes.filter(scheme => {
     const matchesCategory = filterCategory === 'ALL' || 
       scheme.category === filterCategory ||
       (filterCategory === 'Central Sector' && (scheme.portal === 'NSP' || scheme.category?.includes('Central')))
@@ -59,8 +110,13 @@ export default function SchemesPage({
       scheme.shortName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       scheme.targetGroup.toLowerCase().includes(searchQuery.toLowerCase()) ||
       scheme.category.toLowerCase().includes(searchQuery.toLowerCase())
+
+    const matchesEligibility = 
+      eligibilityFilter === 'ALL' ||
+      (eligibilityFilter === 'ELIGIBLE_ONLY' && scheme.qualificationCheck.eligible) ||
+      (eligibilityFilter === 'INELIGIBLE_ONLY' && !scheme.qualificationCheck.eligible)
     
-    return matchesCategory && matchesQuery
+    return matchesCategory && matchesQuery && matchesEligibility
   })
 
   const handleApplyClick = (scheme) => {
@@ -141,12 +197,47 @@ export default function SchemesPage({
             </button>
           ))}
         </div>
+
+        {/* Degree Match & Qualification Quick Filter */}
+        <div className="eligibility-toggle-bar">
+          <div className="filter-lead-text">
+            <GraduationCap size={16} className="text-primary" />
+            <span><strong>Student Qualification:</strong> {activeStudent?.educationLevel || 'Under-Graduate'} • {activeStudent?.academicProgram || 'B.Tech in CSE'}</span>
+          </div>
+          <div className="filter-btns-wrap" role="group" aria-label="Filter by Qualification Match">
+            <button
+              type="button"
+              className={`eligibility-filter-btn ${eligibilityFilter === 'ALL' ? 'active' : ''}`}
+              onClick={() => setEligibilityFilter('ALL')}
+            >
+              All Levels ({evaluatedSchemes.length})
+            </button>
+            <button
+              type="button"
+              className={`eligibility-filter-btn ${eligibilityFilter === 'ELIGIBLE_ONLY' ? 'active' : ''}`}
+              onClick={() => setEligibilityFilter('ELIGIBLE_ONLY')}
+            >
+              <CheckCircle2 size={13} className="text-success" />
+              <span>Eligible for My Level ({evaluatedSchemes.filter(s => s.qualificationCheck.eligible).length})</span>
+            </button>
+            <button
+              type="button"
+              className={`eligibility-filter-btn ${eligibilityFilter === 'INELIGIBLE_ONLY' ? 'active' : ''}`}
+              onClick={() => setEligibilityFilter('INELIGIBLE_ONLY')}
+            >
+              <AlertCircle size={13} className="text-danger" />
+              <span>Other Levels / Ineligible ({evaluatedSchemes.filter(s => !s.qualificationCheck.eligible).length})</span>
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* Results Header Count */}
       <div className="results-meta-bar">
         <span className="results-count-text">
-          Showing <strong>{filteredSchemes.length}</strong> verified scholarship programs
+          Showing <strong>{filteredSchemes.length}</strong> scholarship programs
+          {eligibilityFilter === 'ELIGIBLE_ONLY' && ' (Filtered: Matched for Undergraduate Level)'}
+          {eligibilityFilter === 'INELIGIBLE_ONLY' && ' (Filtered: Higher / Ineligible Qualifications)'}
         </span>
         <span className="real-time-sync-tag">
           <span className="sync-pulse" /> Live Portal Directives Active
@@ -158,12 +249,22 @@ export default function SchemesPage({
         {filteredSchemes.map(scheme => {
           const isExpanded = expandedSchemeId === scheme.id
           const hasActiveApp = activeStudent?.applications?.some(a => a.schemeId === scheme.id)
+          const isEligible = scheme.qualificationCheck.eligible
 
           return (
             <div key={scheme.id} className="gov-card scheme-card">
               {/* Card Header Top */}
               <div className="scheme-card-header">
                 <div className="scheme-badges-wrap">
+                  {isEligible ? (
+                    <span className="badge badge-success">
+                      <CheckCircle2 size={12} /> {scheme.qualificationCheck.badge}
+                    </span>
+                  ) : (
+                    <span className="badge badge-danger">
+                      <AlertCircle size={12} /> {scheme.qualificationCheck.badge}
+                    </span>
+                  )}
                   <span className="badge badge-primary">{scheme.category}</span>
                   <span className="portal-code-tag">{scheme.portal}</span>
                 </div>
@@ -178,6 +279,14 @@ export default function SchemesPage({
                 <h2 className="scheme-name">{scheme.name}</h2>
                 <p className="scheme-desc">{scheme.description}</p>
               </div>
+
+              {/* Ineligible Explanation Notice */}
+              {!isEligible && (
+                <div className="ineligible-reason-box">
+                  <AlertCircle size={15} className="ineligible-icon" />
+                  <span><strong>Qualification Note:</strong> {scheme.qualificationCheck.reason}</span>
+                </div>
+              )}
 
               {/* Highlight Metrics */}
               <div className="scheme-metrics-box">
@@ -227,24 +336,36 @@ export default function SchemesPage({
                   {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
                 </button>
 
-                <button
-                  type="button"
-                  className={`btn ${hasActiveApp ? 'btn-secondary' : 'btn-primary apply-action-btn'}`}
-                  onClick={() => handleApplyClick(scheme)}
-                >
-                  {hasActiveApp ? (
-                    <>
-                      <span>View Active Application</span>
-                      <ArrowRight size={15} />
-                    </>
-                  ) : (
-                    <>
-                      <Zap size={15} className="zap-icon" />
-                      <span>1-Click Apply with DigiLocker</span>
-                      <ArrowRight size={15} />
-                    </>
-                  )}
-                </button>
+                {!isEligible ? (
+                  <button
+                    type="button"
+                    className="btn btn-ineligible"
+                    disabled
+                    title={scheme.qualificationCheck.reason}
+                  >
+                    <AlertCircle size={14} />
+                    <span>Ineligible for Current Level</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className={`btn ${hasActiveApp ? 'btn-secondary' : 'btn-primary apply-action-btn'}`}
+                    onClick={() => handleApplyClick(scheme)}
+                  >
+                    {hasActiveApp ? (
+                      <>
+                        <span>View Active Application</span>
+                        <ArrowRight size={15} />
+                      </>
+                    ) : (
+                      <>
+                        <Zap size={15} className="zap-icon" />
+                        <span>1-Click Apply with DigiLocker</span>
+                        <ArrowRight size={15} />
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           )
