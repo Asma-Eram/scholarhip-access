@@ -11,7 +11,8 @@ import {
   Building2,
   GraduationCap,
   Shield,
-  ExternalLink
+  ExternalLink,
+  RotateCcw
 } from 'lucide-react'
 import { I18N } from '../data/scholarshipData'
 import './Header.css'
@@ -27,7 +28,8 @@ export default function Header({
   activeTabLabel,
   onNavigate,
   userRole,
-  setUserRole
+  setUserRole,
+  onResetDemo
 }) {
   const [showLangMenu, setShowLangMenu] = useState(false)
   const [showMemberMenu, setShowMemberMenu] = useState(false)
@@ -139,7 +141,20 @@ export default function Header({
             )}
           </button>
 
-          {/* Language Selector */}
+          {/* Reset Demo Data Button */}
+          {onResetDemo && (
+            <button 
+              className="header-pill reset-demo-pill"
+              onClick={onResetDemo}
+              aria-label="Reset demo data"
+              title="Reset data back to initial demo state"
+            >
+              <RotateCcw size={14} />
+              <span className="pill-label">{lang === 'hi' ? 'रीसेट डेमो' : 'Reset Demo'}</span>
+            </button>
+          )}
+
+          {/* Language Selector (English & Hindi only) */}
           <div className="dropdown-wrap">
             <button 
               className="header-pill lang-pill"
@@ -150,7 +165,7 @@ export default function Header({
             >
               <Languages size={15} />
               <span className="pill-label">
-                {lang === 'en' ? 'EN' : lang === 'hi' ? 'हिं' : lang.toUpperCase()}
+                {lang === 'hi' ? 'हिन्दी' : 'English'}
               </span>
               <ChevronDown size={12} className={showLangMenu ? 'arrow-flipped' : ''} aria-hidden="true" />
             </button>
@@ -159,9 +174,7 @@ export default function Header({
               <div className="dropdown-panel lang-panel fade-in">
                 {[
                   { code: 'en', label: 'English', sub: 'Standard Portal Language' },
-                  { code: 'hi', label: 'हिंदी (Hindi)', sub: 'National Language' },
-                  { code: 'santhali', label: 'ᱥᱟᱱᱛᱟᱲᱤ (Santhali)', sub: 'Ol Chiki Script' },
-                  { code: 'gondi', label: 'गोंडी (Gondi)', sub: 'Regional Language' }
+                  { code: 'hi', label: 'हिंदी (Hindi)', sub: 'National Language' }
                 ].map(item => (
                   <button
                     key={item.code}

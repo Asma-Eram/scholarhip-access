@@ -357,11 +357,6 @@ export default function GrievanceAssistant({ activeStudent, lang = 'en', setLang
           >
             <option value="en">English (Official)</option>
             <option value="hi">हिंदी (Hindi)</option>
-            <option value="santhali">ᱥᱟᱱᱛᱟᱲᱤ (Santhali / Ol Chiki)</option>
-            <option value="gondi">गोंडी (Gondi / Central)</option>
-            <option value="ho">ᱦᱳ (Ho / Kolhan)</option>
-            <option value="bodo">बड़ो (Bodo / Northeast)</option>
-            <option value="kui">କୁଇ (Kui)</option>
           </select>
         </div>
       </div>

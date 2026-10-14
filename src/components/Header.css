@@ -177,6 +177,18 @@
   background: var(--royal-100);
 }
 
+.reset-demo-pill {
+  color: var(--text-muted);
+  border-color: var(--border-light);
+  background: #f8fafc;
+}
+
+.reset-demo-pill:hover {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
 .notif-pill {
   position: relative;
   padding: 7px 10px;

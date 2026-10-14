@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import MobileNav from './components/MobileNav'
 import OfflineBanner from './components/OfflineBanner'
 import ConflictModal from './components/ConflictModal'
 import HelpSupportModal from './components/HelpSupportModal'
+import DigiLockerModal from './components/DigiLockerModal'
 import Dashboard from './pages/Dashboard'
 import SchemesPage from './pages/SchemesPage'
 import ApplicationTracker from './pages/ApplicationTracker'
@@ -32,21 +33,83 @@ import {
 } from 'lucide-react'
 import './App.css'
 
+// Helper functions for persistent state management
+const loadStorage = (key, fallback) => {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : fallback
+  } catch (e) {
+    return fallback
+  }
+}
+
+const saveStorage = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch (e) {
+    console.warn(`Error writing ${key} to localStorage:`, e)
+  }
+}
+
 export default function App() {
-  const [userRole, setUserRole] = useState('student')
+  const [userRole, setUserRole] = useState(() => loadStorage('sb_userRole', 'student'))
   const [isLoggedIn, setIsLoggedIn] = useState(true)
-  const [household, setHousehold] = useState(HOUSEHOLD_DATA)
-  const [activeStudent, setActiveStudent] = useState(HOUSEHOLD_DATA.members[0])
-  const [collegeApplications, setCollegeApplications] = useState(COLLEGE_APPLICATION_STORE)
-  const [lang, setLang] = useState('en')
-  const [activeTab, setActiveTab] = useState('dashboard')
-  const [offlineMode, setOfflineMode] = useState(false)
+  const [household, setHousehold] = useState(() => loadStorage('sb_household', HOUSEHOLD_DATA))
+  const [activeStudent, setActiveStudent] = useState(() => {
+    const storedHousehold = loadStorage('sb_household', HOUSEHOLD_DATA)
+    const storedStudent = loadStorage('sb_activeStudent', null)
+    if (storedStudent && storedHousehold?.members?.some(m => m.id === storedStudent.id)) {
+      return storedHousehold.members.find(m => m.id === storedStudent.id)
+    }
+    return storedHousehold.members[0]
+  })
+  const [collegeApplications, setCollegeApplications] = useState(() => loadStorage('sb_collegeApps', COLLEGE_APPLICATION_STORE))
+  const [lang, setLang] = useState(() => {
+    const stored = loadStorage('sb_lang', 'en')
+    return stored === 'hi' ? 'hi' : 'en'
+  })
+  const [activeTab, setActiveTab] = useState(() => loadStorage('sb_activeTab', 'dashboard'))
+  const [offlineMode, setOfflineMode] = useState(!navigator.onLine)
   const [toasts, setToasts] = useState([])
   const [conflictTargetScheme, setConflictTargetScheme] = useState(null)
   const [conflictData, setConflictData] = useState(null)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [showNotificationsDrawer, setShowNotificationsDrawer] = useState(false)
   const [showHelpSupportModal, setShowHelpSupportModal] = useState(false)
+  const [digiLockerModalApp, setDigiLockerModalApp] = useState(null)
+
+  // Sync state changes to localStorage
+  useEffect(() => saveStorage('sb_household', household), [household])
+  useEffect(() => saveStorage('sb_activeStudent', activeStudent), [activeStudent])
+  useEffect(() => saveStorage('sb_collegeApps', collegeApplications), [collegeApplications])
+  useEffect(() => saveStorage('sb_lang', lang), [lang])
+  useEffect(() => saveStorage('sb_userRole', userRole), [userRole])
+  useEffect(() => saveStorage('sb_activeTab', activeTab), [activeTab])
+
+  // Real-time network online/offline listeners
+  useEffect(() => {
+    const handleOnline = () => {
+      setOfflineMode(false)
+      const queue = loadStorage('sb_offlineQueue', [])
+      if (queue.length > 0) {
+        addToast(`Internet restored! Synchronized ${queue.length} cached offline actions.`, 'success')
+        saveStorage('sb_offlineQueue', [])
+      } else {
+        addToast(lang === 'hi' ? 'इंटरनेट कनेक्शन पुनः स्थापित हो गया।' : 'Internet connection restored.', 'info')
+      }
+    }
+    const handleOffline = () => {
+      setOfflineMode(true)
+      addToast(lang === 'hi' ? 'ऑफ़लाइन मोड सक्रिय — स्थानीय कैश और PWA सक्षम।' : 'Offline Mode active — local storage & PWA cache enabled.', 'warning')
+    }
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [lang])
 
   const notifications = getLocalizedNotifications(lang)
   const localizedActiveStudent = getLocalizedStudent(activeStudent, lang)
@@ -259,19 +322,64 @@ export default function App() {
   }
 
   const handleResolveDeficiency = (appId) => {
-    addToast(t.fetchingDigilocker || 'Contacting State Nodal Verification Server...', 'info')
-    setTimeout(() => {
-      const resolveInApps = (apps) => apps.map(app => app.id === appId ? {
-        ...app,
-        status: 'under_review',
-        statusText: 'Deficiency Cleared: State Review Resumed',
-        deficiencies: [],
-        stages: app.stages.map(st => st.id === 3 ? { ...st, done: true, active: false, remarks: 'Income certificate e-verified via DigiLocker' } : st.id === 4 ? { ...st, active: true } : st)
-      } : app)
-      setHousehold(prev => ({ ...prev, members: prev.members.map(m => m.id === activeStudent.id ? { ...m, applications: resolveInApps(m.applications) } : m) }))
-      setActiveStudent(prev => ({ ...prev, applications: resolveInApps(prev.applications) }))
-      addToast(t.lifetimeValid || 'Deficiency resolved! Income certificate e-verified via DigiLocker.', 'success')
-    }, 1200)
+    const targetApp = activeStudent.applications?.find(a => a.id === appId) || 
+      household.members.flatMap(m => m.applications || []).find(a => a.id === appId)
+    
+    if (targetApp) {
+      setDigiLockerModalApp(targetApp)
+    } else {
+      handleConfirmResolveDeficiency(appId)
+    }
+  }
+
+  const handleConfirmResolveDeficiency = (appId) => {
+    const resolveInApps = (apps) => apps.map(app => app.id === appId ? {
+      ...app,
+      status: 'under_review',
+      statusText: lang === 'hi' ? 'आपत्ति निवारित: राज्य समीक्षा पुनः शुरू' : 'Deficiency Cleared: State Review Resumed',
+      deficiencies: [],
+      stages: app.stages.map(st => st.id === 3 ? { 
+        ...st, 
+        done: true, 
+        active: false, 
+        remarks: lang === 'hi' ? 'आय प्रमाण पत्र डिज़िलॉकर द्वारा ई-सत्यापित' : 'Income certificate e-verified via DigiLocker NeGD API' 
+      } : st.id === 4 ? { ...st, active: true } : st)
+    } : app)
+
+    setHousehold(prev => ({ 
+      ...prev, 
+      members: prev.members.map(m => m.id === activeStudent.id ? { ...m, applications: resolveInApps(m.applications) } : m) 
+    }))
+    setActiveStudent(prev => ({ 
+      ...prev, 
+      applications: resolveInApps(prev.applications) 
+    }))
+
+    if (offlineMode) {
+      const q = loadStorage('sb_offlineQueue', [])
+      q.push({ type: 'RESOLVE_DEFICIENCY', appId, timestamp: Date.now() })
+      saveStorage('sb_offlineQueue', q)
+      addToast(lang === 'hi' ? 'ऑफ़लाइन कतार में सहेजा गया! ऑनलाइन होने पर सिंक होगा।' : 'Saved to offline queue! Will sync when connection is restored.', 'info')
+    } else {
+      addToast(lang === 'hi' ? 'आपत्ति का निवारण हुआ! डिज़िलॉकर द्वारा ई-सत्यापित।' : 'Deficiency resolved! Income certificate cryptographically verified via DigiLocker.', 'success')
+    }
+  }
+
+  const handleResetDemoData = () => {
+    localStorage.removeItem('sb_household')
+    localStorage.removeItem('sb_activeStudent')
+    localStorage.removeItem('sb_collegeApps')
+    localStorage.removeItem('sb_lang')
+    localStorage.removeItem('sb_userRole')
+    localStorage.removeItem('sb_activeTab')
+    localStorage.removeItem('sb_offlineQueue')
+    setHousehold(HOUSEHOLD_DATA)
+    setActiveStudent(HOUSEHOLD_DATA.members[0])
+    setCollegeApplications(COLLEGE_APPLICATION_STORE)
+    setLang('en')
+    setUserRole('student')
+    setActiveTab('dashboard')
+    addToast(lang === 'hi' ? 'डेमो डेटा सफलतापूर्वक रीसेट किया गया!' : 'Demo data reset to default successfully!', 'info')
   }
 
   const handleDownloadSlip = () => {
@@ -281,7 +389,11 @@ export default function App() {
 
   const handleOfflineSync = () => {
     addToast(t.offlineActiveMsg || 'Synchronizing offline queue with Central Scholarship Server...', 'info')
-    setTimeout(() => { setOfflineMode(false); addToast(t.lifetimeValid || 'Offline sync complete! Records reconciled.', 'success'); }, 1400)
+    setTimeout(() => { 
+      setOfflineMode(false)
+      saveStorage('sb_offlineQueue', [])
+      addToast(t.lifetimeValid || 'Offline sync complete! Records reconciled.', 'success')
+    }, 1200)
   }
 
   const deficiencyCount = activeStudent.applications?.reduce((acc, a) => acc + (a.deficiencies?.length || 0), 0) || 0
@@ -366,6 +478,7 @@ export default function App() {
           onNavigate={setActiveTab}
           userRole={userRole}
           setUserRole={setUserRole}
+          onResetDemo={handleResetDemoData}
         />
 
         {/* Offline Banner */}
@@ -444,6 +557,18 @@ export default function App() {
           lang={lang}
           onClose={() => { setConflictData(null); setConflictTargetScheme(null); }}
           onRelinquishAndProceed={handleRelinquishAndProceed}
+        />
+      )}
+
+      {/* DigiLocker Document Verification Modal */}
+      {digiLockerModalApp && (
+        <DigiLockerModal
+          isOpen={!!digiLockerModalApp}
+          onClose={() => setDigiLockerModalApp(null)}
+          application={digiLockerModalApp}
+          student={localizedActiveStudent}
+          lang={lang}
+          onConfirmResolution={handleConfirmResolveDeficiency}
         />
       )}
 
