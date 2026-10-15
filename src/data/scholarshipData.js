@@ -299,7 +299,7 @@ export const SCHEMES = [
     ],
     verificationType: 'college',
     officialUrl: 'https://www.pmrf.in',
-    applicableStreams: ['phd', 'doctoral', 'research', 'iit', 'iisc', 'gate']
+    applicableStreams: ['phd', 'doctoral', 'research', 'iit', 'iisc', 'gate', 'btech', 'mtech', 'engineering']
   },
   {
     id: 'reliance-foundation',

@@ -139,6 +139,7 @@ export default function SchemesPage({
 
   const categories = [
     { id: 'ALL', label: 'All Schemes (16)' },
+    { id: 'Engineering', label: '⚙️ Engineering & Tech (B.Tech / B.E)' },
     { id: 'Central Sector', label: '🏛️ Central Govt & NSP' },
     { id: 'Corporate / CSR Grants', label: '🏢 Corporate & CSR Grants' },
     { id: 'Commerce', label: '📊 Commerce & Business (B.Com/BBA)' },
@@ -159,6 +160,15 @@ export default function SchemesPage({
     const streams = scheme.applicableStreams || []
     const matchesCategory = filterCategory === 'ALL' || 
       scheme.category === filterCategory ||
+      (filterCategory === 'Engineering' && (
+        streams.includes('btech') || 
+        streams.includes('engineering') || 
+        streams.includes('technical') || 
+        scheme.category?.toLowerCase().includes('engineering') || 
+        scheme.category?.toLowerCase().includes('technology') ||
+        scheme.targetGroup?.toLowerCase().includes('b.tech') ||
+        scheme.targetGroup?.toLowerCase().includes('engineering')
+      )) ||
       (filterCategory === 'Central Sector' && (scheme.portal === 'NSP' || scheme.category?.includes('Central'))) ||
       (filterCategory === 'Corporate / CSR Grants' && (scheme.category?.includes('Corporate') || scheme.verificationType === 'direct_provider')) ||
       (filterCategory === 'Commerce' && (streams.includes('bcom') || streams.includes('bba') || scheme.category?.includes('Commerce'))) ||
@@ -166,19 +176,40 @@ export default function SchemesPage({
       (filterCategory === 'Medical' && (streams.includes('mbbs') || scheme.category?.includes('Medical'))) ||
       (filterCategory === 'School Education' && (streams.includes('school') || scheme.category?.includes('School')))
 
-    const q = searchQuery.toLowerCase().trim()
+    const rawQ = searchQuery.toLowerCase().trim()
+    
+    // Normalize aliases so b.tech, btech, b tech, engineering, b.e, be all cross-match seamlessly
+    let searchTerms = [rawQ]
+    if (rawQ.includes('b.tech') || rawQ.includes('btech') || rawQ.includes('b tech') || rawQ === 'be' || rawQ === 'b.e' || rawQ.includes('engineering')) {
+      searchTerms.push('btech', 'engineering', 'technical')
+    }
+    if (rawQ.includes('b.com') || rawQ.includes('bcom') || rawQ.includes('b com') || rawQ.includes('commerce') || rawQ.includes('bba')) {
+      searchTerms.push('bcom', 'bba', 'commerce')
+    }
+    if (rawQ.includes('b.sc') || rawQ.includes('bsc') || rawQ.includes('b sc') || rawQ.includes('science')) {
+      searchTerms.push('bsc', 'science')
+    }
+    if (rawQ.includes('mbbs') || rawQ.includes('medical') || rawQ.includes('health') || rawQ.includes('doctor') || rawQ.includes('nursing')) {
+      searchTerms.push('mbbs', 'medical', 'health')
+    }
+
     const streamsText = (scheme.applicableStreams || []).join(' ').toLowerCase()
     const criteriaText = (scheme.eligibilityCriteria || []).join(' ').toLowerCase()
-    const matchesQuery = !q ||
-      scheme.name.toLowerCase().includes(q) ||
-      scheme.description.toLowerCase().includes(q) ||
-      scheme.shortName.toLowerCase().includes(q) ||
-      scheme.targetGroup.toLowerCase().includes(q) ||
-      scheme.category.toLowerCase().includes(q) ||
-      scheme.portal.toLowerCase().includes(q) ||
-      (scheme.verificationType || '').toLowerCase().includes(q) ||
-      streamsText.includes(q) ||
-      criteriaText.includes(q)
+    const targetText = (scheme.targetGroup || '').toLowerCase()
+    const descText = (scheme.description || '').toLowerCase()
+    const nameText = (scheme.name || '').toLowerCase()
+    const shortNameText = (scheme.shortName || '').toLowerCase()
+    const categoryText = (scheme.category || '').toLowerCase()
+
+    const matchesQuery = !rawQ || searchTerms.some(term =>
+      nameText.includes(term) ||
+      descText.includes(term) ||
+      shortNameText.includes(term) ||
+      targetText.includes(term) ||
+      categoryText.includes(term) ||
+      streamsText.includes(term) ||
+      criteriaText.includes(term)
+    )
 
     const matchesEligibility = 
       eligibilityFilter === 'ALL' ||
@@ -266,7 +297,7 @@ export default function SchemesPage({
             <Search size={18} className="search-icon" aria-hidden="true" />
             <input 
               type="text" 
-              placeholder="Search by title, B.Com, B.Sc, MBBS, engineering, school, or corporate grants..."
+              placeholder="Search by degree stream (B.Tech, B.Com, B.Sc, MBBS), scholarship title, eligibility..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="scheme-search-field"
@@ -283,6 +314,39 @@ export default function SchemesPage({
                 ×
               </button>
             )}
+          </div>
+
+          {/* Quick Stream Filter Fast Tags */}
+          <div className="quick-stream-tags-row" aria-label="Quick degree stream filters">
+            <span className="quick-stream-label">⚡ Quick Stream Filter:</span>
+            {[
+              { label: '⚙️ B.Tech / Engineering', term: 'B.Tech' },
+              { label: '📊 B.Com / Commerce', term: 'B.Com' },
+              { label: '🔬 B.Sc / Science', term: 'B.Sc' },
+              { label: '🩺 MBBS / Health', term: 'MBBS' },
+              { label: '👩‍🎓 Women in STEM', term: 'Women in STEM' },
+              { label: '🎒 School (Class 9–12)', term: 'School' },
+              { label: '🎓 Ph.D / Fellowships', term: 'Ph.D' }
+            ].map(tag => {
+              const isSelected = searchQuery.toLowerCase() === tag.term.toLowerCase()
+              return (
+                <button
+                  key={tag.term}
+                  type="button"
+                  className={`quick-stream-chip ${isSelected ? 'active' : ''}`}
+                  onClick={() => {
+                    if (isSelected) {
+                      setSearchQuery('')
+                    } else {
+                      setSearchQuery(tag.term)
+                    }
+                  }}
+                  aria-pressed={isSelected}
+                >
+                  {tag.label}
+                </button>
+              )
+            })}
           </div>
         </div>
 
