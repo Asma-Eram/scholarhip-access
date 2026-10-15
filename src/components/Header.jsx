@@ -12,7 +12,8 @@ import {
   GraduationCap,
   Shield,
   ExternalLink,
-  RotateCcw
+  RotateCcw,
+  Upload
 } from 'lucide-react'
 import { I18N } from '../data/scholarshipData'
 import './Header.css'
@@ -29,7 +30,8 @@ export default function Header({
   onNavigate,
   userRole,
   setUserRole,
-  onResetDemo
+  onResetDemo,
+  onOpenDocumentUpload
 }) {
   const [showLangMenu, setShowLangMenu] = useState(false)
   const [showMemberMenu, setShowMemberMenu] = useState(false)
@@ -99,16 +101,16 @@ export default function Header({
             <span className="live-ping-dot" />
           </div>
 
-          {/* Quick Find Scholarships */}
+          {/* Direct Document Upload Action (OCR & Manual) */}
           {userRole === 'student' && (
             <button 
-              className="header-pill search-quick-btn"
-              onClick={() => onNavigate?.('schemes')}
-              aria-label="Browse all scholarships and grants"
-              title="Browse all national, state, and merit scholarships"
+              className="header-pill upload-quick-btn"
+              onClick={() => onOpenDocumentUpload ? onOpenDocumentUpload() : onNavigate?.('schemes')}
+              aria-label="Upload documents for OCR verification"
+              title="Upload scanned certificates (PDF/JPG) or verify via DigiLocker"
             >
-              <Search size={14} />
-              <span className="pill-label">Find Grants</span>
+              <Upload size={14} />
+              <span className="pill-label">Upload Documents (OCR)</span>
             </button>
           )}
 

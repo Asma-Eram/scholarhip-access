@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Search, 
   Filter, 
@@ -19,7 +19,9 @@ import {
   ChevronUp,
   Award,
   Layers,
-  BookOpen
+  BookOpen,
+  Upload,
+  ExternalLink
 } from 'lucide-react'
 import { SCHEMES, CONFLICT_RULES, I18N } from '../data/scholarshipData'
 import AutofillModal from '../components/AutofillModal'
@@ -112,14 +114,28 @@ export default function SchemesPage({
   lang, 
   onTriggerConflict, 
   onDirectApply,
-  onSubmitAutofillApp
+  onSubmitAutofillApp,
+  openDossierTrigger
 }) {
   const [filterCategory, setFilterCategory] = useState('ALL')
   const [eligibilityFilter, setEligibilityFilter] = useState('ALL') // 'ALL' | 'ELIGIBLE_ONLY' | 'INELIGIBLE_ONLY'
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedSchemeId, setExpandedSchemeId] = useState(null)
   const [autofillTargetScheme, setAutofillTargetScheme] = useState(null)
+  const [autofillModalMode, setAutofillModalMode] = useState('digilocker')
   const t = I18N[lang] || I18N.en
+
+  useEffect(() => {
+    if (openDossierTrigger) {
+      handleOpenManualDossier()
+    }
+  }, [openDossierTrigger])
+
+  const handleOpenManualDossier = (scheme) => {
+    const target = scheme || SCHEMES.find(s => s.id === 'post-matric') || SCHEMES[0]
+    setAutofillModalMode('manual')
+    setAutofillTargetScheme(target)
+  }
 
   const categories = [
     { id: 'ALL', label: 'All Schemes (16)' },
@@ -181,7 +197,8 @@ export default function SchemesPage({
     if (conflictResult.hasConflict) {
       onTriggerConflict(scheme.id)
     } else {
-      // Launch DigiLocker Zero-Touch Autofill Modal
+      // Launch Zero-Touch Autofill Modal (Default: DigiLocker tab)
+      setAutofillModalMode('digilocker')
       setAutofillTargetScheme(scheme)
     }
   }
@@ -217,20 +234,54 @@ export default function SchemesPage({
           Unified scholarship gateway connecting students with Central Government, AICTE, state endowments, and premier philanthropic grants. Zero physical queues with instant cryptographic verification.
         </p>
 
+        {/* Manual Certificate Upload & OCR Banner */}
+        <div className="manual-dossier-hero-banner">
+          <div className="dossier-banner-content">
+            <div className="dossier-icon-badge">
+              <Upload size={22} />
+            </div>
+            <div className="dossier-text-block">
+              <div className="dossier-title-row">
+                <span className="dossier-title">Have Scanned Certificates or Marksheets?</span>
+                <span className="badge badge-success">Manual Upload (OCR Engine)</span>
+              </div>
+              <p className="dossier-desc">
+                Don’t have DigiLocker? Upload your scanned Income Certificate, College Bonafide/Fee Receipt, or 12th Marksheet (PDF/JPG). Our AI OCR automatically extracts your credentials and auto-fills your applications.
+              </p>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            className="btn btn-primary open-dossier-modal-btn"
+            onClick={() => handleOpenManualDossier()}
+          >
+            <Upload size={16} />
+            <span>Upload Certificates (PDF/JPG OCR)</span>
+          </button>
+        </div>
+
         {/* Search & Category Filter Toolbar */}
         <div className="schemes-search-bar-wrap">
           <div className="search-input-box">
             <Search size={18} className="search-icon" aria-hidden="true" />
             <input 
               type="text" 
-              placeholder="Search by scholarship title, engineering, medicine, degree level, or eligibility..."
+              placeholder="Search by title, B.Com, B.Sc, MBBS, engineering, school, or corporate grants..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="scheme-search-field"
               aria-label="Search scholarships by title, degree level, or eligibility"
             />
             {searchQuery && (
-              <button className="clear-search-btn" onClick={() => setSearchQuery('')} aria-label="Clear search input">×</button>
+              <button 
+                type="button"
+                className="clear-search-btn" 
+                onClick={() => setSearchQuery('')} 
+                aria-label="Clear search input"
+                title="Clear search"
+              >
+                ×
+              </button>
             )}
           </div>
         </div>
@@ -387,72 +438,77 @@ export default function SchemesPage({
                 </div>
               )}
 
-              {/* Card Footer Actions */}
+              {/* Card Footer Actions - Clean 2-Tier Layout That Never Overflows */}
               <div className="scheme-card-footer">
-                <button 
-                  type="button" 
-                  className="btn btn-secondary details-toggle-btn"
-                  onClick={() => toggleExpand(scheme.id)}
-                >
-                  <span>{isExpanded ? 'Hide Details' : 'View Guidelines'}</span>
-                  {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-                </button>
-
-                {scheme.officialUrl && (
-                  <a 
-                    href={scheme.officialUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="btn btn-secondary official-portal-btn"
-                    title={`Visit official website: ${scheme.officialUrl}`}
+                <div className="card-footer-secondary-row">
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary details-toggle-btn"
+                    onClick={() => toggleExpand(scheme.id)}
                   >
-                    <span>Official Portal</span>
-                    <Globe size={13} />
-                  </a>
-                )}
-
-                {!isEligible ? (
-                  <button
-                    type="button"
-                    className="btn btn-ineligible"
-                    disabled
-                    title={scheme.qualificationCheck.reason}
-                  >
-                    <AlertCircle size={14} />
-                    <span>Ineligible for Current Level</span>
+                    <span>{isExpanded ? 'Hide Details' : 'View Guidelines'}</span>
+                    {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                   </button>
-                ) : (
-                  <button
-                    type="button"
-                    className={`btn ${hasActiveApp ? 'btn-secondary' : 'btn-primary apply-action-btn'}`}
-                    onClick={() => handleApplyClick(scheme)}
-                  >
-                    {hasActiveApp ? (
-                      <>
-                        <span>View Active Application</span>
-                        <ArrowRight size={15} />
-                      </>
-                    ) : (
-                      <>
-                        <Zap size={15} className="zap-icon" />
-                        <span>1-Click Apply</span>
-                        <ArrowRight size={15} />
-                      </>
-                    )}
-                  </button>
-                )}
+
+                  {scheme.officialUrl && (
+                    <a 
+                      href={scheme.officialUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn btn-secondary official-portal-btn"
+                      title={`Visit official website: ${scheme.officialUrl}`}
+                    >
+                      <span>Official Portal</span>
+                      <ExternalLink size={13} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="card-footer-primary-row">
+                  {!isEligible ? (
+                    <button
+                      type="button"
+                      className="btn btn-ineligible full-width-action"
+                      disabled
+                      title={scheme.qualificationCheck.reason}
+                    >
+                      <AlertCircle size={14} />
+                      <span>Ineligible for Current Level</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={`btn full-width-action ${hasActiveApp ? 'btn-secondary' : 'btn-primary apply-action-btn'}`}
+                      onClick={() => handleApplyClick(scheme)}
+                    >
+                      {hasActiveApp ? (
+                        <>
+                          <span>View Active Application</span>
+                          <ArrowRight size={15} />
+                        </>
+                      ) : (
+                        <>
+                          <Zap size={15} className="zap-icon" />
+                          <span>Apply (DigiLocker / Manual OCR)</span>
+                          <ArrowRight size={15} />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           )
         })}
       </div>
 
-      {/* DigiLocker Zero-Touch Autofill Modal */}
+      {/* DigiLocker & Manual OCR Application Modal */}
       {autofillTargetScheme && (
         <AutofillModal
           scheme={autofillTargetScheme}
           student={activeStudent}
           lang={lang}
+          defaultMode={autofillModalMode}
           onClose={() => setAutofillTargetScheme(null)}
           onSubmitApplication={handleAutofillSubmit}
         />

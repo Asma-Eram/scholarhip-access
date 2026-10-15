@@ -77,6 +77,7 @@ export default function App() {
   const [showNotificationsDrawer, setShowNotificationsDrawer] = useState(false)
   const [showHelpSupportModal, setShowHelpSupportModal] = useState(false)
   const [digiLockerModalApp, setDigiLockerModalApp] = useState(null)
+  const [openDossierTrigger, setOpenDossierTrigger] = useState(0)
 
   // Sync state changes to localStorage
   useEffect(() => saveStorage('sb_household', household), [household])
@@ -515,6 +516,10 @@ export default function App() {
           userRole={userRole}
           setUserRole={setUserRole}
           onResetDemo={handleResetDemoData}
+          onOpenDocumentUpload={() => {
+            setActiveTab('schemes')
+            setOpenDossierTrigger(t => t + 1)
+          }}
         />
 
         {/* Offline Banner */}
@@ -539,6 +544,7 @@ export default function App() {
               onTriggerConflict={handleTriggerConflict}
               onDirectApply={(scheme) => handleTriggerConflict(scheme.id)}
               onSubmitAutofillApp={handleAutofillSubmit}
+              openDossierTrigger={openDossierTrigger}
             />
           )}
           {activeTab === 'tracker' && (

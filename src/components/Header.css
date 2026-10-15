@@ -167,14 +167,17 @@
   color: var(--royal-700);
 }
 
-.search-quick-btn {
-  background: var(--royal-50);
-  border-color: var(--royal-100);
-  color: var(--royal-700);
+.upload-quick-btn {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 700;
 }
 
-.search-quick-btn:hover {
-  background: var(--royal-100);
+.upload-quick-btn:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
 }
 
 .reset-demo-pill {

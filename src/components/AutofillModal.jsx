@@ -28,9 +28,10 @@ export default function AutofillModal({
   student, 
   lang, 
   onClose, 
-  onSubmitApplication 
+  onSubmitApplication,
+  defaultMode = 'digilocker'
 }) {
-  const [activeMode, setActiveMode] = useState('digilocker') // 'digilocker' | 'manual'
+  const [activeMode, setActiveMode] = useState(defaultMode) // 'digilocker' | 'manual'
   const [selectedAishe, setSelectedAishe] = useState('U-0205') // Default: NIT Jamshedpur
   const [rollNo, setRollNo] = useState(student.id === 'student_priya' ? '2023UGCS042' : student.id === 'student_birsa' ? 'EMRS-2024-IX-019' : '2025PGTRL008')
   const [consentGiven, setConsentGiven] = useState(true)
